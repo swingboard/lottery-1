@@ -51,7 +51,7 @@ namespace lottery
             @return defaultValue value of the argument in case no value was specified.
          */
         template <class ParamType>
-        ParamType getValue(const std::string &name, ParamType defaultValue) const
+        ParamType get(const std::string &name, ParamType defaultValue) const
         {
             auto it = m_map.find(name);
             if (it == m_map.end()) return defaultValue;
@@ -60,6 +60,16 @@ namespace lottery
             ParamType value;
             stream >> value;
             return stream.good() ? value : defaultValue;
+        }
+
+        /**
+            Checks if an option was specified.
+            @param name option name.
+            @return true if the option was specified, false otherwise. 
+         */
+        bool get(const std::string &name) const
+        {
+            return m_map.find(name) != m_map.end();
         }
 
     private:

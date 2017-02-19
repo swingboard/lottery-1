@@ -163,6 +163,7 @@
     <ClInclude Include="..\..\..\..\source\Game.hpp" />
     <ClInclude Include="..\..\..\..\source\Number.hpp" />
     <ClInclude Include="..\..\..\..\source\SubGame.hpp" />
+    <ClInclude Include="..\..\..\..\source\TupleMemberComparator.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

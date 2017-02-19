@@ -3,13 +3,12 @@
 
 
 #include <set>
+#include <cassert>
 #include "Column.hpp"
 
 
 namespace lottery
 {
-
-    class Game;
 
 
     /**
@@ -57,6 +56,16 @@ namespace lottery
         }
 
         /**
+            Returns the number of results,
+            i.e. the row count.
+            @return the row count.
+         */
+        size_t getRowCount() const
+        {
+            return m_resultsSize;
+        }
+
+        /**
             Returns the results of the sub-game.
             The results are organized in columns.
             @return the results of the sub-game.
@@ -64,6 +73,18 @@ namespace lottery
         const std::vector<Column> &getResults() const
         {
             return m_results;
+        }
+
+        /**
+            Returns the result at the specific row and column.
+            @param column column of result to get.
+            @param row row of result to get.
+            @return the result at the specific position.
+         */
+        Number getResult(size_t column, size_t row) const
+        {
+            assert(column < getColumnCount() && row < getRowCount());
+            return m_results[column][row];
         }
 
         /**
@@ -76,23 +97,9 @@ namespace lottery
          */
         void set(
             const std::string &name,
-            Number minNumber, 
-            Number maxNumber, 
-            size_t columnCount)
-        {
-            //check the args
-            if (minNumber > maxNumber)
-            {
-                throw std::invalid_argument("minNumber greater than maxNumber");
-            }
-
-            //set the data
-            m_name = name;
-            m_minNumber = minNumber;
-            m_maxNumber = maxNumber;
-            m_columnCount = columnCount;
-            m_results.resize(columnCount);
-        }
+            Number minNumber,
+            Number maxNumber,
+            size_t columnCount);
 
         /**
             Sets the results.
@@ -100,14 +107,7 @@ namespace lottery
             @exception std::invalid_argument thrown if the results argument has
                 a size different than the number of columns.
          */
-        void setResults(const std::vector<Column> &results)
-        {
-            if (results.size() != m_columnCount)
-            {
-                throw std::invalid_argument("results size different than column count");
-            }
-            m_results = results;
-        }
+        void setResults(const std::vector<Column> &results);
 
         /**
             Predicts next draw's numbers.
@@ -120,12 +120,11 @@ namespace lottery
 
     private:
         std::string m_name;
-        Number m_minNumber = 0;
-        Number m_maxNumber = 0;
-        size_t m_columnCount = 0;
+        Number m_minNumber = 1;
+        Number m_maxNumber = 49;
+        size_t m_columnCount = 6;
+        size_t m_resultsSize = 0;
         std::vector<Column> m_results;
-
-        friend class Game;
     };
 
 

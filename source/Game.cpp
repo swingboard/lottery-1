@@ -82,7 +82,7 @@ namespace lottery
             ++subGameIndex)
         {
             for (size_t columnIndex = 0;
-                columnIndex < m_subGames[subGameIndex].m_columnCount;
+                columnIndex < m_subGames[subGameIndex].getColumnCount();
                 ++columnIndex)
             {
                 {
@@ -90,6 +90,15 @@ namespace lottery
                     resultsFile >> header;
                 }
             }
+        }
+
+        //prepare the results vectors
+        std::vector<std::vector<Column>> results(m_subGames.size());
+        for (size_t subGameIndex = 0;
+            subGameIndex < m_subGames.size();
+            ++subGameIndex)
+        {
+            results[subGameIndex].resize(m_subGames[subGameIndex].getColumnCount());
         }
 
         //read the numbers
@@ -100,7 +109,7 @@ namespace lottery
                 ++subGameIndex)
             {
                 for (size_t columnIndex = 0; 
-                    columnIndex < m_subGames[subGameIndex].m_columnCount; 
+                    columnIndex < m_subGames[subGameIndex].getColumnCount(); 
                     ++columnIndex)
                 {
                     int number;
@@ -109,12 +118,19 @@ namespace lottery
                     {
                         return true;
                     }
-                    m_subGames[subGameIndex].m_results[columnIndex].push_back(number);
+                    results[subGameIndex][columnIndex].push_back(number);
                 }
                 if (!resultsFile.good())
                 {
                     return false;
                 }
+            }
+
+            for (size_t subGameIndex = 0;
+                subGameIndex < m_subGames.size();
+                ++subGameIndex)
+            {
+                m_subGames[subGameIndex].setResults(results[subGameIndex]);
             }
         }
 
