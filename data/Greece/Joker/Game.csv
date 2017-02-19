@@ -1,0 +1,4 @@
+SubGameName,MinNumber,MaxNumber,ColumnCount
+Main,1,45,5
+Joker,1,20,1
+
