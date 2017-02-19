@@ -16,107 +16,158 @@
 #include "TupleMemberComparator.hpp"
 
 
-static void testDistanceGroups(const lottery::Game &game)
+namespace lottery
 {
-    const lottery::SubGame &subGame = game.getSubGames()[0];
 
-    const size_t distanceGroupCount = 3;
+    using namespace std;
 
-    std::vector<std::vector<size_t>> distanceGroupsPerRow;
 
-    std::vector<size_t> distanceGroupsPerRowCompressed;
-    size_t groupBits = 0;
-    for (size_t v = distanceGroupCount; v != 0; v >>= 1, ++groupBits) {}
-
-    std::vector<size_t> lastTimeDrawn(subGame.getMaxNumber() + 1);
-
-    std::vector<std::pair<lottery::Number, size_t>> distanceTable(subGame.getMaxNumber() + 1);
-
-    const double distanceGroupSize = (subGame.getMaxNumber() + 1) / (double)distanceGroupCount;
-
-    std::vector<size_t> rowDistanceGroups(subGame.getColumnCount());
-
-    std::unordered_map<size_t, size_t> distanceGroupFrequencies;
-
-    for (size_t rowIndex = 0; rowIndex < subGame.getRowCount(); ++rowIndex)
+    static void testDistanceGroups(const Game &game)
     {
-        for (lottery::Number number = subGame.getMinNumber(); number <= subGame.getMaxNumber(); ++number)
-        {
-            const size_t distance = rowIndex - lastTimeDrawn[number];
-            distanceTable[number] = std::make_pair(number, distance);
-        }
+        const SubGame &subGame = game.getSubGames()[0];
 
-        std::sort(distanceTable.begin() + 1, distanceTable.end(), 
-            [](const auto &a, const auto &b)
+        const size_t distanceGroupCount = 3;
+
+        vector<vector<size_t>> distanceGroupsPerRow;
+
+        vector<size_t> distanceGroupsPerRowCompressed;
+        size_t groupBits = 0;
+        for (size_t v = distanceGroupCount; v != 0; v >>= 1, ++groupBits) {}
+
+        vector<size_t> lastTimeDrawn(subGame.getMaxNumber() + 1);
+
+        vector<pair<Number, size_t>> distanceTable(subGame.getMaxNumber() + 1);
+
+        const double distanceGroupSize = (subGame.getMaxNumber() + 1) / (double)distanceGroupCount;
+
+        vector<size_t> rowDistanceGroups(subGame.getColumnCount());
+
+        unordered_map<size_t, size_t> distanceGroupFrequencies;
+
+        for (size_t rowIndex = 0; rowIndex < subGame.getRowCount(); ++rowIndex)
+        {
+            for (Number number = subGame.getMinNumber(); number <= subGame.getMaxNumber(); ++number)
+            {
+                const size_t distance = rowIndex - lastTimeDrawn[number];
+                distanceTable[number] = make_pair(number, distance);
+            }
+
+            sort(distanceTable.begin() + 1, distanceTable.end(),
+                [](const auto &a, const auto &b)
             {
                 if (a.second < b.second) return true;
                 if (a.second > b.second) return false;
                 return a.first < b.first;
             });
 
-        distanceGroupsPerRow.emplace_back();
+            distanceGroupsPerRow.emplace_back();
 
-        for (size_t columnIndex = 0; columnIndex < subGame.getColumnCount(); ++columnIndex)
-        {
-            const lottery::Number number = subGame.getResult(columnIndex, rowIndex);
+            for (size_t columnIndex = 0; columnIndex < subGame.getColumnCount(); ++columnIndex)
+            {
+                const Number number = subGame.getResult(columnIndex, rowIndex);
 
-            size_t distanceIndex;
-            for (distanceIndex = 0; distanceTable[distanceIndex].first != number; ++distanceIndex) {}
+                size_t distanceIndex;
+                for (distanceIndex = 0; distanceTable[distanceIndex].first != number; ++distanceIndex) {}
 
-            const size_t distanceGroup = static_cast<size_t>(distanceIndex / distanceGroupSize);
-            distanceGroupsPerRow.back().push_back(distanceGroup);
+                const size_t distanceGroup = static_cast<size_t>(distanceIndex / distanceGroupSize);
+                distanceGroupsPerRow.back().push_back(distanceGroup);
 
-            rowDistanceGroups[columnIndex] = distanceGroup;
+                rowDistanceGroups[columnIndex] = distanceGroup;
 
-            lastTimeDrawn[number] = rowIndex;
+                lastTimeDrawn[number] = rowIndex;
+            }
+
+            sort(rowDistanceGroups.begin(), rowDistanceGroups.end(), greater<size_t>());
+            size_t compressedDistanceGroups = 0;
+            for (size_t i = 0; i < rowDistanceGroups.size(); ++i)
+            {
+                const size_t dg = rowDistanceGroups[i];
+                compressedDistanceGroups |= dg << (i * groupBits);
+            }
+            ++distanceGroupFrequencies[compressedDistanceGroups];
         }
 
-        std::sort(rowDistanceGroups.begin(), rowDistanceGroups.end(), std::greater<size_t>());
-        size_t compressedDistanceGroups = 0;
-        for (size_t i = 0; i < rowDistanceGroups.size(); ++i)
+        vector<pair<size_t, size_t>> distanceGroupFrequenciesSorted(distanceGroupFrequencies.begin(), distanceGroupFrequencies.end());
+        sort(distanceGroupFrequenciesSorted.begin(), distanceGroupFrequenciesSorted.end(), TupleMemberComparator<greater<size_t>, 1>());
+
+        ofstream file("data.txt");
+        for (size_t rowIndex = 0; rowIndex < subGame.getRowCount(); ++rowIndex)
         {
-            const size_t dg = rowDistanceGroups[i];
-            compressedDistanceGroups |= dg << (i * groupBits);
+            file << setw(5) << rowIndex << " : ";
+
+            for (size_t columnIndex = 0; columnIndex < subGame.getColumnCount(); ++columnIndex)
+            {
+                file << setw(5) << distanceGroupsPerRow[rowIndex][columnIndex];
+            }
+            file << '\n';
         }
-        ++distanceGroupFrequencies[compressedDistanceGroups];
-    }
+        file << '\n';
 
-    std::vector<std::pair<size_t, size_t>> distanceGroupFrequenciesSorted(distanceGroupFrequencies.begin(), distanceGroupFrequencies.end());
-    std::sort(distanceGroupFrequenciesSorted.begin(), distanceGroupFrequenciesSorted.end(), lottery::TupleMemberComparator<std::greater<size_t>, 1>());
-
-    std::ofstream file("data.txt");
-    for (size_t rowIndex = 0; rowIndex < subGame.getRowCount(); ++rowIndex)
-    {
-        file << std::setw(5) << rowIndex << " : ";
-
-        for (size_t columnIndex = 0; columnIndex < subGame.getColumnCount(); ++columnIndex)
+        for (const auto &p : distanceGroupFrequenciesSorted)
         {
-            file << std::setw(5) << distanceGroupsPerRow[rowIndex][columnIndex];
+            const size_t compressedDistanceRows = p.first;
+            file << '[';
+            for (size_t i = 0; i < subGame.getColumnCount(); ++i)
+            {
+                const size_t dg = (compressedDistanceRows >> (i * groupBits)) & ((1 << groupBits) - 1);
+                file << setw(3) << dg;
+            }
+            file << "] -> " << fixed << setprecision(3) << (100.0 * p.second / (double)subGame.getRowCount()) << "%\n";
         }
         file << '\n';
     }
-    file << '\n';
 
-    for (const auto &p : distanceGroupFrequenciesSorted)
-    {
-        const size_t compressedDistanceRows = p.first;
-        file << '[';
-        for (size_t i = 0; i < subGame.getColumnCount(); ++i)
+
+    static void testNumberFrequenciesPerColumn(const Game &game) {
+        const SubGame &subGame = game.getSubGames()[0];
+
+        vector<unordered_map<Number, size_t>> numberFrequenciesPerColumn(subGame.getColumnCount());
+
+        vector<vector<pair<Number, size_t>>> sorted(subGame.getColumnCount());
+
+        for (size_t columnIndex = 0; columnIndex < subGame.getColumnCount(); ++columnIndex)
         {
-            const size_t dg = (compressedDistanceRows >> (i * groupBits)) & ((1 << groupBits) - 1);
-            file << std::setw(3) << dg;
+            const Column &column = subGame.getResults()[columnIndex];
+            for (const Number number : column)
+            {
+                ++numberFrequenciesPerColumn[columnIndex][number];
+            }
+
+            sorted[columnIndex].insert(
+                sorted[columnIndex].end(), 
+                numberFrequenciesPerColumn[columnIndex].begin(),
+                numberFrequenciesPerColumn[columnIndex].end());
+
+            sort(
+                sorted[columnIndex].begin(), 
+                sorted[columnIndex].end(),
+                TupleMemberComparator<greater<size_t>, 1>());
         }
-        file << "] -> " << std::fixed << std::setprecision(3) << (100.0 * p.second / (double)subGame.getRowCount()) << "%\n";
+
+        ofstream file("data.txt");
+        for (size_t columnIndex = 0; columnIndex < subGame.getColumnCount(); ++columnIndex)
+        {
+            file << "Column " << columnIndex << '\n';
+            for (const auto &p : sorted[columnIndex])
+            {
+                file << "    " << setw(5) << (int)p.first << " -> " << setw(5) << p.second;
+                file << setw(10) << fixed << setprecision(3) << (100.0 * p.second / (double)subGame.getRowCount()) << "%\n";
+            }
+            file << '\n';
+        }
+        file << '\n';
     }
-    file << '\n';
-}
 
 
-static void test(const lottery::Game &game)
-{
-    testDistanceGroups(game);
-    exit(0);
-}
+    static void test(const Game &game)
+    {
+        //testDistanceGroups(game);
+        //testNumberFrequenciesPerColumn(game);
+        exit(0);
+    }
+
+
+} //namespace lottery
 
 
 /******************************************************************************
@@ -142,7 +193,7 @@ int main(int argc, const char *argv[])
         return -1;
     }
 
-    test(game);
+    lottery::test(game);
 
     //predicted numbers
     std::set<lottery::Number> predictedNumbers = 
