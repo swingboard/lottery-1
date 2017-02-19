@@ -2,6 +2,7 @@
 #define LOTTERY_SUBGAME_HPP
 
 
+#include <set>
 #include "Column.hpp"
 
 
@@ -107,6 +108,15 @@ namespace lottery
             }
             m_results = results;
         }
+
+        /**
+            Predicts next draw's numbers.
+            @param minPredictedNumbersPerColumn minimum number 
+                   of predicted numbers per column.
+            @return set of predicted numbers.
+         */
+        std::set<Number> predictNumbers(
+            size_t minPredictedNumbersPerColumn) const;
 
     private:
         std::string m_name;

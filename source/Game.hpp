@@ -35,115 +35,8 @@ namespace lottery
             @return true if loaded successfully, false otherwise.
          */
         bool load(
-            const std::string &gameFilename, 
-            const std::string &resultsfilename)
-        {
-            //the game file
-            CSVInputFileStream gameFile(gameFilename);
-            if (!gameFile.is_open())
-            {
-                return false;
-            }
-
-            //the results file
-            CSVInputFileStream resultsFile(resultsfilename);
-            if (!resultsFile.is_open())
-            {
-                return false;
-            }
-
-            //skip the headers
-            for (int index = 0; index < 4; ++index)
-            {
-                std::string header;
-                gameFile >> header;
-            }
-
-            m_subGames.clear();
-
-            //read the subgames
-            for (;;)
-            {
-                //read the name
-                std::string subGameName;
-                gameFile >> subGameName;
-                if (gameFile.eof())
-                {
-                    break;
-                }
-
-                //read the min number
-                int minNumber;
-                gameFile >> minNumber;
-
-                //read the max number
-                int maxNumber;
-                gameFile >> maxNumber;
-
-                //read the column count
-                size_t columnCount;
-                gameFile >> columnCount;
-
-                //check if the sub-game was correctly read
-                if (!gameFile.good())
-                {
-                    return false;
-                }
-
-                //add a subgame
-                m_subGames.emplace_back();
-                m_subGames.back().set(
-                    subGameName, 
-                    (Number)minNumber, 
-                    (Number)maxNumber, 
-                    columnCount);
-            }
-
-            //skip the headers
-            for (size_t subGameIndex = 0;
-                subGameIndex < m_subGames.size();
-                ++subGameIndex)
-            {
-                for (size_t columnIndex = 0;
-                    columnIndex < m_subGames[subGameIndex].m_columnCount;
-                    ++columnIndex)
-                {
-                    {
-                        std::string header;
-                        resultsFile >> header;
-                    }
-                }
-            }
-
-            //read the numbers
-            for (;;)
-            {
-                for (size_t subGameIndex = 0; 
-                    subGameIndex < m_subGames.size(); 
-                    ++subGameIndex)
-                {
-                    for (size_t columnIndex = 0; 
-                        columnIndex < m_subGames[subGameIndex].m_columnCount; 
-                        ++columnIndex)
-                    {
-                        int number;
-                        resultsFile >> number;
-                        if (resultsFile.eof())
-                        {
-                            return true;
-                        }
-                        m_subGames[subGameIndex].m_results[columnIndex].push_back(number);
-                    }
-                    if (!resultsFile.good())
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            //success
-            return true;
-        }
+            const std::string &gameFilename,
+            const std::string &resultsfilename);
 
         /**
             Loads the game from files 'Game.csv' and 'Results.csv'.
@@ -153,6 +46,15 @@ namespace lottery
         {
             return load("Game.csv", "Results.csv");
         }
+
+        /**
+            Predicts next draw's numbers.
+            @param minPredictedNumbersPerColumn minimum number 
+                   of predicted numbers per column.
+            @return set of predicted numbers.
+         */
+        std::set<Number> predictNumbers(
+            size_t minPredictedNumbersPerColumn) const;
 
     private:
         std::vector<SubGame> m_subGames;

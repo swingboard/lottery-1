@@ -150,11 +150,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\source\Game.cpp" />
     <ClCompile Include="..\..\..\..\source\PredictNumbersMain.cpp" />
+    <ClCompile Include="..\..\..\..\source\SubGame.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\source\Column.hpp" />
+    <ClInclude Include="..\..\..\..\source\CommandLine.hpp" />
     <ClInclude Include="..\..\..\..\source\CSVInputFileStream.hpp" />
+    <ClInclude Include="..\..\..\..\source\CSVOutputFileStream.hpp" />
     <ClInclude Include="..\..\..\..\source\CSVWhitespace.hpp" />
     <ClInclude Include="..\..\..\..\source\Game.hpp" />
     <ClInclude Include="..\..\..\..\source\Number.hpp" />
