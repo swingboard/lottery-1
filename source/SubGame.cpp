@@ -105,6 +105,33 @@ namespace lottery
             throw std::invalid_argument("minPredictedNumbersPerColumn shall not be zero");
         }
 
+        //for all columns, calculate the most transitions for the last results
+        //to the next ones and their probabilities, based on prior data.
+        std::vector<std::vector<std::pair<Number, double>>> nextNumbers(m_columnCount);
+        for (size_t columnIndex = 0; columnIndex < m_columnCount; ++columnIndex)
+        {
+            calculateTransitions(m_results[columnIndex], 1, nextNumbers[columnIndex]);
+        }
+
+        //calculate all possible columns and their probabilities from next possible numbers
+        std::vector<std::pair<double, std::vector<Number>>> nextColumns;
+        calculatePermutations(nextNumbers, 
+            [&](const std::vector<std::pair<Number, double>> &values)
+            {
+                //compute probabity of column
+                const double probability = 
+                    std::accumulate(values.begin(), values.end(), 1.0, 
+                        [](double probability, const std::pair<Number, double> &value)
+                        {
+                            return probability * value.second;
+                        });
+
+                //store the column
+                std::vector<Number> numbers(values.size());
+                std::transform(values.begin(), values.end(), numbers.begin(), 
+                    [](const std::pair<Number, double> &v) { return v.first; });
+                nextColumns.push_back(std::make_pair(probability, numbers));
+            });
 
         std::set<Number> predictedNumbers;
 
