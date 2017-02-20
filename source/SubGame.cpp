@@ -1,8 +1,14 @@
 #include "SubGame.hpp"
+#include "Algorithm.hpp"
 
 
 namespace lottery
 {
+
+
+    /**************************************************************************
+        PUBLIC
+     **************************************************************************/
 
 
     /**
@@ -78,12 +84,49 @@ namespace lottery
     std::set<Number> SubGame::predictNumbers(
         size_t minPredictedNumbersPerColumn) const
     {
+        return
+            getColumnCount() > 1 ?
+            _predictNumbersMultiColumn(minPredictedNumbersPerColumn) :
+            _predictNumbersSingleColumn(minPredictedNumbersPerColumn);
+    }
+
+
+    /**************************************************************************
+        PRIVATE
+     **************************************************************************/
+
+
+    //the algorithm to predict numbers using multiple columns
+    std::set<Number> SubGame::_predictNumbersMultiColumn(size_t minPredictedNumbersPerColumn) const
+    {
         //the result
         std::set<Number> predictedNumbers;
 
-        //TEST
-        predictedNumbers.insert({ 1, 2, 3 });
+        //the transitions of numbers per column
+        std::vector<TransitionMap<Number>> perColumn_numberTransitions(m_columnCount);
+        for (size_t columnIndex = 0; columnIndex < m_columnCount; ++columnIndex)
+        {
+            perColumn_numberTransitions[columnIndex] = createTransitionMap(m_results[columnIndex]);
+        }
 
+        //the transitions of sums of each draw
+        const int resultSumQuantum = 10;
+        const std::vector<int> perRow_resultSums = sumColumns(m_results);
+        const std::vector<int> perRow_resultSums_quantized = quantize(perRow_resultSums, resultSumQuantum);
+        TransitionMap<int> resultSumsTransitions = createTransitionMap(perRow_resultSums_quantized);
+
+        return predictedNumbers;
+    }
+
+
+    //the algorithm to predict numbers using one column
+    std::set<Number> SubGame::_predictNumbersSingleColumn(size_t minPredictedNumbersPerColumn) const
+    {
+        //the result
+        std::set<Number> predictedNumbers;
+
+        //TODO
+    
         return predictedNumbers;
     }
 

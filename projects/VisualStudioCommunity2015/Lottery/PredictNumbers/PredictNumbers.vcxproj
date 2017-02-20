@@ -155,6 +155,7 @@
     <ClCompile Include="..\..\..\..\source\SubGame.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\source\Algorithm.hpp" />
     <ClInclude Include="..\..\..\..\source\Column.hpp" />
     <ClInclude Include="..\..\..\..\source\CommandLine.hpp" />
     <ClInclude Include="..\..\..\..\source\CSVInputFileStream.hpp" />

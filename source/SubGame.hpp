@@ -125,6 +125,12 @@ namespace lottery
         size_t m_columnCount = 6;
         size_t m_resultsSize = 0;
         std::vector<Column> m_results;
+
+        //the algorithm to predict numbers using multiple columns
+        std::set<Number> _predictNumbersMultiColumn(size_t minPredictedNumbersPerColumn) const;
+
+        //the algorithm to predict numbers using one column
+        std::set<Number> _predictNumbersSingleColumn(size_t minPredictedNumbersPerColumn) const;
     };
 
 
