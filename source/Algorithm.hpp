@@ -43,6 +43,13 @@ namespace lottery
 
 
     /**
+        A transition map of the 2nd order is a map of values to a transition map.
+     */
+    template <class T>
+    using TransitionMap2 = std::unordered_map<T, TransitionMap<T>>;
+
+
+    /**
         Min/max values.
      */
     template <class T>
@@ -107,6 +114,53 @@ namespace lottery
 
             //sort the frequency vector by frequency in descending order
             sortFrequencyVector(frequencyVector);
+        }
+
+        return result;
+    }
+
+
+    /**
+        Creates a transition map of 2nd order of the given values.
+        @param values values to create the transition map of.
+        @return the transition map.
+     */
+    template <class T>
+    TransitionMap2<T> createTransitionMap2(const std::vector<T> &values)
+    {
+        std::unordered_map<T, std::unordered_map<T, std::unordered_map<T, size_t>>> frequencyMap;
+
+        //create the frequency map
+        for (size_t index = 2; index < values.size(); ++index)
+        {
+            const T prevValue2 = values[index - 2];
+            const T prevValue1 = values[index - 1];
+            const T nextValue = values[index];
+            ++frequencyMap[prevValue2][prevValue1][nextValue];
+        }
+
+        TransitionMap2<T> result;
+
+        //setup the result
+        for (const auto &prevValue2Pair : frequencyMap)
+        {
+            const T prevValue2 = prevValue2Pair.first;
+
+            for (const auto &prevValue1Pair : prevValue2Pair.second)
+            {
+                const T prevValue1 = prevValue1Pair.first;
+
+                FrequencyVector<T> &frequencyVector = result[prevValue2][prevValue1];
+
+                //create the frequency vector for each 'prevValue'
+                for (const auto &nextValuePair : prevValue1Pair.second)
+                {
+                    frequencyVector.push_back(nextValuePair);
+                }
+
+                //sort the frequency vector by frequency in descending order
+                sortFrequencyVector(frequencyVector);
+            }
         }
 
         return result;
@@ -290,17 +344,23 @@ namespace lottery
 
     /**
         Iterates a range of iterators, calling a callback function for each member.
+        The iteration stops if 'f' returns false.
         @param begin begin iterator.
         @param end end iterator.
         @param f callback function to invoke at each iteration; receives the iterator's value at each step.
+        @return what 'f' returns in its last call.
      */
     template <class T, class F>
-    void iterate(const T begin, const T end, const F &f)
+    bool iterate(const T begin, const T end, const F &f)
     {
         for (T it = begin; it != end; ++it)
         {
-            f(*it);
+            if (!f(*it))
+            {
+                return false;
+            }
         }
+        return true;
     }
 
 
@@ -308,11 +368,12 @@ namespace lottery
         Iterates a vector, calling a callback function for each member.
         @param values values to iterate.
         @param f callback function to invoke at each iteration; receives the iterator's value at each step.
+        @return what 'f' returns in its last call.
      */
     template <class T, class F>
-    void iterate(const std::vector<T> &values, const F &f)
+    bool iterate(const std::vector<T> &values, const F &f)
     {
-        iterate(values.begin(), values.end(), f);
+        return iterate(values.begin(), values.end(), f);
     }
 
 
@@ -322,27 +383,33 @@ namespace lottery
         @param end end iterator of vectors of vectors.
         @param args arguments to pass to function 'f'.
         @param f function to invoke.
+        @return what 'f' returns in its last call.
      */
     template <class T, class F>
-    void iterate2(
+    bool iterate2(
         const typename std::vector<std::vector<T>>::const_iterator it, 
         const typename std::vector<std::vector<T>>::const_iterator end, 
         std::vector<T> &args, 
         const F &f)
     {
+        bool result;
+
         if (it != end)
         {
-            iterate(*it, [&](const T &v)
+            result = iterate(*it, [&](const T &v)
             {
                 args.push_back(v);
-                iterate2(std::next(it, 1), end, args, f);
+                bool result = iterate2(std::next(it, 1), end, args, f);
                 args.pop_back();
+                return result;
             });
         }
         else
         {
-            f(args);
+            result = f(args);
         }
+
+        return result;
     }
 
 
@@ -351,13 +418,14 @@ namespace lottery
         for each combination of values of each vector contained in the given vector.
         @param values2 values of values to iterate.
         @param f callback function to invoke at each iteration; it receives a vector of values of type T.
+        @return what 'f' returns in its last call.
      */
     template <class T, class F>
-    void iterate(const std::vector<std::vector<T>> &values2, const F &f)
+    bool iterate(const std::vector<std::vector<T>> &values2, const F &f)
     {
         std::vector<T> args;
         args.reserve(values2.size());
-        iterate2(values2.begin(), values2.end(), args, f);
+        return iterate2(values2.begin(), values2.end(), args, f);
     }
 
 
@@ -391,6 +459,34 @@ namespace lottery
     bool inRange(T v, const Range<T> &range)
     {
         return inRange(v, range.first, range.second);
+    }
+
+
+    /**
+        Inserts an element to a vector, sorted.
+     */
+    template <class T, class Pred>
+    typename std::vector<T>::iterator insertSorted(std::vector<T> & vec, const T &item, const Pred &pred)
+    {
+        return vec.insert(std::upper_bound(vec.begin(), vec.end(), item, pred), item);
+    }
+
+
+    /**
+        Checks if a vector contains duplicates.
+        The data must be sorted.
+     */
+    template <class T>
+    bool containsDuplicates(const std::vector<T> &values)
+    {
+        for (size_t i = 1; i < values.size(); ++i)
+        {
+            if (values[i] == values[i - 1])
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
 

@@ -113,11 +113,11 @@ namespace lottery
         }
 
         //the transitions of sums of each draw
-        const int drawnNumberSumQuantum = 10;
+        const int drawnNumberSumQuantum = 1;
         std::vector<int> perRow_drawnNumberSums = sumColumns(m_results);
         std::vector<int> perRow_drawnNumberSums_quantized = quantize(perRow_drawnNumberSums, drawnNumberSumQuantum);
         const int drawnNumberSums_range = range(range(perRow_drawnNumberSums_quantized));
-        TransitionMap<int> drawnNumberSumsTransitions = createTransitionMap(perRow_drawnNumberSums_quantized);
+        TransitionMap2<int> drawnNumberSumsTransitions_quantized = createTransitionMap2(perRow_drawnNumberSums_quantized);
 
         /*
             Try to find, per column, the numbers that match most all the following criteria:
@@ -135,41 +135,57 @@ namespace lottery
         }        
 
         //latest drawn number sum transitions 
-        std::vector<int> latestdrawnNumberSum_transitions = 
-            valuesOf(drawnNumberSumsTransitions[perRow_drawnNumberSums_quantized.back()]);
+        const int prevSum2 = *(perRow_drawnNumberSums_quantized.end() - 2);
+        const int prevSum1 = *(perRow_drawnNumberSums_quantized.end() - 1);
+        std::vector<int> latestdrawnNumberSum_transitions_quantized = 
+            valuesOf(drawnNumberSumsTransitions_quantized[prevSum2][prevSum1]);
 
-        //scores of combinations of score, numbers, sum
-        std::vector<std::tuple<double, std::vector<Number>, int>> matches;
+        //scores of combinations of score, numbers
+        typedef std::tuple<double, std::vector<Number>> Match;
+
+        //min limit to place a combination in the matches
+        const double minScore = 0.99;
+
+        //top matches
+        const size_t topMatchCount = 10;
+        std::vector<Match> topMatches(topMatchCount);
 
         //find the best match of transitions of numbers to transitions of result sums
-        iterate(latestdrawnNumberSum_transitions, [&](int nextSum)
+        iterate(latestdrawnNumberSum_transitions_quantized, [&](int nextSum_quantized)
         {
-            iterate(perColumn_latestDrawnNumbers_transitions, [&](const std::vector<Number> &nextNumbers)
+            return iterate(perColumn_latestDrawnNumbers_transitions, [&](const std::vector<Number> &nextNumbers)
             {
-                const int nextNumbersSum = quantize(sumValues<int>(nextNumbers), drawnNumberSumQuantum);
-                const int sumDelta = std::abs(nextNumbersSum - nextSum);
-                const double score = percent(sumDelta, drawnNumberSums_range);
-                matches.push_back(std::make_tuple(score, nextNumbers, nextSum));
+                std::vector<Number> sortedNumbers(nextNumbers);
+                sort(sortedNumbers, std::less<Number>());
+                if (!containsDuplicates(sortedNumbers))
+                {
+                    const int nextNumbersSum = sumValues<int>(sortedNumbers);
+                    const int nextNumbersSum_quantized = quantize(nextNumbersSum, drawnNumberSumQuantum);
+                    const int sumDelta = std::abs(nextNumbersSum_quantized - nextSum_quantized);
+                    const double score = percent(sumDelta, drawnNumberSums_range);
+                    if (score >= minScore)
+                    {
+                        const Match match = std::make_tuple(score, sortedNumbers);
+                        insertSorted(topMatches, match, TupleMemberComparator<std::greater<double>, 0>());
+                        if (topMatches.size() > topMatchCount)
+                        {
+                            topMatches.pop_back();
+                        }
+                    }
+                }
+                return true;
             });
         });
 
-        //sort the scores in ascending order
-        sort(matches, TupleMemberComparator<std::greater<double>, 0>());
-
         //create the predicted numbers
-        const auto &bestMatch = matches[0];
-        const std::vector<Number> &bestMatchNumbers = std::get<1>(bestMatch);
         std::set<Number> predictedNumbers;
-        const int subFromNumber = static_cast<int>(minPredictedNumbersPerColumn) / 2;
-        for (const Number number : bestMatchNumbers)
+        for (size_t i = 0; i < minPredictedNumbersPerColumn; ++i)
         {
-            for (int i = 0; i < static_cast<int>(minPredictedNumbersPerColumn); ++i)
+            const Match &match = topMatches[i];
+            const std::vector<Number> &matchNumbers = std::get<1>(match);
+            for (const Number number : matchNumbers)
             {
-                const Number predictedNumber = static_cast<Number>(number + i - subFromNumber);
-                if (inRange(predictedNumber, m_minNumber, m_maxNumber))
-                {
-                    predictedNumbers.insert(predictedNumber);
-                }
+                predictedNumbers.insert(number);
             }
         }
 
