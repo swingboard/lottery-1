@@ -127,10 +127,10 @@ namespace lottery
         std::vector<Column> m_results;
 
         //the algorithm to predict numbers using multiple columns
-        std::set<Number> _predictNumbersMultiColumn(size_t minPredictedNumbersPerColumn) const;
+        std::set<Number> _predictNumbersMultiColumn(const size_t minPredictedNumbersPerColumn) const;
 
         //the algorithm to predict numbers using one column
-        std::set<Number> _predictNumbersSingleColumn(size_t minPredictedNumbersPerColumn) const;
+        std::set<Number> _predictNumbersSingleColumn(const size_t minPredictedNumbersPerColumn) const;
     };
 
 

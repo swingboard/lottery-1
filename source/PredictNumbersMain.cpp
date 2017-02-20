@@ -10,7 +10,7 @@ int main(int argc, const char *argv[])
     //parse the command line
     lottery::CommandLine commandLine(argc, argv);
     size_t minPredictedNumbersPerColumn = 
-        commandLine.get("-minPredictedNumbersPerColumn", 0U);
+        commandLine.get("-minPredictedNumbersPerColumn", 1U);
     std::string outputFilename =
         commandLine.get("-outputFilename", std::string("Prediction.csv"));
 

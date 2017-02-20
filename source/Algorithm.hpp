@@ -9,6 +9,7 @@
 #include <functional>
 #include <cmath>
 #include <type_traits>
+#include <limits>
 #include "TupleMemberComparator.hpp"
 #include "Number.hpp"
 
@@ -39,6 +40,13 @@ namespace lottery
      */
     template <class T>
     using TransitionMap = std::unordered_map<T, FrequencyVector<T>>;
+
+
+    /**
+        Min/max values.
+     */
+    template <class T>
+    using Range = std::pair<T, T>;
 
 
     /**
@@ -140,6 +148,49 @@ namespace lottery
 
 
     /**
+        Sums the values stored in a vector.
+     */
+    template <class RT, class T>
+    RT sumValues(const std::vector<T> &values)
+    {
+        RT result = 0;
+        for (const T &v : values) {
+            result += v;
+        }
+        return result;
+    }
+
+
+    /**
+        Sums the values stored in a frequency vector.
+     */
+    template <class RT, class T>
+    RT sumValues(const FrequencyVector<T> &frequencies)
+    {
+        RT result = 0;
+        for (const Frequency<T> &freq : frequencies) {
+            result += freq.first;
+        }
+        return result;
+    }
+
+
+    /**
+        Returns the values of a frequency vector.
+     */
+    template <class T>
+    std::vector<T> valuesOf(const FrequencyVector<T> &frequencies)
+    {
+        std::vector<T> result;
+        for (const Frequency<T> &freq : frequencies)
+        {
+            result.push_back(freq.first);
+        }
+        return result;
+    }
+
+
+    /**
         Sums columns of lottery Numbers to vectors of int.
         @param data lottery number data.
         @return sums of columns per row.
@@ -177,6 +228,16 @@ namespace lottery
 
 
     /**
+        Quantize single value.
+     */
+    template <class T>
+    T quantize(T value, T quantum)
+    {
+        return value - lottery::remainder(value, quantum);
+    }
+
+
+    /**
         Quantizes a set of values.
         @param values values to quantize.
         @param quantum value of quantum.
@@ -189,13 +250,147 @@ namespace lottery
 
         for (size_t index = 0; index < values.size(); ++index)
         {
-            const T value = values[index];
-            const T rm = lottery::remainder(value, quantum);
-            const T quantizedValue = value - rm;
-            result[index] = quantizedValue;
+            result[index] = quantize(values[index], quantum);
         }
 
         return result;
+    }
+
+
+    /**
+        Returns the min-max value of a set of values.
+     */
+    template <class ContainerType>
+    Range<typename ContainerType::value_type> range(const ContainerType &values)
+    {
+        typedef typename ContainerType::value_type T;
+        typedef std::numeric_limits<T> limitsT;
+
+        Range<T> result(limitsT::max(), std::min(-limitsT::max(), limitsT::min()));
+
+        for (const T v : values)
+        {
+            result.first  = std::min(result.first , v);
+            result.second = std::max(result.second, v);
+        }
+
+        return result;
+    }
+
+
+    /**
+        Returns the range value of the given pair, i.e. second - first.
+     */
+    template <class T>
+    T range(const Range<T> &range)
+    {
+        return range.second - range.first;
+    }
+
+
+    /**
+        Iterates a range of iterators, calling a callback function for each member.
+        @param begin begin iterator.
+        @param end end iterator.
+        @param f callback function to invoke at each iteration; receives the iterator's value at each step.
+     */
+    template <class T, class F>
+    void iterate(const T begin, const T end, const F &f)
+    {
+        for (T it = begin; it != end; ++it)
+        {
+            f(*it);
+        }
+    }
+
+
+    /**
+        Iterates a vector, calling a callback function for each member.
+        @param values values to iterate.
+        @param f callback function to invoke at each iteration; receives the iterator's value at each step.
+     */
+    template <class T, class F>
+    void iterate(const std::vector<T> &values, const F &f)
+    {
+        iterate(values.begin(), values.end(), f);
+    }
+
+
+    /**
+        Helper in iterating a vector of vectors.
+        @param it current iterator into vector of vectors.
+        @param end end iterator of vectors of vectors.
+        @param args arguments to pass to function 'f'.
+        @param f function to invoke.
+     */
+    template <class T, class F>
+    void iterate2(
+        const typename std::vector<std::vector<T>>::const_iterator it, 
+        const typename std::vector<std::vector<T>>::const_iterator end, 
+        std::vector<T> &args, 
+        const F &f)
+    {
+        if (it != end)
+        {
+            iterate(*it, [&](const T &v)
+            {
+                args.push_back(v);
+                iterate2(std::next(it, 1), end, args, f);
+                args.pop_back();
+            });
+        }
+        else
+        {
+            f(args);
+        }
+    }
+
+
+    /**
+        Iterates a vector of vectors, calling a callback function
+        for each combination of values of each vector contained in the given vector.
+        @param values2 values of values to iterate.
+        @param f callback function to invoke at each iteration; it receives a vector of values of type T.
+     */
+    template <class T, class F>
+    void iterate(const std::vector<std::vector<T>> &values2, const F &f)
+    {
+        std::vector<T> args;
+        args.reserve(values2.size());
+        iterate2(values2.begin(), values2.end(), args, f);
+    }
+
+
+    /**
+        Calculates the percentage of 'nom' in 'denom'.
+        @param nom nominator.
+        @param denom denominator.
+        @return value in the range of 0 to 1.
+     */
+    template <class T>
+    double percent(T nom, T denom)
+    {
+        return 1.0 - (nom / static_cast<double>(denom));
+    }
+
+
+    /**
+        Checks if a value is within a range.
+     */
+    template <class T>
+    bool inRange(T v, T min, T max)
+    {
+        return v = min && v <= max;
+    }
+
+
+    /**
+        Checks if a value is within a range.
+     */
+    template <class T>
+    bool inRange(T v, const Range<T> &range)
+    {
+        return inRange(v, range.first, range.second);
     }
 
 
