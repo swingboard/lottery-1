@@ -111,23 +111,41 @@ namespace lottery
         //column averages
         std::vector<double> columnAverages(m_columnCount);
 
+        //column deltas
+        std::vector<std::vector<int>> columnDeltas(m_columnCount, std::vector<int>(getRowCount() = 1));
+
         //row sums
         std::vector<int> rowSums(getRowCount() - 1);
 
         //row delta sums
         std::vector<int> rowDeltaSums(getRowCount() - 1);
 
-        //iterate all rows except the last one, since the prediction is for the row next to the current one.
-        for (size_t rowIndex = 0; rowIndex < getRowCount() - 1; ++rowIndex)
+        //row deltas
+        std::vector<std::vector<int>> rowDeltas(m_columnCount, std::vector<int>(getRowCount() - 1));
+
+        //iterate all rows except the last one, since the prediction is for the row next to the current one;
+        //also skip the first row because the column deltas need to be computed.
+        for (size_t rowIndex = 1; rowIndex < getRowCount() - 1; ++rowIndex)
         {
             //compute column sums and averages; 
-            //also compute sum of row
+            //also compute sum of row;
+            //also compute column deltas.
             for (size_t columnIndex = 0; columnIndex < m_columnCount; ++columnIndex)
             {
-                const Number number = m_results[columnIndex][rowIndex];
+                const int number = m_results[columnIndex][rowIndex];
+
+                //calculate column sums
                 columnSums[columnIndex] += number;
+
+                //calculate column averages
                 columnAverages[columnIndex] = columnSums[columnIndex] / (double)(rowIndex + 1);
+
+                //calculate row sums
                 rowSums[rowIndex] += number;
+
+                //calculate column deltas
+                const int prevNumber = m_results[columnIndex - 1][rowIndex];
+                columnDeltas[columnIndex][rowIndex] = number - prevNumber;
             }
 
             //compute delta sums of row
@@ -135,8 +153,19 @@ namespace lottery
             {
                 const Number number1 = m_results[columnIndex][rowIndex];
                 const Number number2 = m_results[columnIndex + 1][rowIndex];
-                rowDeltaSums[rowIndex] += number2 - number1;
+                const int delta = number2 - number1;
+                rowDeltaSums[rowIndex] += delta;
+                rowDeltas[columnIndex][rowIndex] = delta;
             }
+
+            /*
+                predict the next row by this criteria:
+                -each number of the predicted row does not create a column average that deviates too much from the predicted column average.
+                -the sum of the numbers of the predicted row does not deviate too much from the predicted row sum.
+                -the delta of each number of the predicted row from its previous number of the same column does not deviate too much from the predicted column delta. 
+                -the sum of the deltas between the numbers of the predicted row does not deviate too much from the predicted sum of deltas.
+                -the deltas between the numbers of the predicted row do not deviate too much from the predicted deltas.
+            */
         }
 
         std::set<Number> predictedNumbers;
