@@ -24,10 +24,11 @@ namespace lottery
         Calculates the transitions and their probabilities from last number of values
         using the given depth.
      */
-    template <class T>
+    template <class T, class E>
     void calculateTransitions(
         const std::vector<T> &values, 
-        size_t depth,
+        const size_t depth,
+        const E epsilon,
         std::vector<std::pair<T, double>> &transitions)
     {
         //map of values to frequencies
@@ -49,7 +50,10 @@ namespace lottery
                 const T value2 = *(currentIt + depthIndex);
 
                 //if sequences differ, find next sequence
-                if (value1 != value2) goto NEXT_VALUE;
+                if (std::abs(value1 - value2) > epsilon)
+                {
+                    goto NEXT_VALUE;
+                }
             }
 
             //increase the sequence of the target value
@@ -130,6 +134,91 @@ namespace lottery
             }
         }
         return true;
+    }
+
+
+    /**
+        Given a set of columns with data,
+        it calculates the sums of the deltas between the column values.        
+     */
+    template <class RT, class T>
+    std::vector<RT> calculateDeltaSums(const std::vector<std::vector<T>> &data)
+    {
+        const size_t columnCount = data.size();
+        const size_t rowCount = data[0].size();
+
+        std::vector<RT> results(rowCount);
+
+        for (size_t rowIndex = 0; rowIndex < rowCount; ++rowIndex)
+        {
+            int &sum = results[rowIndex];
+            for (size_t columnIndex = 1; columnIndex < columnCount; ++columnIndex)
+            {
+                const RT prevValue = data[columnIndex - 1][rowIndex];
+                const RT value = data[columnIndex][rowIndex];
+                const RT delta = value - prevValue;
+                sum += delta;
+            }
+        }
+
+        return results;
+    }
+
+
+    template <class RT, class It>
+    RT calculateDeltaSum(const It begin, const It end)
+    {
+        RT result = 0;
+        for (It it = std::next(begin, 1), prevIt = begin; it != end; ++it, ++prevIt)
+        {
+            const RT prevValue = *prevIt;
+            const RT value = *it;
+            const RT delta = value - prevValue;
+            result += delta;
+        }
+        return result;
+    }
+
+
+    //calculate match percentage.
+    inline double matchPercent(double nom, double denom)
+    {
+        return 1.0 - (nom / denom);
+    }
+
+
+    /**
+        Compares a value against a set of values and finds the closest value.
+        Returns index of closest value and percentage match.
+     */
+    template <class T>
+    std::pair<size_t, double> matchValue(const T value, const std::vector<T> &values)
+    {
+        double smallestDelta = std::numeric_limits<double>::max();
+        size_t closestValueIndex;
+        T closestValue;
+        T minValue = std::numeric_limits<T>::max();
+        T maxValue = std::min(std::numeric_limits<T>::min(), -std::numeric_limits<T>::max());
+
+        for (size_t index = 0; index < values.size(); ++index)
+        {
+            const T otherValue = values[index];
+            minValue = std::min(minValue, otherValue);
+            maxValue = std::max(maxValue, otherValue);
+            const double delta = std::abs(otherValue - value);
+            if (delta < smallestDelta)
+            {
+                smallestDelta = delta;
+                closestValue = otherValue;
+                closestValueIndex = index;
+            }
+        }
+
+        const double maxDelta = maxValue - minValue;
+        const double matchDelta = std::abs(closestValue - value);
+        const double mp = matchPercent(matchDelta, maxDelta);
+
+        return std::make_pair(closestValueIndex, mp);
     }
 
 
