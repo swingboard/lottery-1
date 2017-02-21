@@ -163,8 +163,9 @@
     <ClInclude Include="..\..\..\..\source\CSVWhitespace.hpp" />
     <ClInclude Include="..\..\..\..\source\Game.hpp" />
     <ClInclude Include="..\..\..\..\source\Number.hpp" />
+    <ClInclude Include="..\..\..\..\source\String.hpp" />
     <ClInclude Include="..\..\..\..\source\SubGame.hpp" />
-    <ClInclude Include="..\..\..\..\source\TupleMemberComparator.hpp" />
+    <ClInclude Include="..\..\..\..\source\Tuple.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

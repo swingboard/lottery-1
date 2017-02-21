@@ -14,7 +14,8 @@
     <ClInclude Include="..\..\..\..\source\Column.hpp" />
     <ClInclude Include="..\..\..\..\source\CommandLine.hpp" />
     <ClInclude Include="..\..\..\..\source\CSVOutputFileStream.hpp" />
-    <ClInclude Include="..\..\..\..\source\TupleMemberComparator.hpp" />
     <ClInclude Include="..\..\..\..\source\Algorithm.hpp" />
+    <ClInclude Include="..\..\..\..\source\Tuple.hpp" />
+    <ClInclude Include="..\..\..\..\source\String.hpp" />
   </ItemGroup>
 </Project>

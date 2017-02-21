@@ -34,6 +34,12 @@ int main(int argc, const char *argv[])
         return -2;
     }
 
+    //write the output file header
+    for (size_t index = 1; index <= predictedNumbers.size(); ++index)
+    {
+        outputFile << ((std::string("#") + index));
+    }
+
     //write the output file
     for (const lottery::Number number : predictedNumbers)
     {

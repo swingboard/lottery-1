@@ -3,6 +3,7 @@
 
 
 #include <fstream>
+#include "String.hpp"
 
 
 namespace lottery
