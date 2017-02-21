@@ -11,6 +11,7 @@
 #include <type_traits>
 #include <limits>
 #include <numeric>
+#include <array>
 #include "TupleMemberComparator.hpp"
 #include "Number.hpp"
 
@@ -83,18 +84,19 @@ namespace lottery
         std::vector<T> &temp,
         const F &f)
     {
-        if (it != end)
+        auto nextIt = it + 1;
+        for (const T &v : *it)
         {
-            for (const T &v : *it)
+            temp.push_back(v);
+            if (nextIt != end)
             {
-                temp.push_back(v);
-                calculatePermutationsHelper(it + 1, end, temp, f);
-                temp.pop_back();
+                calculatePermutationsHelper(nextIt, end, temp, f);
             }
-        }
-        else
-        {
-            f(temp);
+            else
+            {
+                f(temp);
+            }
+            temp.pop_back();
         }
     }
 
@@ -108,6 +110,7 @@ namespace lottery
         const F &f)
     {
         std::vector<T> temp;
+        temp.reserve(values.size());
         calculatePermutationsHelper(values.begin(), values.end(), temp, f);
     }
 
@@ -116,10 +119,10 @@ namespace lottery
         Checks if a vector has unique values.
         The values must be sorted.
      */
-    template <class T>
-    bool hasUniqueValues(const std::vector<T> &values)
+    template <class It>
+    bool hasUniqueValues(const It begin, const It end)
     {
-        for (auto it = values.begin() + 1; it != values.end(); ++it)
+        for (auto it = begin + 1; it != end; ++it)
         {
             if (*it == *(it - 1))
             {

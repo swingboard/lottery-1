@@ -113,37 +113,39 @@ namespace lottery
             calculateTransitions(m_results[columnIndex], 1, nextNumbers[columnIndex]);
         }
 
-        //calculate all possible columns and their probabilities from next possible numbers
-        std::vector<std::pair<double, std::vector<Number>>> nextColumns;
+        //calculate all possible draws and their probabilities from next possible numbers;
+        //process each draw according to the following criteria:
+        //TODO
+
+        //temp buffer
         std::vector<Number> temp(m_columnCount);
+
+        //calculate all possible draws from next numbers
         calculatePermutations(nextNumbers, 
             [&](const std::vector<std::pair<Number, double>> &values)
             {
-                //compute probabity of column
-                const double probability = 
-                    std::accumulate(values.begin(), values.end(), 1.0, 
-                        [](double probability, const std::pair<Number, double> &value)
-                            { return probability * value.second; });
-
                 //transform the array of values to an array of numbers
                 std::transform(values.begin(), values.end(), temp.begin(), 
                     [](const std::pair<Number, double> &v) { return v.first; });
 
                 //sort the numbers
-                std::sort(temp.begin(), temp.end(), std::less<Number>());
+                std::sort(temp.begin(), temp.begin() + m_columnCount, std::less<Number>());
 
                 //the numbers must be unique
-                if (!hasUniqueValues(temp)) return;
+                if (!hasUniqueValues(temp.begin(), temp.begin() + m_columnCount))
+                {
+                    return;
+                }
 
-                //store the column
-                nextColumns.push_back(std::make_pair(probability, temp));
+                //compute probability of draw
+                const double probability = 
+                    std::accumulate(values.begin(), values.end(), 1.0, 
+                        [](double probability, const std::pair<Number, double> &value)
+                            { return probability * value.second; });
+
+                //process the draw
+                //TODO
             });
-
-        //sort the next columns by probability in descending order
-        std::sort(
-            nextColumns.begin(), 
-            nextColumns.end(), 
-            TupleMemberComparator<std::greater<double>, 0>());
 
         std::set<Number> predictedNumbers;
 
