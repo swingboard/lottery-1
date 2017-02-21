@@ -107,8 +107,26 @@ namespace lottery
         const std::vector<std::vector<T>> &values, 
         const F &f)
     {
-        std::vector<T> temp(values.size());
+        std::vector<T> temp;
         calculatePermutationsHelper(values.begin(), values.end(), temp, f);
+    }
+
+
+    /**
+        Checks if a vector has unique values.
+        The values must be sorted.
+     */
+    template <class T>
+    bool hasUniqueValues(const std::vector<T> &values)
+    {
+        for (auto it = values.begin() + 1; it != values.end(); ++it)
+        {
+            if (*it == *(it - 1))
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
 

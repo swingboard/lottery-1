@@ -115,6 +115,7 @@ namespace lottery
 
         //calculate all possible columns and their probabilities from next possible numbers
         std::vector<std::pair<double, std::vector<Number>>> nextColumns;
+        std::vector<Number> temp(m_columnCount);
         calculatePermutations(nextNumbers, 
             [&](const std::vector<std::pair<Number, double>> &values)
             {
@@ -122,16 +123,27 @@ namespace lottery
                 const double probability = 
                     std::accumulate(values.begin(), values.end(), 1.0, 
                         [](double probability, const std::pair<Number, double> &value)
-                        {
-                            return probability * value.second;
-                        });
+                            { return probability * value.second; });
+
+                //transform the array of values to an array of numbers
+                std::transform(values.begin(), values.end(), temp.begin(), 
+                    [](const std::pair<Number, double> &v) { return v.first; });
+
+                //sort the numbers
+                std::sort(temp.begin(), temp.end(), std::less<Number>());
+
+                //the numbers must be unique
+                if (!hasUniqueValues(temp)) return;
 
                 //store the column
-                std::vector<Number> numbers(values.size());
-                std::transform(values.begin(), values.end(), numbers.begin(), 
-                    [](const std::pair<Number, double> &v) { return v.first; });
-                nextColumns.push_back(std::make_pair(probability, numbers));
+                nextColumns.push_back(std::make_pair(probability, temp));
             });
+
+        //sort the next columns by probability in descending order
+        std::sort(
+            nextColumns.begin(), 
+            nextColumns.end(), 
+            TupleMemberComparator<std::greater<double>, 0>());
 
         std::set<Number> predictedNumbers;
 
