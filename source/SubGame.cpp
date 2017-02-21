@@ -112,7 +112,7 @@ namespace lottery
         std::vector<double> columnAverages(m_columnCount);
 
         //column deltas
-        std::vector<std::vector<int>> columnDeltas(m_columnCount, std::vector<int>(getRowCount() = 1));
+        std::vector<std::vector<int>> columnDeltas(m_columnCount, std::vector<int>(getRowCount() - 1));
 
         //row sums
         std::vector<int> rowSums(getRowCount() - 1);
@@ -143,18 +143,23 @@ namespace lottery
                 //calculate row sums
                 rowSums[rowIndex] += number;
 
-                //calculate column deltas
-                const int prevNumber = m_results[columnIndex - 1][rowIndex];
+                //compute column deltas
+                const int prevNumber = m_results[columnIndex][rowIndex - 1];
                 columnDeltas[columnIndex][rowIndex] = number - prevNumber;
             }
 
-            //compute delta sums of row
+            //compute delta sums of row;
+            //also compute row deltas.
             for (size_t columnIndex = 0; columnIndex < m_columnCount - 1; ++columnIndex)
             {
                 const Number number1 = m_results[columnIndex][rowIndex];
                 const Number number2 = m_results[columnIndex + 1][rowIndex];
                 const int delta = number2 - number1;
+
+                //compute delta sums of row
                 rowDeltaSums[rowIndex] += delta;
+
+                //compute row deltas
                 rowDeltas[columnIndex][rowIndex] = delta;
             }
 
