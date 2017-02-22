@@ -158,6 +158,51 @@ namespace lottery
     }
 
 
+    /**
+        Calculates the probabilities of values based on next values statistics.
+     */
+    template <class T>
+    ColumnsVector<ProbabilityVector<Number>> calculateStatistics_nextValueProbabilities(
+        const std::vector<std::vector<T>> &values,
+        const ColumnsVector<std::unordered_map<T, AppearanceVector<T>>> &nextValues)
+    {
+        ColumnsVector<ProbabilityVector<Number>> result(values.size());
+
+        //for all columns
+        for (size_t columnIndex = 0; columnIndex < values.size(); ++columnIndex)
+        {
+            const std::vector<T> &columnValues = values[columnIndex];
+            ProbabilityVector<Number> &probVec = result[columnIndex];
+
+            //get the last value of the column
+            const T prevValue = columnValues[columnValues.size() - 1];
+
+            //get the next values of previous value; if there is none, then ignore it,
+            //because the the prevValue1 shall be rare
+            const auto it = nextValues[columnIndex].find(prevValue);
+            if (it == nextValues[columnIndex].end())
+            {
+                continue;
+            }
+
+            //iterate all the next values of previous value 1
+            const AppearanceVector<T> &nextValues = it->second;
+            for (const Appearance<T> &ap : nextValues)
+            {
+                const T nextValue = ap.value;
+                probVec.push_back(Probability<T>{nextValue, ap.appearancePercent});
+            }
+
+            //sort the probability vector in descending order
+            std::sort(probVec.begin(), probVec.end(),
+                [](const Probability<T> &a, const Probability<T> &b)
+                    { return a.probability > b.probability; });
+        }
+
+        return result;
+    }
+
+
 } //namespace lottery
 
 
