@@ -13,6 +13,20 @@ namespace lottery
     typedef int8_t Number;
 
 
+    ///generic value type.
+    template <class T> struct ValueType
+    {
+        typedef T Type;
+    };
+
+
+    ///value type for Number is int.
+    template <> struct ValueType<Number>
+    {
+        typedef int Type;
+    };
+
+
 } //namespace lottery
 
 

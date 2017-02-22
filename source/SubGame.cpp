@@ -119,7 +119,10 @@ namespace lottery
         }
 
         std::vector<std::unordered_map<Number, std::unordered_map<Number, double>>>
-            nextNumberProbabilities = calculateNextValueProbabilities(m_results);
+            numberProbabilitiesByNextNumber = calculateProbabilitiesByNextValue(m_results);
+
+        std::vector<std::unordered_map<Number, std::unordered_map<Number, double>>>
+            numberProbabilitiesByNextNumberDelta = calculateProbabilitiesByNextValueDelta(m_results);
 
         //TODO    
         std::set<Number> predictedNumbers;

@@ -29,6 +29,21 @@
 namespace lottery
 {
 
+
+    ///returns min/max values.
+    template <class T>
+    std::pair<T, T> getMinMaxValues(const std::vector<T> &values)
+    {
+        std::pair<T, T> result(std::numeric_limits<T>::max(), -std::numeric_limits<T>::max());
+        for (T v : values)
+        {
+            result.first = std::min(result.first, v);
+            result.second = std::max(result.second, v);
+        }
+        return result;
+    }
+
+
 } //namespace lottery
 
 
