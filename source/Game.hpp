@@ -49,12 +49,15 @@ namespace lottery
 
         /**
             Predicts next draw's numbers.
-            @param minPredictedNumbersPerColumn minimum number 
-                   of predicted numbers per column.
-            @return set of predicted numbers.
+            @param minPredictedNumbersPerColumn minimum number of predicted numbers per column.
+            @param startResultsIndex begin index of data to examine.
+            @param endResultIndex end index of data to examine; if 0, it means the end of data.
+            @return predicted numbers per subgame.
          */
-        std::set<Number> predictNumbers(
-            size_t minPredictedNumbersPerColumn) const;
+        std::vector<std::vector<Number>> predictNumbers(
+            size_t minPredictedNumbersPerColumn,
+            size_t startResultsIndex = 0,
+            size_t endResultsIndex = 0) const;
 
     private:
         std::vector<SubGame> m_subGames;

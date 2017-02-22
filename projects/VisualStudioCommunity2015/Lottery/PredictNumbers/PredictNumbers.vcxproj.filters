@@ -17,5 +17,7 @@
     <ClInclude Include="..\..\..\..\source\Algorithm.hpp" />
     <ClInclude Include="..\..\..\..\source\Tuple.hpp" />
     <ClInclude Include="..\..\..\..\source\String.hpp" />
+    <ClInclude Include="..\..\..\..\source\Random.hpp" />
+    <ClInclude Include="..\..\..\..\source\Pair.hpp" />
   </ItemGroup>
 </Project>

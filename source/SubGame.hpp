@@ -111,12 +111,15 @@ namespace lottery
 
         /**
             Predicts next draw's numbers.
-            @param minPredictedNumbersPerColumn minimum number 
-                   of predicted numbers per column.
+            @param minPredictedNumbersPerColumn minimum number of predicted numbers per column.
+            @param startResultsIndex begin index of data to examine.
+            @param endResultIndex end index of data to examine; if 0, it means the end of data.
             @return set of predicted numbers.
          */
         std::set<Number> predictNumbers(
-            size_t minPredictedNumbersPerColumn) const;
+            size_t minPredictedNumbersPerColumn,
+            size_t startResultsIndex,
+            size_t endResultsIndex) const;
 
     private:
         std::string m_name;
@@ -127,10 +130,16 @@ namespace lottery
         std::vector<Column> m_results;
 
         //the algorithm to predict numbers using multiple columns
-        std::set<Number> _predictNumbersMultiColumn(const size_t minPredictedNumbersPerColumn) const;
+        std::set<Number> _predictNumbersMultiColumn(
+            const size_t minPredictedNumbersPerColumn,
+            size_t startResultsIndex,
+            size_t endResultsIndex) const;
 
         //the algorithm to predict numbers using one column
-        std::set<Number> _predictNumbersSingleColumn(const size_t minPredictedNumbersPerColumn) const;
+        std::set<Number> _predictNumbersSingleColumn(
+            const size_t minPredictedNumbersPerColumn,
+            size_t startResultsIndex,
+            size_t endResultsIndex) const;
     };
 
 
