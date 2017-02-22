@@ -119,12 +119,10 @@ namespace lottery
         }
 
         //statistics: most often next number after a specific number
-        ColumnsVector<std::unordered_map<Number, AppearanceVector<Number>>>
-            statistics_nextNumbers = calculateStatistics_nextValues(m_results);
+        auto nextNumbers = calculateNextValues(m_results);
 
         //calculate probabilities of next numbers
-        ColumnsVector<ProbabilityVector<Number>> statistics_nextNumberProbabilities =
-            calculateStatistics_nextValueProbabilities(m_results, statistics_nextNumbers);
+        auto nextNumbersProbabilities = calculateNextValuesProbabilities(m_results, nextNumbers);
 
         //TODO    
         std::set<Number> predictedNumbers;

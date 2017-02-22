@@ -48,7 +48,7 @@ namespace lottery
         Calculates the next value statistics, i.e. the percentage of appearance of a value after another value.
      */
     template <class T>
-    ColumnsVector<std::unordered_map<T, AppearanceVector<T>>> calculateStatistics_nextValues(const std::vector<std::vector<T>> &values)
+    ColumnsVector<std::unordered_map<T, AppearanceVector<T>>> calculateNextValues(const std::vector<std::vector<T>> &values)
     {
         ColumnsVector<std::unordered_map<T, AppearanceVector<T>>> result(values.size());
 
@@ -99,87 +99,27 @@ namespace lottery
 
 
     /**
-        Calculates the next value statistics for 2 numbers, i.e. the percentage of appearance of a value after a pair of values.
-     */
-    template <class T>
-    ColumnsVector<std::unordered_map<T, std::unordered_map<T, AppearanceVector<T>>>> calculateStatistics_nextValues2(const std::vector<std::vector<T>> &values)
-    {
-        ColumnsVector<std::unordered_map<T, std::unordered_map<T, AppearanceVector<T>>>> result(values.size());
-
-        //iterate columns
-        for (size_t columnIndex = 0; columnIndex < values.size(); ++columnIndex)
-        {
-            const std::vector<T> &columnValues = values[columnIndex];
-
-            //column data
-            std::unordered_map<T, std::unordered_map<T, std::unordered_map<T, size_t>>> data;
-            std::unordered_map<T, std::unordered_map<T, size_t>> totals;
-
-            //iterate rows of column
-            for (size_t rowIndex = 2; rowIndex < columnValues.size(); ++rowIndex)
-            {
-                const T prevValue2 = columnValues[rowIndex - 2];
-                const T prevValue1 = columnValues[rowIndex - 1];
-                const T nextValue = columnValues[rowIndex];
-                ++data[prevValue2][prevValue1][nextValue];
-                ++totals[prevValue2][prevValue1];
-            }
-
-            //create the result vector
-            std::unordered_map<T, std::unordered_map<T, AppearanceVector<T>>> &columnResult2 = result[columnIndex];
-            for (const auto &p2 : data)
-            {
-                std::unordered_map<T, AppearanceVector<T>> &columnResult1 = columnResult2[p2.first];
-
-                for (const auto &p1 : p2.second)
-                {
-                    AppearanceVector<T> &apVec = columnResult1[p1.first];
-                    const double valueTotals = totals[p2.first][p1.first];
-
-                    //set the appearance percent
-                    for (const auto &p : p1.second)
-                    {
-                        const double appearancePercent = p.second / valueTotals;
-                        apVec.push_back(Appearance<T>{p.first, appearancePercent, 0});
-                    }
-
-                    //set the appearance coverage
-                    double coveragePercent = 0;
-                    for (Appearance<T> &ap : apVec)
-                    {
-                        ap.coveragePercent = coveragePercent;
-                        coveragePercent += ap.appearancePercent;
-                    }
-                }
-            }
-        }
-
-        return result;
-    }
-
-
-    /**
         Calculates the probabilities of values based on next values statistics.
      */
     template <class T>
-    ColumnsVector<ProbabilityVector<Number>> calculateStatistics_nextValueProbabilities(
+    ColumnsVector<ProbabilityVector<T>> calculateNextValuesProbabilities(
         const std::vector<std::vector<T>> &values,
         const ColumnsVector<std::unordered_map<T, AppearanceVector<T>>> &nextValues)
     {
-        ColumnsVector<ProbabilityVector<Number>> result(values.size());
+        ColumnsVector<ProbabilityVector<T>> result(values.size());
 
         //for all columns
         for (size_t columnIndex = 0; columnIndex < values.size(); ++columnIndex)
         {
             const std::vector<T> &columnValues = values[columnIndex];
-            ProbabilityVector<Number> &probVec = result[columnIndex];
+            ProbabilityVector<T> &probVec = result[columnIndex];
 
             //get the last value of the column
-            const T prevValue = columnValues[columnValues.size() - 1];
+            const T lastValue = columnValues.back();
 
             //get the next values of previous value; if there is none, then ignore it,
             //because the the prevValue1 shall be rare
-            const auto it = nextValues[columnIndex].find(prevValue);
+            const auto it = nextValues[columnIndex].find(lastValue);
             if (it == nextValues[columnIndex].end())
             {
                 continue;
