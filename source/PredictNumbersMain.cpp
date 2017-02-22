@@ -42,13 +42,13 @@ int main(int argc, const char *argv[])
 
     //write the output file header
     outputFile << "SubGame";
-    for (size_t index = 1; index <= predictedNumbers.size(); ++index)
+    for (size_t index = 1; index <= maxPrediction; ++index)
     {
-        outputFile << ((std::string("Number_1") + index));
+        outputFile << ((std::string("Number_") + index));
     }
 
     //write the output file
-    for (size_t subGameIndex = 0; subGameIndex = game.getSubGames().size(); ++subGameIndex)
+    for (size_t subGameIndex = 0; subGameIndex < game.getSubGames().size(); ++subGameIndex)
     {
         //write the subgame index
         outputFile << (std::string("#") + (subGameIndex + 1));
