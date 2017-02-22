@@ -118,11 +118,8 @@ namespace lottery
             throw std::invalid_argument("minPredictedNumbersPerColumn shall not be zero");
         }
 
-        //statistics: most often next number after a specific number
-        auto nextNumbers = calculateNextValues(m_results);
-
-        //calculate probabilities of next numbers
-        auto nextNumbersProbabilities = calculateNextValuesProbabilities(m_results, nextNumbers);
+        std::vector<std::unordered_map<Number, std::unordered_map<Number, double>>>
+            nextNumberProbabilities = calculateNextValueProbabilities(m_results);
 
         //TODO    
         std::set<Number> predictedNumbers;
