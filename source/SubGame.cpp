@@ -122,15 +122,6 @@ namespace lottery
         ColumnsVector<std::unordered_map<Number, AppearanceVector<Number>>>
             statistics_nextNumbers = calculateStatistics_nextValues(m_results);
 
-        //statistics: most often next number after two numbers
-        ColumnsVector<std::unordered_map<Number, std::unordered_map<Number, AppearanceVector<Number>>>>
-            statistics_nextNumbers2 = calculateStatistics_nextValues2(m_results);
-
-        //statistics: calculate the probability of each number to be the next number of the last number
-        //of the data, based on the next numbers and next numbers(2) statistics.
-        ColumnsVector<ProbabilityVector<Number>> statistics_nextNumberProbabilities 
-            = calculateStatistics_nextValueProbabilities(m_results, statistics_nextNumbers, statistics_nextNumbers2);
-
         //TODO    
         std::set<Number> predictedNumbers;
         return predictedNumbers;

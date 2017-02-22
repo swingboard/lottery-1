@@ -80,6 +80,43 @@ namespace lottery
     }
 
 
+    /**
+        Locates the closest value into the given maps of maps.
+        If a value is not found, then the closest value is used.
+        If no value could be found, V() is returned.
+     */
+    template <class T, class V>
+    V findClosestValue(std::map<T, std::map<T, std::map<T, V>>> &values, const T prevValue2, const T prevValue1, const T nextValue)
+    {
+        auto it2 = values.find(prevValue2);
+        if (it2 == values.end())
+        {
+            it2 = findClosestKey(values.begin(), values.end(), prevValue2);
+        }
+        if (it2 != values.end())
+        {
+            auto it1 = it2->second.find(prevValue1);
+            if (it1 == it2->second.end())
+            {
+                it1 = findClosestKey(it2->second.begin(), it2->second.end(), prevValue1);
+            }
+            if (it1 != it2->second.end())
+            {
+                auto it = it1->second.find(nextValue);
+                if (it == it1->second.end())
+                {
+                    it = findClosestKey(it1->second.begin(), it1->second.end(), nextValue);
+                }
+                if (it != it1->second.end())
+                {
+                    return it->second;
+                }
+            }
+        }
+        return V();
+    }
+
+
 } //namespace lottery
 
 
