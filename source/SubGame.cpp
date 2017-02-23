@@ -118,11 +118,28 @@ namespace lottery
             throw std::invalid_argument("minPredictedNumbersPerColumn shall not be zero");
         }
 
-        std::vector<std::unordered_map<Number, std::unordered_map<Number, double>>>
+        std::vector<std::unordered_map<Number, double>>
             numberProbabilitiesByNextNumber = calculateProbabilitiesByNextValue(m_results);
+        std::vector<std::vector<std::pair<Number, double>>> 
+            sorted1 = sortProbabilities(numberProbabilitiesByNextNumber);
 
-        std::vector<std::unordered_map<Number, std::unordered_map<Number, double>>>
+        std::vector<std::unordered_map<Number, double>>
             numberProbabilitiesByNextNumberDelta = calculateProbabilitiesByNextValueDelta(m_results);
+        std::vector<std::vector<std::pair<Number, double>>> 
+            sorted2 = sortProbabilities(numberProbabilitiesByNextNumberDelta);
+
+        std::vector<std::unordered_map<Number, double>>
+            numberProbabilitiesByNextNumberDeltaFromAverage = calculateProbabilitiesByNextValueDeltaFromAverage(m_results);
+        std::vector<std::vector<std::pair<Number, double>>> 
+            sorted3 = sortProbabilities(numberProbabilitiesByNextNumberDeltaFromAverage);
+
+        std::vector<std::unordered_map<Number, double>>
+            allProbabilities = multiplyProbabilities({
+                numberProbabilitiesByNextNumber,
+                numberProbabilitiesByNextNumberDelta,
+                numberProbabilitiesByNextNumberDeltaFromAverage});
+        std::vector<std::vector<std::pair<Number, double>>> sorted4 = 
+            sortProbabilities(allProbabilities);
 
         //TODO    
         std::set<Number> predictedNumbers;

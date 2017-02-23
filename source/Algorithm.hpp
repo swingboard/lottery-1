@@ -44,6 +44,23 @@ namespace lottery
     }
 
 
+    //sum values
+    template <class RT, class T>
+    RT sum(const std::vector<T> &values)
+    {
+        return std::accumulate(values.begin(), values.end(), 0, [](RT a, RT b) { return a + b; });
+    }
+
+
+    //average of values
+    template <class RT, class T>
+    RT average(const std::vector<T> &values)
+    {
+        const RT s = sum<RT>(values);
+        return (RT)(s / (double)values.size());
+    }
+
+
 } //namespace lottery
 
 
