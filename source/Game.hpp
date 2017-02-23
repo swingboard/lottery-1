@@ -48,6 +48,14 @@ namespace lottery
         }
 
         /**
+            Returns the number of results available.
+         */
+        size_t getResultsCount() const
+        {
+            return m_subGames[0].getRowCount();
+        }
+
+        /**
             Predicts next draw's numbers.
             @param minPredictedNumbersPerColumn minimum number of predicted numbers per column.
             @param startResultsIndex begin index of data to examine.

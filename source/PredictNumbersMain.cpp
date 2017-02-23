@@ -24,7 +24,7 @@ int main(int argc, const char *argv[])
     }
 
     //test predicted numbers
-    if (1)
+    if (0)
     {
         const lottery::SubGame &subGame = game.getSubGames()[0];
         lottery::RandomNumberGenerator<int> rnd(subGame.getMinNumber(), subGame.getMaxNumber());
@@ -87,7 +87,7 @@ int main(int argc, const char *argv[])
 
     //predicted numbers
     std::vector<std::vector<lottery::Number>> predictedNumbers = 
-        game.predictNumbers(minPredictedNumbersPerColumn);
+        game.predictNumbers(minPredictedNumbersPerColumn, 0, game.getResultsCount() - 1);
 
     //find the largest of the subgames' prediction
     const size_t maxPrediction = std::accumulate(predictedNumbers.begin(), predictedNumbers.end(), 0, 

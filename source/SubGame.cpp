@@ -67,11 +67,11 @@ namespace lottery
             }
         }
 
-        //cache the results size for quick access
-        m_resultsSize = m_results[0].size();
-
         //set the results
         m_results = results;
+
+        //cache the results size for quick access
+        m_resultsSize = m_results[0].size();
     }
 
 
@@ -116,6 +116,44 @@ namespace lottery
         if (minPredictedNumbersPerColumn == 0)
         {
             throw std::invalid_argument("minPredictedNumbersPerColumn shall not be zero");
+        }
+
+        //candidate numbers per column
+        std::vector<std::vector<Number>> candidateNumbers(m_columnCount);
+ 
+        //process columns
+        for (size_t columnIndex = 0; columnIndex < m_columnCount; ++columnIndex)
+        {
+            std::vector<Number> columnNumbers = m_results[columnIndex];
+
+            //gather all the values found as next to the last column value
+            const Number lastNumber = columnNumbers[endResultsIndex - 1];
+            Number prevNumber = 0;
+            std::unordered_set<Number> nextNumbers;
+
+            //process the numbers of the column
+            for (size_t rowIndex = startResultsIndex; rowIndex < endResultsIndex; ++rowIndex)
+            {
+                const Number number = columnNumbers[rowIndex];
+                
+                //gather next numbers of last number
+                if (prevNumber == lastNumber) nextNumbers.insert(number);
+                prevNumber = number;
+            }
+
+            //find patterns of column numbers for all the current numbers
+            //plus the next numbers
+            PatternVector<Number> allPatterns;
+            for (const Number nextNumber : nextNumbers)
+            {
+                columnNumbers.push_back(nextNumber);
+                PatternVector<Number> patterns = findPatterns(columnNumbers, startResultsIndex, endResultsIndex, 6, 3);
+                columnNumbers.pop_back();
+                allPatterns.insert(allPatterns.end(), patterns.begin(), patterns.end());
+            }
+
+            //get the candidate numbers from the patterns
+            candidateNumbers[columnIndex] = getPatternMatches(columnNumbers, allPatterns);
         }
 
         //TODO    

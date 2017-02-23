@@ -116,7 +116,7 @@ namespace lottery
                     resultsFile >> number;
                     if (resultsFile.eof())
                     {
-                        return true;
+                        goto RESULTS_LOADED;
                     }
                     results[subGameIndex][columnIndex].push_back(number);
                 }
@@ -125,13 +125,16 @@ namespace lottery
                     return false;
                 }
             }
+        }
 
-            for (size_t subGameIndex = 0;
-                subGameIndex < m_subGames.size();
-                ++subGameIndex)
-            {
-                m_subGames[subGameIndex].setResults(results[subGameIndex]);
-            }
+        RESULTS_LOADED:
+
+        //set the results of each sub-game
+        for (size_t subGameIndex = 0;
+            subGameIndex < m_subGames.size();
+            ++subGameIndex)
+        {
+            m_subGames[subGameIndex].setResults(results[subGameIndex]);
         }
 
         //success

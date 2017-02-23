@@ -10,21 +10,7 @@ namespace lottery
 
 
     ///number type.
-    typedef int8_t Number;
-
-
-    ///generic value type.
-    template <class T> struct ValueType
-    {
-        typedef T Type;
-    };
-
-
-    ///value type for Number is int.
-    template <> struct ValueType<Number>
-    {
-        typedef int Type;
-    };
+    typedef int Number;
 
 
 } //namespace lottery
