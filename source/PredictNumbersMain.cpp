@@ -23,6 +23,42 @@ int main(int argc, const char *argv[])
         return -1;
     }
 
+    //test predicted numbers
+    if (1)
+    {
+        const lottery::SubGame &subGame = game.getSubGames()[0];
+        const size_t rowCount = subGame.getRowCount();
+        const size_t startIndex = rowCount / 2;
+        const size_t endIndex = rowCount;
+        const double sampleCount = endIndex - startIndex;
+        std::vector<int> totalSuccesses(subGame.getColumnCount() + 1);
+        double predictedNumberCount = 0;
+        for (size_t index = startIndex; index < endIndex; ++index)
+        {
+            std::set<lottery::Number> predictedNumbers = subGame.predictNumbers(minPredictedNumbersPerColumn, 0, index);
+            predictedNumberCount += predictedNumbers.size();
+            int successes = 0;
+            for (size_t col = 0; col < subGame.getColumnCount(); ++col)
+            {
+                int n = subGame.getResult(col, index);
+                if (predictedNumbers.find(n) != predictedNumbers.end())
+                {
+                    ++successes;
+                }
+            }
+            ++totalSuccesses[successes];
+        }
+        for (size_t i = 1; i <= subGame.getColumnCount(); ++i)
+        {
+            std::cout << "successes of " << i << " : " << (100.0 * totalSuccesses[i] / sampleCount) << "%\n";
+        }
+        std::cout << "Average prediction size : " << (predictedNumberCount / sampleCount) << "\n";
+        std::cout << "Average prediction size per column : " << (predictedNumberCount / sampleCount / subGame.getColumnCount()) << "\n";
+        std::cout << '\n';
+        system("pause");
+        return 0;
+    }
+
     //predicted numbers
     std::vector<std::vector<lottery::Number>> predictedNumbers = 
         game.predictNumbers(minPredictedNumbersPerColumn);

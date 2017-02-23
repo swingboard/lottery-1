@@ -118,8 +118,125 @@ namespace lottery
             throw std::invalid_argument("minPredictedNumbersPerColumn shall not be zero");
         }
 
+        //number of samples
+        const size_t sampleCount = endResultsIndex - startResultsIndex;
+
+        //predicted numbers per column, accompanied with their probability.
+        std::vector<std::unordered_map<Number, double>> candidateNumbersPerColumn(m_columnCount);
+
+        //create per-column statistics useful in the prediction
+        for (size_t columnIndex = 0; columnIndex < m_columnCount; ++columnIndex)
+        {
+            //column results
+            const std::vector<Number> &columnResults = m_results[columnIndex];
+
+            //last column result
+            const Number lastNumber = columnResults[endResultsIndex - 1];
+
+            //next numbers of the last column result
+            std::unordered_map<Number, size_t> nextNumbers;
+
+            //next number count
+            size_t nextNumberCount = 0;
+
+            //previous number
+            Number previousNumber = 0;
+
+            //sum of numbers of column
+            size_t numberSum = 0;
+
+            //average of numbers of column
+            double numberAverage = 0;
+
+            //average deltas
+            std::vector<double> averageDeltas;
+
+            //iterate the given rows
+            for (size_t rowIndex = startResultsIndex; rowIndex < endResultsIndex; ++rowIndex)
+            {
+                //number at current row
+                const Number number = columnResults[rowIndex];
+
+                //if the previous number equals the last number, then add the current number
+                //to the set of next numbers
+                if (previousNumber == lastNumber)
+                {
+                    ++nextNumbers[number];
+                    ++nextNumberCount;
+                }
+                previousNumber = number;
+
+                //update the sum of numbers
+                numberSum += number;
+
+                //new average of numbers
+                const size_t currentSampleCount = rowIndex - startResultsIndex + 1;
+                const double newNumberAverage = numberSum / (double)currentSampleCount;
+
+                //delta of the new average from the last one
+                const double newNumberAverageDelta = std::abs(newNumberAverage - numberAverage);
+
+                //update the number average
+                numberAverage = newNumberAverage;
+
+                //update the average deltas
+                averageDeltas.push_back(newNumberAverageDelta);
+            }
+
+            //calculate the sum of last N average deltas
+            double numberAverageDeltaSum = 0;
+            const size_t averageDeltaSampleCount = std::min(100U, averageDeltas.size());
+            for (size_t averageDeltaIndex = averageDeltas.size() - averageDeltaSampleCount; 
+                averageDeltaIndex < averageDeltas.size(); 
+                ++averageDeltaIndex)
+            {
+                numberAverageDeltaSum += averageDeltas[averageDeltaIndex];
+            }
+
+            //calculate the final number average delta average
+            const double numberAverageDeltaAverage = numberAverageDeltaSum / (double)averageDeltaSampleCount;
+
+            //process each next number found against the average;
+            //if the number does not modify the average over a certain limit,
+            //then consider the number as a good candidate for being the next number
+            for (const auto &nextNumberPair : nextNumbers)
+            {
+                //the number
+                const Number nextNumber = nextNumberPair.first;
+
+                //compute a new sum with the current next number
+                const double newNumberSum = numberSum + nextNumber;
+
+                //compute a new average with the current next number
+                const double newNumberAverage = newNumberSum / (double)(sampleCount + 1);
+
+                //compute a new average delta
+                const double newNumberAverageDelta = std::abs(newNumberAverage - numberAverage);
+
+                //add the next number as a candidate if the new delta is below the delta average
+                if (newNumberAverageDelta <= numberAverageDeltaAverage)
+                {
+                    //the number of occurrences
+                    const size_t nextNumberOccurrences = nextNumberPair.second;
+
+                    //the probability of occurrence of the next number
+                    const double probability = nextNumberOccurrences / (double)nextNumberCount;
+
+                    //add the number to the candidate numbers per column
+                    candidateNumbersPerColumn[columnIndex][nextNumber] = probability;
+                }
+            }
+        }
+
         //TODO    
         std::set<Number> predictedNumbers;
+        for (const auto &map : candidateNumbersPerColumn)
+        {
+            for (const auto &p : map)
+            {
+                predictedNumbers.insert(p.first);
+            }
+        }
         return predictedNumbers;
     }
 
