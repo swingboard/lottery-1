@@ -27,11 +27,13 @@ int main(int argc, const char *argv[])
     if (1)
     {
         const lottery::SubGame &subGame = game.getSubGames()[0];
+        lottery::RandomNumberGenerator<int> rnd(subGame.getMinNumber(), subGame.getMaxNumber());
         const size_t rowCount = subGame.getRowCount();
         const size_t startIndex = rowCount / 2;
         const size_t endIndex = rowCount;
         const double sampleCount = endIndex - startIndex;
         std::vector<int> totalSuccesses(subGame.getColumnCount() + 1);
+        std::vector<int> totalRandomSuccesses(subGame.getColumnCount() + 1);
         double predictedNumberCount = 0;
         for (size_t index = startIndex; index < endIndex; ++index)
         {
@@ -47,13 +49,37 @@ int main(int argc, const char *argv[])
                 }
             }
             ++totalSuccesses[successes];
+
+            int randomSuccesses = 0;
+            std::unordered_set<lottery::Number> randomSet;
+            while (randomSet.size() < predictedNumbers.size())
+            {
+                const int number = rnd();
+                const auto it = randomSet.find(number);
+                if (it == randomSet.end())
+                {
+                    randomSet.insert(number);
+                }
+            }
+            for (size_t col = 0; col < subGame.getColumnCount(); ++col)
+            {
+                int n = subGame.getResult(col, index);
+                if (randomSet.find(n) != randomSet.end())
+                {
+                    ++randomSuccesses;
+                }
+            }
+            ++totalRandomSuccesses[randomSuccesses];
         }
         for (size_t i = 1; i <= subGame.getColumnCount(); ++i)
         {
-            std::cout << "successes of " << i << " : " << (100.0 * totalSuccesses[i] / sampleCount) << "%\n";
+            std::cout << "successes of " << i << " : " << (100.0 * totalSuccesses[i] / sampleCount) << "% vs ";
+            std::cout << (100.0 * totalRandomSuccesses[i] / sampleCount) << "%\n";
         }
-        std::cout << "Average prediction size : " << (predictedNumberCount / sampleCount) << "\n";
-        std::cout << "Average prediction size per column : " << (predictedNumberCount / sampleCount / subGame.getColumnCount()) << "\n";
+        const double averagePredictionSize = predictedNumberCount / sampleCount;
+        std::cout << "Average prediction size : " << averagePredictionSize << "\n";
+        const size_t predictionSizePerColumn = (size_t)std::round(predictedNumberCount / sampleCount / subGame.getColumnCount());
+        std::cout << "Average prediction size per column : " << predictionSizePerColumn << "\n";
         std::cout << '\n';
         system("pause");
         return 0;
