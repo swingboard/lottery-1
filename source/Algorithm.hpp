@@ -67,10 +67,30 @@ namespace lottery
     /**
         Calculates the sum of values.
      */
+    template <class It>
+    typename It::value_type sum(const It begin, const It end)
+    {
+        return std::accumulate(begin, end, 0, [](const auto &a, const auto &b) { return a + b; });
+    }
+
+
+    /**
+        Calculates the average of values.
+     */
+    template <class It>
+    typename It::value_type average(const It begin, const It end)
+    {
+        return sum(begin, end) / std::distance(begin, end);
+    }
+
+
+    /**
+        Calculates the sum of values.
+     */
     template <class T>
     T sum(const std::vector<T> &values)
     {
-        return std::accumulate(values.begin(), values.end(), 0, [](T a, T b) { return a + b; });
+        return sum(values.begin(), values.end());
     }
 
 
@@ -80,7 +100,7 @@ namespace lottery
     template <class T>
     T average(const std::vector<T> &values)
     {
-        return static_cast<T>(std::round(sum(values) / (double)values.size()));
+        return average(values.begin(), values.end());
     }
 
 
