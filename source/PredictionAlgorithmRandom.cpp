@@ -7,13 +7,8 @@ namespace lottery
 
 
     ///constructor.
-    PredictionAlgorithmRandom::PredictionAlgorithmRandom() : PredictionAlgorithm("Random")
-    {
-    }
-
-
-    //empty.
-    void PredictionAlgorithmRandom::doTraining(const lottery::SubGame &subGame, const size_t startIndex, const size_t endIndex, const size_t predictedNumbersCount)
+    PredictionAlgorithmRandom::PredictionAlgorithmRandom() 
+        : PredictionAlgorithm("Random")
     {
     }
 

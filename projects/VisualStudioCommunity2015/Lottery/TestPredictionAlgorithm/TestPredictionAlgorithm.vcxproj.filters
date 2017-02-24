@@ -9,5 +9,6 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\..\source\PredictionAlgorithm.hpp" />
     <ClInclude Include="..\..\..\..\source\PredictionAlgorithmRandom.hpp" />
+    <ClInclude Include="..\..\..\..\source\Row.hpp" />
   </ItemGroup>
 </Project>

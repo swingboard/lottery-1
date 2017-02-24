@@ -71,7 +71,17 @@ namespace lottery
         m_results = results;
 
         //cache the results size for quick access
-        m_resultsSize = m_results[0].size();
+        m_rowCount = m_results[0].size();
+
+        //set the rows
+        m_rows.resize(m_rowCount, Row(m_columnCount));
+        for (size_t rowIndex = 0; rowIndex < m_rowCount; ++rowIndex)
+        {
+            for (size_t columnIndex = 0; columnIndex < m_columnCount; ++columnIndex)
+            {
+                m_rows[rowIndex][columnIndex] = m_results[columnIndex][rowIndex];
+            }
+        }
     }
 
 

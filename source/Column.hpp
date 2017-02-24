@@ -11,7 +11,11 @@ namespace lottery
 
 
     ///type of column.
-    typedef std::vector<Number> Column;
+    class Column : public std::vector<Number>
+    {
+    public:
+        using std::vector<Number>::vector;
+    };
 
 
 } //namespace lottery

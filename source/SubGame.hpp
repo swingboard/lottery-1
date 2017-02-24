@@ -5,6 +5,7 @@
 #include <set>
 #include <cassert>
 #include "Column.hpp"
+#include "Row.hpp"
 
 
 namespace lottery
@@ -62,7 +63,7 @@ namespace lottery
          */
         size_t getRowCount() const
         {
-            return m_resultsSize;
+            return m_rowCount;
         }
 
         /**
@@ -85,6 +86,22 @@ namespace lottery
         {
             assert(column < getColumnCount() && row < getRowCount());
             return m_results[column][row];
+        }
+
+        /**
+            Returns the specific column of results.
+         */
+        const Column &getColumn(size_t column) const
+        {
+            return m_results[column];
+        }
+
+        /**
+            Returns the specific row of the results.
+         */
+        const Row &getRow(size_t row) const
+        {
+            return m_rows[row];
         }
 
         /**
@@ -126,8 +143,9 @@ namespace lottery
         Number m_minNumber = 1;
         Number m_maxNumber = 49;
         size_t m_columnCount = 6;
-        size_t m_resultsSize = 0;
+        size_t m_rowCount = 0;
         std::vector<Column> m_results;
+        std::vector<Row> m_rows;
 
         //the algorithm to predict numbers using multiple columns
         std::set<Number> _predictNumbersMultiColumn(
