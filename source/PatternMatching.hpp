@@ -99,7 +99,7 @@ namespace lottery
         //end index to search for pattern
         const size_t endIndex = values.size() - patternSize;
 
-        //iterate all values in the sequence to find the most matching pattern
+        //iterate all values in the sequence to find the most matching patterns
         for (size_t index = 0; index < endIndex; ++index)
         {
             //delta sum
@@ -111,12 +111,12 @@ namespace lottery
             //iterate values of pattern
             for (size_t patternIndex = 0; patternIndex < patternSize; ++patternIndex)
             {
-                //get the end value
-                const T endValue = values[endIndex + patternIndex];
-                
                 //get the pattern value
                 const T patternValue = values[index + patternIndex];
 
+                //get the end value
+                const T endValue = values[endIndex + patternIndex];
+                
                 //delta
                 const T delta = endValue - patternValue;
 
