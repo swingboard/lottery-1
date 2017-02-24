@@ -147,10 +147,13 @@ namespace lottery
             for (const Number nextNumber : nextNumbers)
             {
                 columnNumbers.push_back(nextNumber);
-                PatternVector<Number> patterns = findPatterns(columnNumbers, startResultsIndex, endResultsIndex, 6, 6);
+                PatternVector<Number> patterns = findPatterns(columnNumbers, startResultsIndex, endResultsIndex, 3, 3);
                 columnNumbers.pop_back();
                 allPatterns.insert(allPatterns.end(), patterns.begin(), patterns.end());
             }
+
+            //sort all patterns
+            std::sort(allPatterns.begin(), allPatterns.end(), PatternComparator<Number>());
 
             //get the candidate numbers from the patterns
             candidateNumbers[columnIndex] = getPatternMatches(columnNumbers, allPatterns);
@@ -158,6 +161,10 @@ namespace lottery
 
         //TODO    
         std::set<Number> predictedNumbers;
+        for (const auto &vec : candidateNumbers)
+        {
+            predictedNumbers.insert(vec.begin(), vec.begin() + vec.size()/2);
+        }
         return predictedNumbers;
     }
 

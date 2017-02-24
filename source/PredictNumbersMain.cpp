@@ -24,7 +24,7 @@ int main(int argc, const char *argv[])
     }
 
     //test predicted numbers
-    if (0)
+    if (1)
     {
         const lottery::SubGame &subGame = game.getSubGames()[0];
         lottery::RandomNumberGenerator<int> rnd(subGame.getMinNumber(), subGame.getMaxNumber());
@@ -78,7 +78,7 @@ int main(int argc, const char *argv[])
         }
         const double averagePredictionSize = predictedNumberCount / sampleCount;
         std::cout << "Average prediction size : " << averagePredictionSize << "\n";
-        const size_t predictionSizePerColumn = (size_t)std::round(predictedNumberCount / sampleCount / subGame.getColumnCount());
+        const size_t predictionSizePerColumn = (size_t)std::round(averagePredictionSize / subGame.getColumnCount());
         std::cout << "Average prediction size per column : " << predictionSizePerColumn << "\n";
         std::cout << '\n';
         system("pause");

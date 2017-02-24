@@ -184,14 +184,13 @@ namespace lottery
         std::unordered_set<T> resultValues;        
         for (const Pattern<T> &pattern : patterns)
         {
-            resultValues.insert(values[getPatternEndIndex(pattern) - 1]);
+            const T &value = values[getPatternEndIndex(pattern) - 1];
+            if (resultValues.find(value) == resultValues.end())
+            {
+                resultValues.insert(value);
+                results.push_back(value);
+            }
         }
-
-        //set the results
-        results.insert(results.end(), resultValues.begin(), resultValues.end());
-
-        //sort the results
-        std::sort(results.begin(), results.end(), std::less<T>());
 
         return results;
     }
