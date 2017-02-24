@@ -78,7 +78,7 @@ int main(int argc, const char *argv[])
         }
         const double averagePredictionSize = predictedNumberCount / sampleCount;
         std::cout << "Average prediction size : " << averagePredictionSize << "\n";
-        const size_t predictionSizePerColumn = (size_t)std::round(averagePredictionSize / subGame.getColumnCount());
+        const double predictionSizePerColumn = averagePredictionSize / subGame.getColumnCount();
         std::cout << "Average prediction size per column : " << predictionSizePerColumn << "\n";
         std::cout << '\n';
         system("pause");
