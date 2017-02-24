@@ -147,7 +147,7 @@ namespace lottery
             for (const Number nextNumber : nextNumbers)
             {
                 columnNumbers.push_back(nextNumber);
-                PatternVector<Number> patterns = findPatterns(columnNumbers, startResultsIndex, endResultsIndex, 6, 3);
+                PatternVector<Number> patterns = findPatterns(columnNumbers, startResultsIndex, endResultsIndex, 6, 6);
                 columnNumbers.pop_back();
                 allPatterns.insert(allPatterns.end(), patterns.begin(), patterns.end());
             }
