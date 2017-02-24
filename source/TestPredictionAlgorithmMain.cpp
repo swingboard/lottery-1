@@ -3,77 +3,7 @@
 #include "Game.hpp"
 #include "Statistics.hpp"
 #include "CSVOutputFileStream.hpp"
-
-
-/**
-    Base class for prediction algorithms.
- */
-class PredictionAlgorithm
-{
-public:
-    //constructor.
-    PredictionAlgorithm(const std::string &name)
-        : m_name(name)
-    {
-    }
-
-    //destructor.
-    virtual ~PredictionAlgorithm()
-    {
-    }
-
-    //returns the name.
-    const std::string &getName() const
-    {
-        return m_name;
-    }
-
-    //interface for preparing the algorithm for rediction.
-    virtual void doTraining(const lottery::SubGame &subGame, const size_t startIndex, const size_t endIndex, const size_t predictedNumbersCount) = 0;
-
-    //interface for predicting numbers.
-    virtual std::unordered_set<lottery::Number> predictNumbers(const lottery::SubGame &subGame, const size_t startIndex, const size_t endIndex, const size_t predictedNumbersCount) = 0;
-
-private:
-    std::string m_name;
-};
-
-
-//type of prediction algorithm pointer.
-typedef std::shared_ptr<PredictionAlgorithm> PredictionAlgorithmPtr;
-
-
-//random prediction
-class RandomPrediction : public PredictionAlgorithm
-{
-public:
-    ///constructor.
-    RandomPrediction() : PredictionAlgorithm("Random")
-    {
-    }
-
-    //empty.
-    virtual void doTraining(const lottery::SubGame &subGame, const size_t startIndex, const size_t endIndex, const size_t predictedNumbersCount)
-    {
-    }
-
-    //pick random numbers.
-    virtual std::unordered_set<lottery::Number> predictNumbers(const lottery::SubGame &subGame, const size_t startIndex, const size_t endIndex, const size_t predictedNumbersCount)
-    {
-        //create a randomizer
-        lottery::RandomNumberGenerator<int> getRandomNumber(subGame.getMinNumber(), subGame.getMaxNumber());
-
-        std::unordered_set<lottery::Number> result;
-
-        //fill the result with random values
-        while (result.size() < predictedNumbersCount)
-        {
-            result.insert(getRandomNumber());
-        }
-
-        return result;
-    }
-};
+#include "PredictionAlgorithmRandom.hpp"
 
 
 //entry point
@@ -108,17 +38,17 @@ int main(int argc, const char *argv[])
     }
 
     //create array of algorithms
-    std::vector<PredictionAlgorithmPtr> predictionAlgorithms;
-    predictionAlgorithms.push_back(std::make_shared<RandomPrediction>());
+    std::vector<lottery::PredictionAlgorithmPtr> predictionAlgorithms;
+    predictionAlgorithms.push_back(std::make_shared<lottery::PredictionAlgorithmRandom>());
 
     //prepare the algorithms.
-    for (const PredictionAlgorithmPtr &predictionAlgorithm : predictionAlgorithms)
+    for (const lottery::PredictionAlgorithmPtr &predictionAlgorithm : predictionAlgorithms)
     {
         predictionAlgorithm->doTraining(subGame, 0, testStartIndex, predictedNumbersCount);
     }
 
     //do the predictions.
-    for (const PredictionAlgorithmPtr &predictionAlgorithm : predictionAlgorithms)
+    for (const lottery::PredictionAlgorithmPtr &predictionAlgorithm : predictionAlgorithms)
     {
         //the algorithm's results.
         std::vector<size_t> totalSuccesses(subGame.getColumnCount() + 1);

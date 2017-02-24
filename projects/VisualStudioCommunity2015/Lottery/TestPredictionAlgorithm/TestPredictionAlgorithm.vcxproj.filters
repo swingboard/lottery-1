@@ -4,5 +4,10 @@
     <ClCompile Include="..\..\..\..\source\TestPredictionAlgorithmMain.cpp" />
     <ClCompile Include="..\..\..\..\source\Game.cpp" />
     <ClCompile Include="..\..\..\..\source\SubGame.cpp" />
+    <ClCompile Include="..\..\..\..\source\PredictionAlgorithmRandom.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\source\PredictionAlgorithm.hpp" />
+    <ClInclude Include="..\..\..\..\source\PredictionAlgorithmRandom.hpp" />
   </ItemGroup>
 </Project>
