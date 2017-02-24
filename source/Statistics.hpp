@@ -2,7 +2,7 @@
 #define LOTTERY_STATISTICS_HPP
 
 
-#include "Algorithm.hpp"
+#include "PatternMatching.hpp"
 
 
 namespace lottery

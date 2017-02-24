@@ -124,39 +124,72 @@ namespace lottery
         //process columns
         for (size_t columnIndex = 0; columnIndex < m_columnCount; ++columnIndex)
         {
-            std::vector<Number> columnNumbers = m_results[columnIndex];
+            //get the column numbers that should be examined
+            std::vector<Number> columnNumbers(
+                m_results[columnIndex].begin() + startResultsIndex, 
+                m_results[columnIndex].begin() + endResultsIndex);
 
-            //gather all the values found as next to the last column value
-            const Number lastNumber = columnNumbers[endResultsIndex - 1];
-            Number prevNumber = 0;
-            std::unordered_set<Number> nextNumbers;
+            //find the min/max values of the column
+            Number minNumber = std::numeric_limits<Number>::max();
+            Number maxNumber = std::numeric_limits<Number>::min();
 
             //process the numbers of the column
-            for (size_t rowIndex = startResultsIndex; rowIndex < endResultsIndex; ++rowIndex)
+            for (size_t rowIndex = 0; rowIndex < columnNumbers.size(); ++rowIndex)
             {
                 const Number number = columnNumbers[rowIndex];
-                
-                //gather next numbers of last number
-                if (prevNumber == lastNumber) nextNumbers.insert(number);
-                prevNumber = number;
+
+                //find the min/max number
+                minNumber = std::min(minNumber, number);
+                maxNumber = std::max(maxNumber, number);
             }
 
-            //find patterns of column numbers for all the current numbers
-            //plus the next numbers
-            PatternVector<Number> allPatterns;
-            for (const Number nextNumber : nextNumbers)
+            //find patterns of column numbers for all the current numbers plus 
+            //all the numbers identified in the min-max range of the column
+            //until a satisfactory number of candidate numbers is made for the column
+            size_t patternSize = m_columnCount;
+            int epsilon = 1;
+            int topEpsilon = m_columnCount;
+            for (;;)
             {
-                columnNumbers.push_back(nextNumber);
-                PatternVector<Number> patterns = findPatterns(columnNumbers, startResultsIndex, endResultsIndex, 3, 3);
-                columnNumbers.pop_back();
-                allPatterns.insert(allPatterns.end(), patterns.begin(), patterns.end());
+                PatternVector<Number> allPatterns;
+                for (Number nextNumber = minNumber; nextNumber <= maxNumber; ++nextNumber)
+                {
+                    columnNumbers.push_back(nextNumber);
+                    PatternVector<Number> patterns = findPatterns(columnNumbers, patternSize, epsilon);
+                    columnNumbers.pop_back();
+                    allPatterns.insert(allPatterns.end(), patterns.begin(), patterns.end());
+                }
+
+                //sort all patterns
+                std::sort(allPatterns.begin(), allPatterns.end(), PatternComparator<Number>());
+
+                //get the candidate numbers from the patterns
+                candidateNumbers[columnIndex] = getPatternMatches(columnNumbers, allPatterns);
+
+                //do not try bigger patterns / epsilons if at least N numbers are found
+                if (candidateNumbers[columnIndex].size() >= m_columnCount)
+                {
+                    //candidateNumbers[columnIndex].resize(std::min(candidateNumbers[columnIndex].size(), m_columnCount));
+                    break;
+                }
+
+                //increment the epsilon first; if epsilon reaches the top epsilon,
+                //then decrement the pattern size; if the pattern size reaches 1,
+                //then stop, since 2 is the last valid pattern size. 
+                //As the pattern size decreases, the top epsilon decreases,
+                //so as that in lower pattern sizes, smaller deltas between values
+                //are used for comparing values: the smaller the pattern size is,
+                //the smaller the delta between the compared values shall be,
+                //in order to maintain accuracy.
+                ++epsilon;
+                if (epsilon > topEpsilon)
+                {
+                    --patternSize;
+                    if (patternSize == 1) break;
+                    epsilon = 1;
+                    --topEpsilon;
+                }
             }
-
-            //sort all patterns
-            std::sort(allPatterns.begin(), allPatterns.end(), PatternComparator<Number>());
-
-            //get the candidate numbers from the patterns
-            candidateNumbers[columnIndex] = getPatternMatches(columnNumbers, allPatterns);
         }
 
         //TODO    

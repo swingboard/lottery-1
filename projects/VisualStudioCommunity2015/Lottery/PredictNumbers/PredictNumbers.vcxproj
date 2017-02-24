@@ -164,6 +164,7 @@
     <ClInclude Include="..\..\..\..\source\Game.hpp" />
     <ClInclude Include="..\..\..\..\source\Number.hpp" />
     <ClInclude Include="..\..\..\..\source\Pair.hpp" />
+    <ClInclude Include="..\..\..\..\source\PatternMatching.hpp" />
     <ClInclude Include="..\..\..\..\source\Random.hpp" />
     <ClInclude Include="..\..\..\..\source\Statistics.hpp" />
     <ClInclude Include="..\..\..\..\source\String.hpp" />
