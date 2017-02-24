@@ -2,7 +2,91 @@
 #include "CommandLine.hpp"
 #include "Game.hpp"
 #include "CSVOutputFileStream.hpp"
-#include "algorithm.hpp"
+
+
+
+//TODO remove
+#include "PatternMatching.hpp"
+
+
+
+//TODO remove
+namespace lottery
+{
+
+
+    static void test(const Game &game)
+    {
+        const SubGame &subGame = game.getSubGames()[0];
+
+        CSVOutputFileStream file(2 + subGame.getColumnCount(), "test.csv");
+
+        file << "PatternSize" << "Epsilon";
+        for (size_t columnIndex = 0; columnIndex < subGame.getColumnCount(); ++columnIndex)
+        {
+            file << ("Successes"_s + (columnIndex + 1));
+        }
+
+        for (size_t patternSize = 2; patternSize < 10; ++patternSize)
+        {
+            for (int epsilon = 1; epsilon < 10; ++epsilon)
+            {
+                std::vector<size_t> totalSuccesses(subGame.getColumnCount() + 1);
+
+                const size_t startResultIndex = (subGame.getRowCount() * 2) / 3;
+                const size_t endResultIndex = subGame.getRowCount() - 1;
+                const size_t resultSampleCount = endResultIndex - startResultIndex;
+
+                for (size_t resultIndex = startResultIndex; resultIndex < endResultIndex; ++resultIndex)
+                {
+                    std::vector<std::vector<Number>> candidateNumbers(subGame.getColumnCount());
+
+                    for (size_t columnIndex = 0; columnIndex < subGame.getColumnCount(); ++columnIndex)
+                    {
+                        const std::vector<Number> numbers(subGame.getResults()[columnIndex].begin(), subGame.getResults()[columnIndex].begin() + resultIndex);
+                        PatternVector<Number> patterns = findPatterns(numbers, patternSize, epsilon);
+                        if (!patterns.empty()) patterns.erase(patterns.begin());
+                        candidateNumbers[columnIndex] = getPatternMatches(numbers, patterns);
+                    }
+
+                    std::unordered_set<Number> predictedNumbers;
+
+                    for (const std::vector<Number> &candidateNumbersOfColumn : candidateNumbers)
+                    {
+                        predictedNumbers.insert(average(candidateNumbersOfColumn));
+                    }
+
+                    std::vector<Number> predictedNumbersSorted(predictedNumbers.begin(), predictedNumbers.end());
+                    std::sort(predictedNumbersSorted.begin(), predictedNumbersSorted.end(), std::less<Number>());
+
+                    size_t successes = 0;
+                    for (size_t columnIndex = 0; columnIndex < subGame.getColumnCount(); ++columnIndex)
+                    {
+                        const Number drawnNumber = subGame.getResults()[columnIndex][resultIndex - 1];
+                        if (predictedNumbers.find(drawnNumber) != predictedNumbers.end())
+                        {
+                            ++successes;
+                        }
+                    }
+
+                    ++totalSuccesses[successes];
+                }
+
+                file << patternSize;
+                file << epsilon;
+                for (size_t i = 1; i <= subGame.getColumnCount(); ++i)
+                {
+                    const double percent = 100.0 * totalSuccesses[i] / (double)resultSampleCount;
+                    std::stringstream stream;
+                    stream << std::fixed << std::setprecision(3) << percent << '%';
+                    file << stream.str();
+                }
+            }
+        }
+    }
+
+
+} //namespace lottery
 
 
 //entry point
@@ -21,6 +105,13 @@ int main(int argc, const char *argv[])
     {
         std::cerr << "ERROR: The game could not be loaded.\n";
         return -1;
+    }
+
+    //TODO remove
+    if (1)
+    {
+        lottery::test(game);
+        return 0;
     }
 
     //TODO: remove
