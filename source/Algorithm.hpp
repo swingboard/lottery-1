@@ -26,42 +26,43 @@
 #include "Number.hpp"
 
 
+/**
+    convert string literal to std::string.
+    */
+inline std::string operator "" _s(const char *str, size_t size)
+{
+    return std::string{str, str + size};
+}
+
+
+/**
+    Append value to string.
+    */
+template <class T>
+std::string operator + (const std::string &str, const T &val)
+{
+    std::stringstream stream;
+    stream << str;
+    stream << val;
+    return stream.str();
+}
+
+
+/**
+    Append string to value.
+    */
+template <class T>
+std::string operator + (const T &val, const std::string &str)
+{
+    std::stringstream stream;
+    stream << val;
+    stream << str;
+    return stream.str();
+}
+
+
 namespace lottery
 {
-
-    /**
-        convert string literal to std::string.
-     */
-    inline std::string operator "" _s(const char *str, size_t size)
-    {
-        return std::string{str, str + size};
-    }
-
-
-    /**
-        Append value to string.
-     */
-    template <class T>
-    std::string operator + (const std::string &str, const T &val)
-    {
-        std::stringstream stream;
-        stream << str;
-        stream << val;
-        return stream.str();
-    }
-
-
-    /**
-        Append string to value.
-     */
-    template <class T>
-    std::string operator + (const T &val, const std::string &str)
-    {
-        std::stringstream stream;
-        stream << val;
-        stream << str;
-        return stream.str();
-    }
 
 
     /**
