@@ -83,6 +83,8 @@ namespace lottery
     /**
         Locates the pattern that matches most the given end of sequence.
         @param values sequence of values to match with its end.
+        @param startSearchIndex start index in values.
+        @param endSearchIndex end index in values.
         @param patternSize number of values to match.
         @param epsilon min value epsilon.
         @return a container of tuples that match the sequence end, sorted by absolute elta sum
@@ -90,17 +92,22 @@ namespace lottery
             The sum of absolute deltas indicates the total difference of the patterns,
             whereas the delta of deltas indicates the uniformity of the deltas.
      */
-    template <class T>
-    std::vector<Pattern<T>> findPatterns(const std::vector<T> &values, const size_t patternSize, const T epsilon)
+    template <class T, class E>
+    std::vector<Pattern<T>> findPatterns(
+        const std::vector<T> &values, 
+        const size_t startSearchIndex, 
+        const size_t endSearchIndex, 
+        const size_t patternSize, 
+        const E epsilon)
     {
         //result
         std::vector<Pattern<T>> result;
 
         //end index to search for pattern
-        const size_t endIndex = values.size() - patternSize;
+        const size_t endIndex = endSearchIndex - patternSize;
 
         //iterate all values in the sequence to find the most matching patterns
-        for (size_t index = 0; index < endIndex; ++index)
+        for (size_t index = startSearchIndex; index < endIndex; ++index)
         {
             //delta sum
             T absDeltaSum = 0;
@@ -144,6 +151,19 @@ namespace lottery
         std::sort(result.begin(), result.end(), PatternComparator<T>());
 
         return result;
+    }
+
+
+    /**
+        Searches for patterns within every value of the given container of values.
+     */
+    template <class T, class E>
+    std::vector<Pattern<T>> findPatterns(
+        const std::vector<T> &values,
+        const size_t patternSize,
+        const E epsilon)
+    {
+        return findPatterns(values, 0, values.size(), patternSize, epsilon);
     }
 
 

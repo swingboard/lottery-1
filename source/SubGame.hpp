@@ -105,6 +105,14 @@ namespace lottery
         }
 
         /**
+            Returns the rows.
+         */
+        const std::vector<Row> &getRows() const
+        {
+            return m_rows;
+        }
+
+        /**
             Sets the subgame data.
             @param name name of the subgame.
             @param minNumber minimum number.

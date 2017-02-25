@@ -17,7 +17,7 @@ namespace lottery
         PredictionAlgorithmRandom();
 
         //pick random numbers.
-        virtual std::unordered_set<lottery::Number> predictNumbers(const lottery::SubGame &subGame, const size_t startIndex, const size_t endIndex, const size_t predictedNumbersCount);
+        virtual std::unordered_set<lottery::Number> predictNumbers(const lottery::SubGame &subGame, const size_t startIndex, const size_t endIndex, const size_t predictedNumbersPerColumn);
     };
 
 

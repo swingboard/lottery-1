@@ -22,7 +22,7 @@ int main(int argc, const char *argv[])
     const size_t testStartIndex = subGame.getRowCount() * 2 / 3;
     const size_t testEndIndex = subGame.getRowCount() - 1;
     const size_t testSampleCount = testEndIndex - testStartIndex;
-    const size_t predictedNumbersCount = subGame.getColumnCount() * 3;
+    const size_t predictedNumbersPerColumn = 3;
 
     //open the output file
     lottery::CSVOutputFileStream resultsFile(subGame.getColumnCount() + 1, "AlgorithmPredictionTestResults.csv");
@@ -44,7 +44,7 @@ int main(int argc, const char *argv[])
     //prepare the algorithms.
     for (const lottery::PredictionAlgorithmPtr &predictionAlgorithm : predictionAlgorithms)
     {
-        predictionAlgorithm->doTraining(subGame, 0, testStartIndex, predictedNumbersCount);
+        predictionAlgorithm->doTraining(subGame, 0, testStartIndex, predictedNumbersPerColumn);
     }
 
     //do the predictions.
@@ -56,7 +56,7 @@ int main(int argc, const char *argv[])
         //get predictions for all the test samples.
         for (size_t testIndex = testStartIndex; testIndex < testEndIndex; ++testIndex)
         {
-            std::unordered_set<lottery::Number> predictedNumbers = predictionAlgorithm->predictNumbers(subGame, 0, testIndex, predictedNumbersCount);
+            std::unordered_set<lottery::Number> predictedNumbers = predictionAlgorithm->predictNumbers(subGame, 0, testIndex, predictedNumbersPerColumn);
             size_t successes = 0;
             for (size_t columnIndex = 0; columnIndex < subGame.getColumnCount(); ++columnIndex)
             {
