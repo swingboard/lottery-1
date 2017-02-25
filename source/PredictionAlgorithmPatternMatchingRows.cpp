@@ -36,9 +36,13 @@ namespace lottery
         //TODO
 
         //find patterns
-        PatternVector<Row> patterns = findPatterns(subGame.getRows(), startIndex, endIndex, m_patternSize, epsilon);
+        //PatternVector<Row> patterns = findPatterns(subGame.getRows(), startIndex, endIndex, m_patternSize, epsilon);
 
         //select the top patterns
+
+        std::unordered_set<lottery::Number> predictedNumbers;
+
+        return predictedNumbers;
     }
 
 

@@ -18,23 +18,10 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\..\..\source\Game.cpp" />
-    <ClCompile Include="..\..\..\..\source\PredictionAlgorithmPatternMatchingRows.cpp" />
-    <ClCompile Include="..\..\..\..\source\PredictionAlgorithmRandom.cpp" />
-    <ClCompile Include="..\..\..\..\source\SubGame.cpp" />
-    <ClCompile Include="..\..\..\..\source\TestPredictionAlgorithmMain.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\..\..\source\Game.hpp" />
-    <ClInclude Include="..\..\..\..\source\PredictionAlgorithm.hpp" />
-    <ClInclude Include="..\..\..\..\source\PredictionAlgorithmPatternMatchingRows.hpp" />
-    <ClInclude Include="..\..\..\..\source\PredictionAlgorithmRandom.hpp" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{1c1159d0-021b-4b06-8db3-1cd66ea36ec3}</ProjectGuid>
+    <ProjectGuid>{2E01EF6F-4701-4DE6-AE82-75031771E8D9}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>TestPredictionAlgorithm</RootNamespace>
+    <RootNamespace>CreateAllRows</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -102,7 +89,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\..\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\..\include</AdditionalIncludeDirectories>
       <AdditionalOptions>/std:c++latest %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
@@ -134,7 +121,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\..\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\..\include</AdditionalIncludeDirectories>
       <AdditionalOptions>/std:c++latest %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
@@ -143,9 +130,6 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
-    <PostBuildEvent>
-      <Command>copy Release\$(ProjectName).exe ..\..\..\bin\ /y</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -165,6 +149,16 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\source\CreateAllRowsMain.cpp" />
+    <ClCompile Include="..\..\..\..\source\Game.cpp" />
+    <ClCompile Include="..\..\..\..\source\SubGame.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\source\Algorithm.hpp" />
+    <ClInclude Include="..\..\..\..\source\Game.hpp" />
+    <ClInclude Include="..\..\..\..\source\SubGame.hpp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -31,12 +31,12 @@ namespace lottery
         /**
             Loads the game from a disk file.
             @param game filename name of the game.
-            @param resultsFilename name of the results data.
+            @param resultsFilename name of the results data; if empty, no results are loaded.
             @return true if loaded successfully, false otherwise.
          */
         bool load(
             const std::string &gameFilename,
-            const std::string &resultsfilename);
+            const std::string &resultsfilename = "");
 
         /**
             Loads the game from files 'Game.csv' and 'Results.csv'.

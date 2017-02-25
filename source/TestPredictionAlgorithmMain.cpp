@@ -4,6 +4,7 @@
 #include "Statistics.hpp"
 #include "CSVOutputFileStream.hpp"
 #include "PredictionAlgorithmRandom.hpp"
+#include "PredictionAlgorithmPatternMatchingRows.hpp"
 
 
 //entry point
@@ -40,6 +41,7 @@ int main(int argc, const char *argv[])
     //create array of algorithms
     std::vector<lottery::PredictionAlgorithmPtr> predictionAlgorithms;
     predictionAlgorithms.push_back(std::make_shared<lottery::PredictionAlgorithmRandom>());
+    predictionAlgorithms.push_back(std::make_shared<lottery::PredictionAlgorithmPatternMatchingRows>());
 
     //prepare the algorithms.
     for (const lottery::PredictionAlgorithmPtr &predictionAlgorithm : predictionAlgorithms)

@@ -11,5 +11,6 @@
     <ClInclude Include="..\..\..\..\source\PredictionAlgorithm.hpp" />
     <ClInclude Include="..\..\..\..\source\PredictionAlgorithmRandom.hpp" />
     <ClInclude Include="..\..\..\..\source\PredictionAlgorithmPatternMatchingRows.hpp" />
+    <ClInclude Include="..\..\..\..\source\Game.hpp" />
   </ItemGroup>
 </Project>

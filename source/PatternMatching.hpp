@@ -87,18 +87,20 @@ namespace lottery
         @param endSearchIndex end index in values.
         @param patternSize number of values to match.
         @param epsilon min value epsilon.
+        @param comp comparator; must return the delta between two values.
         @return a container of tuples that match the sequence end, sorted by absolute elta sum
             in descending order and by delta of deltas in descending order.
             The sum of absolute deltas indicates the total difference of the patterns,
             whereas the delta of deltas indicates the uniformity of the deltas.
      */
-    template <class T, class E>
+    template <class T, class E, class C>
     std::vector<Pattern<T>> findPatterns(
-        const std::vector<T> &values, 
-        const size_t startSearchIndex, 
-        const size_t endSearchIndex, 
-        const size_t patternSize, 
-        const E epsilon)
+        const std::vector<T> &values,
+        const size_t startSearchIndex,
+        const size_t endSearchIndex,
+        const size_t patternSize,
+        const E epsilon,
+        const C &comp)
     {
         //result
         std::vector<Pattern<T>> result;
@@ -110,28 +112,28 @@ namespace lottery
         for (size_t index = startSearchIndex; index < endIndex; ++index)
         {
             //delta sum
-            T absDeltaSum = 0;
+            E absDeltaSum = 0;
 
             //delta of deltas
-            T delta2 = 0;
-            
+            E delta2 = 0;
+
             //iterate values of pattern
             for (size_t patternIndex = 0; patternIndex < patternSize; ++patternIndex)
             {
                 //get the pattern value
-                const T patternValue = values[index + patternIndex];
+                const T &patternValue = values[index + patternIndex];
 
                 //get the end value
-                const T endValue = values[endIndex + patternIndex];
-                
+                const T &endValue = values[endIndex + patternIndex];
+
                 //delta
-                const T delta = endValue - patternValue;
+                const E delta = endValue - patternValue;
 
                 //delta ot deltas
                 delta2 = delta - delta2;
 
                 //absolute delta
-                const T absDelta = std::abs(delta);
+                const E absDelta = std::abs(delta);
 
                 //if the absolute delta between values is greater than epsilon, go to the next pattern
                 if (absDelta > epsilon) goto NEXT_PATTERN;
@@ -142,8 +144,8 @@ namespace lottery
 
             //store the result
             result.push_back(std::make_tuple(index, index + patternSize, absDeltaSum, std::abs(delta2)));
-            
-            NEXT_PATTERN:
+
+        NEXT_PATTERN:
             ;
         }
 
@@ -151,6 +153,23 @@ namespace lottery
         std::sort(result.begin(), result.end(), PatternComparator<T>());
 
         return result;
+    }
+
+
+    /**
+        Searches for patterns using the default subtraction operation
+        as the comparator.
+     */
+    template <class T, class E>
+    std::vector<Pattern<T>> findPatterns(
+        const std::vector<T> &values,
+        const size_t startSearchIndex,
+        const size_t endSearchIndex,
+        const size_t patternSize,
+        const E epsilon)
+    {
+        return findPatterns(values, startSearchIndex, endSearchIndex, patternSize, epsilon,
+            [](const T &a, const T &b) { return a - b; });
     }
 
 

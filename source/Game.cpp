@@ -8,7 +8,7 @@ namespace lottery
     /**
         Loads the game from a disk file.
         @param game filename name of the game.
-        @param resultsFilename name of the results data.
+        @param resultsFilename name of the results data; if empty, no results are loaded.
         @return true if loaded successfully, false otherwise.
      */
     bool Game::load(
@@ -18,13 +18,6 @@ namespace lottery
         //the game file
         CSVInputFileStream gameFile(gameFilename);
         if (!gameFile.is_open())
-        {
-            return false;
-        }
-
-        //the results file
-        CSVInputFileStream resultsFile(resultsfilename);
-        if (!resultsFile.is_open())
         {
             return false;
         }
@@ -74,6 +67,19 @@ namespace lottery
                 (Number)minNumber, 
                 (Number)maxNumber, 
                 columnCount);
+        }
+
+        //do not load the results if the results filename is empty.
+        if (resultsfilename.empty())
+        {
+            return true;
+        }
+
+        //the results file
+        CSVInputFileStream resultsFile(resultsfilename);
+        if (!resultsFile.is_open())
+        {
+            return false;
         }
 
         //skip the headers

@@ -105,6 +105,45 @@ namespace lottery
     }
 
 
+    //recursive helper function
+    template <class T, class F>
+    void createAllRowsHelper(
+        const std::vector<T> &values, 
+        const size_t rowLength, 
+        const F &func, 
+        const size_t rowIndex,
+        const size_t valueIndex,
+        std::vector<T> &result)
+    {
+        if (rowIndex < rowLength)
+        {
+            for (size_t vi = valueIndex; vi < values.size() - rowLength + rowIndex + 1; ++vi)
+            {
+                result[rowIndex] = values[vi];
+                createAllRowsHelper(values, rowLength, func, rowIndex + 1, vi + 1, result);
+            }
+        }
+        else
+        {
+            func(result);
+        }
+    }
+
+
+    /**
+        Given a set of values, it creates all possible rows,
+        calling the given function for each row.
+        @param values values to use for creating the rows; must be in correct order.
+        @param rowLength length of row, i.e. how many symbols the result row shall have.
+     */
+    template <class T, class F>
+    void createAllRows(const std::vector<T> &values, const size_t rowLength, const F &func)
+    {
+        std::vector<T> result(rowLength);
+        createAllRowsHelper(values, rowLength, func, 0, 0, result);
+    }
+
+
 } //namespace lottery
 
 
