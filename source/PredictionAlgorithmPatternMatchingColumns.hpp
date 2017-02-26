@@ -20,7 +20,7 @@ namespace lottery
         /**
             Constructor.
          */
-        PredictionAlgorithmPatternMatchingColumns(size_t patternSize = 3, int numberEpsilon = 6);
+        PredictionAlgorithmPatternMatchingColumns(size_t patternSize, int numberEpsilon);
 
         /**
             Runs the algorithm.

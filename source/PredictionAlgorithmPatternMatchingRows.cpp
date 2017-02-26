@@ -9,10 +9,11 @@ namespace lottery
     /**
         constructor.
      */
-    PredictionAlgorithmPatternMatchingRows::PredictionAlgorithmPatternMatchingRows(const size_t patternSize, const int epsilonPerNumber)
+    PredictionAlgorithmPatternMatchingRows::PredictionAlgorithmPatternMatchingRows(const size_t patternSize, const int numberEpsilon, const int rowEpsilon)
         : PredictionAlgorithm("PatternMatchingRows")
         , m_patternSize(patternSize)
-        , m_epsilonPerNumber(epsilonPerNumber)
+        , m_numberEpsilon(numberEpsilon)
+        , m_rowEpsilon(rowEpsilon)
     {
     }
 
@@ -22,17 +23,14 @@ namespace lottery
      */
     std::unordered_set<lottery::Number> PredictionAlgorithmPatternMatchingRows::predictNumbers(const lottery::SubGame &subGame, const size_t indexFirst, const size_t indexLast, const size_t predictedNumbersPerColumn)
     {
-        //epsilon per row
-        const int rowEpsilon = m_epsilonPerNumber * subGame.getColumnCount();
-
         //find the patterns
         PatternVector<Row, int> patterns;
         findPatterns(
             makeRange(subGame.getRows(), indexLast - m_patternSize + 1, indexLast), 
-            makeRange(subGame.getRows(), indexFirst, indexLast), 
-            rowEpsilon, 
+            makeRange(subGame.getRows(), indexFirst, indexLast - 1), 
+            m_rowEpsilon, 
             patterns, 
-            RowPatternComparator(m_epsilonPerNumber, rowEpsilon));
+            RowPatternComparator(m_numberEpsilon, m_rowEpsilon));
 
         //sort the patterns
         std::sort(patterns.begin(), patterns.end(), PatternComparator<Row, int>());

@@ -27,15 +27,17 @@ namespace lottery
         //process each column
         for (size_t columnIndex = 0; columnIndex < subGame.getColumnCount(); ++columnIndex)
         {
-            //column data
             const std::vector<Number> &column = subGame.getResults()[columnIndex];
+
+            //column pattern
+            //std::vector<Number> pattern = partition(column, indexLast - m_patternSize + 1, indexLast + 1);
 
             std::vector<Pattern<Number, int>> patterns;
 
             //find the patterns
             findPatterns(
-                makeRange(column, indexLast - m_patternSize - 1, indexLast), 
-                makeRange(column, indexFirst, indexLast - m_patternSize),
+                makeRange(column, indexLast - m_patternSize + 1, indexLast), 
+                makeRange(column, indexFirst, indexLast - 1),
                 m_numberEpsilon, 
                 patterns, 
                 NumberPatternComparator());

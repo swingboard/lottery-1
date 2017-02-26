@@ -18,7 +18,7 @@ namespace lottery
         /**
             constructor.
          */
-        PredictionAlgorithmPatternMatchingRows(const size_t patternSize = 3, const int epsilonPerNumber = 18);
+        PredictionAlgorithmPatternMatchingRows(const size_t patternSize, const int numberEpsilon, const int rowEpsilon);
 
         /**
             Uses pattern matching to predict the next draw.
@@ -27,7 +27,8 @@ namespace lottery
 
     private:
         const size_t m_patternSize;
-        const int m_epsilonPerNumber;
+        const int m_numberEpsilon;
+        const int m_rowEpsilon;
     };
 
 

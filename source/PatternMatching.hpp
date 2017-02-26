@@ -106,6 +106,16 @@ namespace lottery
 
 
     /**
+        Creates a range out of the given values.
+     */
+    template <class T>
+    VectorRange<T> makeRange(const std::vector<T> &values)
+    {
+        return VectorRange<T>{values, 0, values.size() - 1};
+    }
+
+
+    /**
         Locates patterns.
         @param srcData data source with the values to be searched for.
         @param dstData data source with the values to be searched.
@@ -125,7 +135,7 @@ namespace lottery
         const size_t patternSize = srcData.indexLast - srcData.indexFirst + 1;
 
         //iterate all values in the sequence to find the most matching patterns
-        for (size_t searchIndex = dstData.indexFirst; searchIndex <= dstData.indexLast - patternSize; ++searchIndex)
+        for (size_t searchIndex = dstData.indexFirst; searchIndex <= dstData.indexLast - patternSize + 1; ++searchIndex)
         {
             //delta of the pattern
             T patternDelta = 0;

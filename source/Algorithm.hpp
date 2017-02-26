@@ -141,6 +141,14 @@ namespace lottery
     }
 
 
+    ///get part of vector.
+    template <class T>
+    std::vector<T> partition(const std::vector<T> &data, size_t begin, size_t end)
+    {
+        return std::vector<T>(data.begin() + begin, data.begin() + end);
+    }
+
+
 } //namespace lottery
 
 

@@ -43,8 +43,8 @@ int main(int argc, const char *argv[])
     //create array of algorithms
     std::vector<lottery::PredictionAlgorithmPtr> predictionAlgorithms;
     predictionAlgorithms.push_back(std::make_shared<lottery::PredictionAlgorithmRandom>());
-    predictionAlgorithms.push_back(std::make_shared<lottery::PredictionAlgorithmPatternMatchingRows>());
-    predictionAlgorithms.push_back(std::make_shared<lottery::PredictionAlgorithmPatternMatchingColumns>());
+    predictionAlgorithms.push_back(std::make_shared<lottery::PredictionAlgorithmPatternMatchingRows>(3, 12, 12 * subGame.getColumnCount()));
+    predictionAlgorithms.push_back(std::make_shared<lottery::PredictionAlgorithmPatternMatchingColumns>(3, 3));
 
     //prepare the algorithms.
     for (const lottery::PredictionAlgorithmPtr &predictionAlgorithm : predictionAlgorithms)
