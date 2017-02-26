@@ -180,7 +180,7 @@ namespace lottery
                 //delta
                 const T delta = comp(endValue, patternValue);
 
-                //delta ot deltas
+                //delta of deltas
                 delta2 = delta - delta2;
 
                 //absolute delta
