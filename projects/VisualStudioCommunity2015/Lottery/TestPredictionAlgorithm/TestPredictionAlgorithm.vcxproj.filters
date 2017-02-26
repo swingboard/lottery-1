@@ -6,6 +6,7 @@
     <ClCompile Include="..\..\..\..\source\SubGame.cpp" />
     <ClCompile Include="..\..\..\..\source\PredictionAlgorithmRandom.cpp" />
     <ClCompile Include="..\..\..\..\source\PredictionAlgorithmPatternMatchingRows.cpp" />
+    <ClCompile Include="..\..\..\..\source\PredictionAlgorithmPatternMatchingColumns.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\source\PredictionAlgorithm.hpp" />
@@ -15,5 +16,7 @@
     <ClInclude Include="..\..\..\..\source\Algorithm.hpp" />
     <ClInclude Include="..\..\..\..\source\PatternMatching.hpp" />
     <ClInclude Include="..\..\..\..\source\SubGame.hpp" />
+    <ClInclude Include="..\..\..\..\source\PredictionAlgorithmPatternMatchingColumns.hpp" />
+    <ClInclude Include="..\..\..\..\source\Number.hpp" />
   </ItemGroup>
 </Project>

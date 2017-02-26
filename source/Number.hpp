@@ -13,6 +13,17 @@ namespace lottery
     typedef int Number;
 
 
+    ///returns the numbers' difference.
+    class NumberPatternComparator
+    {
+    public:
+        int operator ()(const Number a, const Number b) const
+        {
+            return a - b;
+        }
+    };
+
+
 } //namespace lottery
 
 

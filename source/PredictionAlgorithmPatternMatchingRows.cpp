@@ -25,42 +25,31 @@ namespace lottery
         //epsilon per row
         const int rowEpsilon = m_epsilonPerNumber * subGame.getColumnCount();
 
-        //results stored here
-        std::vector<PatternMatch<Row, int>> results;
-
-        //find the patterns that match the most the current state of the input;
-        //include the row-to-be-predicted in the pattern matching search,
-        //because the goal of this algorithm test is to find out 
-        //if the current row-to-be-predicted can be pattern-matched with previous rows.
+        //find the patterns that match the most the current state of the input.
         PatternVector<Row, int> patterns;
-        findPatterns(
-            subGame.getRows(), 
-            startIndex, 
-            endIndex + 1, 
-            m_patternSize, 
-            rowEpsilon, 
-            patterns, 
-            RowPatternComparator(m_epsilonPerNumber, rowEpsilon));
-
-        //store the pattern matches in the results
+        findPatterns(subGame.getRows(), startIndex, endIndex, m_patternSize, rowEpsilon, patterns, RowPatternComparator(m_epsilonPerNumber, rowEpsilon));
+        std::sort(patterns.begin(), patterns.end(), PatternComparator<Row, int>());
+        std::vector<PatternMatch<Row, int>> results;
         getPatternMatches(subGame.getRows(), patterns, results);
-
-        //sort the results
-        std::sort(results.begin(), results.end(), PatternMatchComparator<Row, int>());
 
         std::unordered_set<lottery::Number> predictedNumbers;
 
         //take the top results, until the number of requested predicted numbers is filled
         for (const auto &patternMatch : results)
         {
+            const int matchDelta = getPatternMatchDelta(patternMatch);
+            const int matchDeltaPerNumber = matchDelta / subGame.getColumnCount() / m_patternSize;
             const Row &row = getPatternMatchValue(patternMatch);
-            for (const Number number : row)
+            for (const Number drawnNumber : row)
             {
-                //TODO modify the predicted number according to the delta and delta2 of the pattern.
-                predictedNumbers.insert(number);
-                if (predictedNumbers.size() == predictedNumbersPerColumn * subGame.getColumnCount())
+                const Number number = drawnNumber - matchDeltaPerNumber;
+                if (number >= subGame.getMinNumber() && number <= subGame.getMaxNumber())
                 {
-                    goto END;
+                    predictedNumbers.insert(number);
+                    if (predictedNumbers.size() == predictedNumbersPerColumn * subGame.getColumnCount())
+                    {
+                        goto END;
+                    }
                 }
             }
         }

@@ -5,6 +5,7 @@
 #include "CSVOutputFileStream.hpp"
 #include "PredictionAlgorithmRandom.hpp"
 #include "PredictionAlgorithmPatternMatchingRows.hpp"
+#include "PredictionAlgorithmPatternMatchingColumns.hpp"
 
 
 //entry point
@@ -20,9 +21,9 @@ int main(int argc, const char *argv[])
 
     //prepare the test parameters.
     const lottery::SubGame &subGame = game.getSubGames()[0];
-    const size_t testStartIndex = subGame.getRowCount() * 2 / 3;
-    const size_t testEndIndex = subGame.getRowCount() - 1;
-    const size_t testSampleCount = testEndIndex - testStartIndex;
+    const size_t testSampleStartIndex = subGame.getRowCount() * 2 / 3;
+    const size_t testSampleEndIndex = subGame.getRowCount();
+    const size_t testSampleCount = testSampleEndIndex - testSampleStartIndex;
     const size_t predictedNumbersPerColumn = 3;
 
     //open the output file
@@ -43,11 +44,12 @@ int main(int argc, const char *argv[])
     std::vector<lottery::PredictionAlgorithmPtr> predictionAlgorithms;
     predictionAlgorithms.push_back(std::make_shared<lottery::PredictionAlgorithmRandom>());
     predictionAlgorithms.push_back(std::make_shared<lottery::PredictionAlgorithmPatternMatchingRows>());
+    predictionAlgorithms.push_back(std::make_shared<lottery::PredictionAlgorithmPatternMatchingColumns>());
 
     //prepare the algorithms.
     for (const lottery::PredictionAlgorithmPtr &predictionAlgorithm : predictionAlgorithms)
     {
-        predictionAlgorithm->doTraining(subGame, 0, testStartIndex, predictedNumbersPerColumn);
+        predictionAlgorithm->doTraining(subGame, 0, testSampleStartIndex, predictedNumbersPerColumn);
     }
 
     //do the predictions.
@@ -59,13 +61,19 @@ int main(int argc, const char *argv[])
         size_t totalPredictedNumbers = 0;
 
         //get predictions for all the test samples.
-        for (size_t testIndex = testStartIndex; testIndex < testEndIndex; ++testIndex)
+        for (size_t currentTestSampleEndIndex = testSampleStartIndex; 
+             currentTestSampleEndIndex < testSampleEndIndex; 
+            ++currentTestSampleEndIndex)
         {
-            std::unordered_set<lottery::Number> predictedNumbers = predictionAlgorithm->predictNumbers(subGame, 0, testIndex, predictedNumbersPerColumn);
+            //do the test
+            std::unordered_set<lottery::Number> predictedNumbers = 
+                predictionAlgorithm->predictNumbers(subGame, 0, currentTestSampleEndIndex, predictedNumbersPerColumn);
+
+            //count the successes
             size_t successes = 0;
             for (size_t columnIndex = 0; columnIndex < subGame.getColumnCount(); ++columnIndex)
             {
-                const lottery::Number drawnNumber = subGame.getResults()[columnIndex][testIndex + 1];
+                const lottery::Number drawnNumber = subGame.getResults()[columnIndex][currentTestSampleEndIndex - 1];
                 if (predictedNumbers.find(drawnNumber) != predictedNumbers.end())
                 {
                     ++successes;

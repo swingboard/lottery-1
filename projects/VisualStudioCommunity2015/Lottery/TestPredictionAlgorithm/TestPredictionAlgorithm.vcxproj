@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\source\Game.cpp" />
+    <ClCompile Include="..\..\..\..\source\PredictionAlgorithmPatternMatchingColumns.cpp" />
     <ClCompile Include="..\..\..\..\source\PredictionAlgorithmPatternMatchingRows.cpp" />
     <ClCompile Include="..\..\..\..\source\PredictionAlgorithmRandom.cpp" />
     <ClCompile Include="..\..\..\..\source\SubGame.cpp" />
@@ -28,8 +29,10 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\..\source\Algorithm.hpp" />
     <ClInclude Include="..\..\..\..\source\Game.hpp" />
+    <ClInclude Include="..\..\..\..\source\Number.hpp" />
     <ClInclude Include="..\..\..\..\source\PatternMatching.hpp" />
     <ClInclude Include="..\..\..\..\source\PredictionAlgorithm.hpp" />
+    <ClInclude Include="..\..\..\..\source\PredictionAlgorithmPatternMatchingColumns.hpp" />
     <ClInclude Include="..\..\..\..\source\PredictionAlgorithmPatternMatchingRows.hpp" />
     <ClInclude Include="..\..\..\..\source\PredictionAlgorithmRandom.hpp" />
     <ClInclude Include="..\..\..\..\source\SubGame.hpp" />
