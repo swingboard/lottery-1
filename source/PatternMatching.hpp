@@ -165,7 +165,10 @@ namespace lottery
                 const T valueAbsoluteDelta = std::abs(valueDelta);
 
                 //if the absolute delta between values is greater than epsilon, go to the next pattern
-                if (valueAbsoluteDelta > epsilon) goto NEXT_PATTERN;
+                if (valueAbsoluteDelta > epsilon)
+                {
+                    goto NEXT_PATTERN;
+                }
 
                 //sum the deltas of the values
                 patternDelta += valueDelta;

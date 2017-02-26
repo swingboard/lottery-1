@@ -41,8 +41,9 @@ namespace lottery
         //take the top results, until the number of requested predicted numbers is filled
         for (const Pattern<Row, int> &pattern : patterns)
         {
-            for (const Number number : pattern.predictedValue)
+            for (const Number n : pattern.predictedValue)
             {
+                const Number number = n + pattern.delta / m_patternSize / subGame.getColumnCount();
                 if (number >= subGame.getMinNumber() && number <= subGame.getMaxNumber())
                 {
                     predictedNumbers.insert(number);

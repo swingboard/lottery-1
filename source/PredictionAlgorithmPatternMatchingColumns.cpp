@@ -30,7 +30,7 @@ namespace lottery
             const std::vector<Number> &column = subGame.getResults()[columnIndex];
 
             //column pattern
-            //std::vector<Number> pattern = partition(column, indexLast - m_patternSize + 1, indexLast + 1);
+            //std::vector<Number> pattern = partition(column, indexLast - m_patternSize + 1, indexLast);
 
             std::vector<Pattern<Number, int>> patterns;
 
@@ -48,7 +48,7 @@ namespace lottery
             //get the top results
             for (const Pattern<Number, int> &pattern : patterns)
             {
-                const Number number = pattern.predictedValue;
+                const Number number = pattern.predictedValue + pattern.delta / m_patternSize;
                 if (number >= subGame.getMinNumber() && number <= subGame.getMaxNumber())
                 {
                     predictedNumbers.insert(number);
