@@ -48,6 +48,19 @@ namespace lottery
         }
 
         /**
+            Returns the median number.
+         */
+        Number getMedianNumber() const
+        {
+            return m_minNumber + ((m_maxNumber - m_minNumber) / 2);
+        }
+
+        /**
+            Returns the numbers of the sub-game.
+         */
+        std::vector<Number> getNumbers() const;
+
+        /**
             Returns the column count.
             @return the column count.
          */

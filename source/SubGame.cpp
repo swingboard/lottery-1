@@ -12,6 +12,20 @@ namespace lottery
 
 
     /**
+        Returns the numbers of the sub-game.
+        */
+    std::vector<Number> SubGame::getNumbers() const
+    {
+        std::vector<Number> numbers;
+        for (Number number = m_minNumber; number <= m_maxNumber; ++number)
+        {
+            numbers.push_back(number);
+        }
+        return numbers;
+    }
+
+
+    /**
         Sets the subgame data.
         @param name name of the subgame.
         @param minNumber minimum number.

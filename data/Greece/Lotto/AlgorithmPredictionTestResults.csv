@@ -1,1 +1,3 @@
-Algorithm,Successes_1,Successes_2,Successes_3,Successes_4,Successes_5,Successes_6
+Algorithm,NumCount,Successes_1,Successes_2,Successes_3,Successes_4,Successes_5,Successes_6
+Random,18,21.5618,33.683,26.3403,10.373,1.6317,0.11655
+PatternMatchingRows,17.9184,21.2121,33.7995,26.1072,10.7226,1.8648,0.11655

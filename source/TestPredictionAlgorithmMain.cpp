@@ -26,13 +26,14 @@ int main(int argc, const char *argv[])
     const size_t predictedNumbersPerColumn = 3;
 
     //open the output file
-    lottery::CSVOutputFileStream resultsFile(subGame.getColumnCount() + 1, "AlgorithmPredictionTestResults.csv");
+    lottery::CSVOutputFileStream resultsFile(subGame.getColumnCount() + 2, "AlgorithmPredictionTestResults.csv");
     if (!resultsFile.is_open())
     {
         std::cerr << "ERROR: The results file could not be opened.\n";
         return -1;
     }
     resultsFile << "Algorithm";
+    resultsFile << "NumCount";
     for (size_t columnIndex = 1; columnIndex <= subGame.getColumnCount(); ++columnIndex)
     {
         resultsFile << ("Successes_"_s + columnIndex);
@@ -55,6 +56,8 @@ int main(int argc, const char *argv[])
         //the algorithm's results.
         std::vector<size_t> totalSuccesses(subGame.getColumnCount() + 1);
 
+        size_t totalPredictedNumbers = 0;
+
         //get predictions for all the test samples.
         for (size_t testIndex = testStartIndex; testIndex < testEndIndex; ++testIndex)
         {
@@ -69,10 +72,12 @@ int main(int argc, const char *argv[])
                 }
             }
             ++totalSuccesses[successes];
+            totalPredictedNumbers += predictedNumbers.size();
         }
 
-        //write the successes of the algorithm to the output file
+        //write the results of the algorithm to the output file
         resultsFile << predictionAlgorithm->getName();
+        resultsFile << (totalPredictedNumbers / (double)testSampleCount);
         for (size_t columnIndex = 1; columnIndex <= subGame.getColumnCount(); ++columnIndex)
         {
             const double percent = 100.0 * totalSuccesses[columnIndex] / (double)testSampleCount;

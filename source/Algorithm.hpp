@@ -107,7 +107,7 @@ namespace lottery
 
     //recursive helper function
     template <class T, class F>
-    void createAllRowsHelper(
+    bool createAllRowsHelper(
         const std::vector<T> &values, 
         const size_t rowLength, 
         const F &func, 
@@ -115,18 +115,13 @@ namespace lottery
         const size_t valueIndex,
         std::vector<T> &result)
     {
-        if (rowIndex < rowLength)
+        if (rowIndex == rowLength) return func(result);
+        for (size_t vi = valueIndex; vi < values.size() - rowLength + rowIndex + 1; ++vi)
         {
-            for (size_t vi = valueIndex; vi < values.size() - rowLength + rowIndex + 1; ++vi)
-            {
-                result[rowIndex] = values[vi];
-                createAllRowsHelper(values, rowLength, func, rowIndex + 1, vi + 1, result);
-            }
+            result[rowIndex] = values[vi];
+            if (!createAllRowsHelper(values, rowLength, func, rowIndex + 1, vi + 1, result)) return false;
         }
-        else
-        {
-            func(result);
-        }
+        return true;
     }
 
 
@@ -137,10 +132,12 @@ namespace lottery
         @param rowLength length of row, i.e. how many symbols the result row shall have.
      */
     template <class T, class F>
-    void createAllRows(const std::vector<T> &values, const size_t rowLength, const F &func)
+    bool createAllRows(
+        const std::vector<T> &values, 
+        std::vector<T> &result,
+        const F &func)
     {
-        std::vector<T> result(rowLength);
-        createAllRowsHelper(values, rowLength, func, 0, 0, result);
+        return createAllRowsHelper(values, result.size(), func, 0, 0, result);
     }
 
 
