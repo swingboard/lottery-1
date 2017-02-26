@@ -14,7 +14,7 @@ namespace lottery
 
 
     //pick random numbers.
-    std::unordered_set<lottery::Number> PredictionAlgorithmRandom::predictNumbers(const lottery::SubGame &subGame, const size_t startIndex, const size_t endIndex, const size_t predictedNumbersPerColumn)
+    std::unordered_set<lottery::Number> PredictionAlgorithmRandom::predictNumbers(const lottery::SubGame &subGame, const size_t indexFirst, const size_t indexLast, const size_t predictedNumbersPerColumn)
     {
         //create a randomizer
         lottery::RandomNumberGenerator<int> getRandomNumber(subGame.getMinNumber(), subGame.getMaxNumber());

@@ -20,7 +20,7 @@ namespace lottery
     /**
         Runs the algorithm.
         */
-    std::unordered_set<lottery::Number> PredictionAlgorithmPatternMatchingColumns::predictNumbers(const lottery::SubGame &subGame, const size_t startIndex, const size_t endIndex, const size_t predictedNumbersPerColumn)
+    std::unordered_set<lottery::Number> PredictionAlgorithmPatternMatchingColumns::predictNumbers(const lottery::SubGame &subGame, const size_t indexFirst, const size_t indexLast, const size_t predictedNumbersPerColumn)
     {
         std::unordered_set<lottery::Number> predictedNumbers;
 
@@ -28,34 +28,37 @@ namespace lottery
         for (size_t columnIndex = 0; columnIndex < subGame.getColumnCount(); ++columnIndex)
         {
             //column data
-            const std::vector<Number> column = subGame.getResults()[columnIndex];
+            const std::vector<Number> &column = subGame.getResults()[columnIndex];
 
-            //find the pattern matches
             std::vector<Pattern<Number, int>> patterns;
-            findPatterns(column, startIndex, endIndex, m_patternSize, m_numberEpsilon, patterns, NumberPatternComparator());
-            std::sort(patterns.begin(), patterns.end(), PatternComparator<Number, int>());
-            std::vector<PatternMatch<Number, int>> results;
-            getPatternMatches(column, patterns, results);
 
-            //sort the results
+            //find the patterns
+            findPatterns(
+                makeRange(column, indexLast - m_patternSize - 1, indexLast), 
+                makeRange(column, indexFirst, indexLast - m_patternSize),
+                m_numberEpsilon, 
+                patterns, 
+                NumberPatternComparator());
+            
+            //sort the patterns
+            std::sort(patterns.begin(), patterns.end(), PatternComparator<Number, int>());
 
             //get the top results
-            std::unordered_set<Number> numbers;
-            for (size_t index = 0; 
-                index < results.size() && numbers.size() < predictedNumbersPerColumn; 
-                ++index)
+            for (const Pattern<Number, int> &pattern : patterns)
             {
-                const PatternMatch<Number, int> &patternMatch = results[index];
-                const Number drawnNumber = getPatternMatchValue(patternMatch);
-                const int matchDeltaPerNumber = getPatternMatchDelta2(patternMatch) / m_patternSize;
-                const Number number = drawnNumber - matchDeltaPerNumber;
+                const Number number = pattern.predictedValue;
                 if (number >= subGame.getMinNumber() && number <= subGame.getMaxNumber())
                 {
-                    numbers.insert(number);
                     predictedNumbers.insert(number);
+                    if (predictedNumbers.size() == predictedNumbersPerColumn * subGame.getColumnCount())
+                    {
+                        goto END;
+                    }
                 }
             }
         }
+
+        END:
 
         return predictedNumbers;
     }

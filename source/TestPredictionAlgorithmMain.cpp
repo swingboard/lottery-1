@@ -21,9 +21,9 @@ int main(int argc, const char *argv[])
 
     //prepare the test parameters.
     const lottery::SubGame &subGame = game.getSubGames()[0];
-    const size_t testSampleStartIndex = subGame.getRowCount() * 2 / 3;
-    const size_t testSampleEndIndex = subGame.getRowCount();
-    const size_t testSampleCount = testSampleEndIndex - testSampleStartIndex;
+    const size_t testSampleIndexFirst = subGame.getRowCount() * 2 / 3;
+    const size_t testSampleIndexLast = subGame.getRowCount() - 1;
+    const size_t testSampleCount = testSampleIndexLast - testSampleIndexFirst + 1;
     const size_t predictedNumbersPerColumn = 3;
 
     //open the output file
@@ -49,7 +49,7 @@ int main(int argc, const char *argv[])
     //prepare the algorithms.
     for (const lottery::PredictionAlgorithmPtr &predictionAlgorithm : predictionAlgorithms)
     {
-        predictionAlgorithm->doTraining(subGame, 0, testSampleStartIndex, predictedNumbersPerColumn);
+        predictionAlgorithm->doTraining(subGame, 0, testSampleIndexFirst, predictedNumbersPerColumn);
     }
 
     //do the predictions.
@@ -61,19 +61,19 @@ int main(int argc, const char *argv[])
         size_t totalPredictedNumbers = 0;
 
         //get predictions for all the test samples.
-        for (size_t currentTestSampleEndIndex = testSampleStartIndex; 
-             currentTestSampleEndIndex < testSampleEndIndex; 
-            ++currentTestSampleEndIndex)
+        for (size_t currentTestSampleIndexLast = testSampleIndexFirst; 
+            currentTestSampleIndexLast <= testSampleIndexLast; 
+            ++currentTestSampleIndexLast)
         {
             //do the test
             std::unordered_set<lottery::Number> predictedNumbers = 
-                predictionAlgorithm->predictNumbers(subGame, 0, currentTestSampleEndIndex, predictedNumbersPerColumn);
+                predictionAlgorithm->predictNumbers(subGame, 0, currentTestSampleIndexLast, predictedNumbersPerColumn);
 
             //count the successes
             size_t successes = 0;
             for (size_t columnIndex = 0; columnIndex < subGame.getColumnCount(); ++columnIndex)
             {
-                const lottery::Number drawnNumber = subGame.getResults()[columnIndex][currentTestSampleEndIndex - 1];
+                const lottery::Number drawnNumber = subGame.getResults()[columnIndex][currentTestSampleIndexLast];
                 if (predictedNumbers.find(drawnNumber) != predictedNumbers.end())
                 {
                     ++successes;

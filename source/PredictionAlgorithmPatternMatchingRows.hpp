@@ -23,7 +23,7 @@ namespace lottery
         /**
             Uses pattern matching to predict the next draw.
          */
-        virtual std::unordered_set<lottery::Number> predictNumbers(const lottery::SubGame &subGame, const size_t startIndex, const size_t endIndex, const size_t predictedNumbersPerColumn);
+        virtual std::unordered_set<lottery::Number> predictNumbers(const lottery::SubGame &subGame, const size_t indexFirst, const size_t indexLast, const size_t predictedNumbersPerColumn);
 
     private:
         const size_t m_patternSize;

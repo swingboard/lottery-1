@@ -12,8 +12,32 @@ namespace lottery
     /**
         Pattern type.
      */
-    template <class V, class T>
-    using Pattern = std::tuple<size_t, size_t, T, T>;
+    template <class V, class T> class Pattern
+    {
+    public:
+        ///predicted value.
+        V predictedValue;
+
+        ///start index of pattern within the test data.
+        size_t indexFirst;
+
+        ///end index of pattern within the test data.
+        size_t indexLast;
+
+        ///non-absolute delta between the patterns.
+        T delta;
+
+        ///absolute delta between the patterns.
+        T absoluteDelta;
+
+        /**
+            indicator of the delta uniformity; the lower the value, the higher the delta uniformity is.
+            I.e. if the pattern to be matched is {1, 2}, and it is to be matched against the patterns
+            {2, 1} and {2, 3}, then both matches will have the same absolute delta, but the pattern {2, 3}
+            will have a lower uniformity indicator than pattern {2, 1}, making it a better match than {2, 1}.
+         */
+        T deltaVariance;
+    };
 
 
     /**
@@ -24,47 +48,10 @@ namespace lottery
 
 
     /**
-        returns a pattern's start index.
-     */
-    template <class P>
-    size_t getPatternStartIndex(const P &pattern)
-    {
-        return std::get<0>(pattern);
-    }
-
-
-    /**
-        returns a pattern's end index.
-     */
-    template <class P>
-    size_t getPatternEndIndex(const P &pattern)
-    {
-        return std::get<1>(pattern);
-    }
-
-
-    /**
-        returns a pattern's delta value.
-     */
-    template <class P>
-    const auto &getPatternDelta(const P &pattern)
-    {
-        return std::get<2>(pattern);
-    }
-
-
-    /**
-        returns a pattern's delta2 value.
-     */
-    template <class P>
-    const auto &getPatternDelta2(const P &pattern)
-    {
-        return std::get<3>(pattern);
-    }
-
-
-    /**
         Pattern comparator function.
+        First it compares the patterns by absolute delta, then by delta variance indicator,
+        then by non-absolute delta, then by start index.
+        The comparison results in the best matches are at the beginning of a pattern vector.
      */
     template <class V, class T>
     class PatternComparator
@@ -72,163 +59,122 @@ namespace lottery
     public:
         bool operator ()(const Pattern<V, T> &a, const Pattern<V, T> &b) const
         {
-            if (getPatternDelta(a) < getPatternDelta(b)) return true;
-            if (getPatternDelta(a) > getPatternDelta(b)) return false;
-            if (getPatternDelta2(a) < getPatternDelta2(b)) return true;
-            if (getPatternDelta2(a) > getPatternDelta2(b)) return false;
-            return getPatternStartIndex(a) < getPatternStartIndex(b);
+            //compare by absolute delta
+            if (a.absoluteDelta < b.absoluteDelta) return true;
+            if (a.absoluteDelta > b.absoluteDelta) return false;
+
+            //compare by delta variance indicator
+            if (a.deltaVariance < b.deltaVariance) return true;
+            if (a.deltaVariance > b.deltaVariance) return false;
+
+            //compare by delta
+            if (a.delta < b.delta) return true;
+            if (a.delta > b.delta) return false;
+
+            //compare by start index
+            return a.indexFirst < b.indexFirst;
         }
     };
 
 
     /**
-        Pattern match type.
+        A data source.
      */
-    template <class V, class T>
-    using PatternMatch = std::tuple<V, T, T>;
-
-
-    /**
-        Returns the pattern match's value.
-     */
-    template <class V, class T>
-    const V &getPatternMatchValue(const PatternMatch<V, T> &patternMatch)
-    {
-        return std::get<0>(patternMatch);
-    }
-
-
-    /**
-        Returns the pattern match's delta value.
-     */
-    template <class V, class T>
-    const T &getPatternMatchDelta(const PatternMatch<V, T> &patternMatch)
-    {
-        return std::get<1>(patternMatch);
-    }
-
-
-    /**
-        Returns the pattern match's delta2 value.
-     */
-    template <class V, class T>
-    const T &getPatternMatchDelta2(const PatternMatch<V, T> &patternMatch)
-    {
-        return std::get<2>(patternMatch);
-    }
-
-
-    /**
-        Pattern match comparator function.
-     */
-    template <class V, class T>
-    class PatternMatchComparator
+    template <class T>
+    class VectorRange
     {
     public:
-        bool operator ()(const PatternMatch<V, T> &a, const PatternMatch<V, T> &b) const
-        {
-            if (getPatternMatchDelta(a) < getPatternMatchDelta(b)) return true;
-            if (getPatternMatchDelta(a) > getPatternMatchDelta(b)) return false;
-            if (getPatternMatchDelta2(a) < getPatternMatchDelta2(b)) return true;
-            if (getPatternMatchDelta2(a) > getPatternMatchDelta2(b)) return false;
-            return getPatternMatchValue(a) < getPatternMatchValue(b);
-        }
+        ///the source of values.
+        const std::vector<T> &data;
+
+        ///index of first entry.
+        size_t indexFirst;
+
+        ///index of last entry.
+        size_t indexLast;
     };
 
 
     /**
-        Locates the pattern that matches most the given end of sequence.
-        @param values sequence of values to match with its end.
-        @param startSearchIndex start index in values.
-        @param endSearchIndex end index in values.
-        @param patternSize number of values to match.
+        Creates a range out of the given values.
+     */
+    template <class T>
+    VectorRange<T> makeRange(const std::vector<T> &values, size_t first, size_t last)
+    {
+        return VectorRange<T>{values, first, last};
+    }
+
+
+    /**
+        Locates patterns.
+        @param srcData data source with the values to be searched for.
+        @param dstData data source with the values to be searched.
         @param epsilon min value epsilon.
-        @param result a container of tuples that match the sequence end.
+        @param result a container of found patterns.
         @param comp comparator; must return the delta between two values.
      */
     template <class V, class T, class C>
     void findPatterns(
-        const std::vector<V> &values,
-        const size_t startSearchIndex,
-        const size_t endSearchIndex,
-        const size_t patternSize,
+        const VectorRange<V> &srcData,
+        const VectorRange<V> &dstData,
         const T &epsilon,
         PatternVector<V, T> &result,
         const C &comp)
     {
         //end index to search for pattern
-        const size_t endIndex = endSearchIndex - patternSize;
+        const size_t patternSize = srcData.indexLast - srcData.indexFirst + 1;
 
         //iterate all values in the sequence to find the most matching patterns
-        for (size_t index = startSearchIndex; index < endIndex; ++index)
+        for (size_t searchIndex = dstData.indexFirst; searchIndex <= dstData.indexLast - patternSize; ++searchIndex)
         {
-            //delta sum
-            T absDeltaSum = 0;
+            //delta of the pattern
+            T patternDelta = 0;
 
-            //delta of deltas
-            T delta2 = 0;
+            //absolute delta of the pattern
+            T patternAbsoluteDelta = 0;
+
+            //pattern delta variance indicator
+            T patternDeltaVariance = 0;
 
             //iterate values of pattern
             for (size_t patternIndex = 0; patternIndex < patternSize; ++patternIndex)
             {
-                //get the pattern value
-                const V &patternValue = values[index + patternIndex];
+                //get the source value
+                const V &srcValue = srcData.data[srcData.indexFirst + patternIndex];
 
-                //get the end value
-                const V &endValue = values[endIndex + patternIndex];
+                //get the destination value
+                const V &dstValue = dstData.data[searchIndex + patternIndex];
 
-                //delta
-                const T delta = comp(endValue, patternValue);
+                //compute the value delta between the source value and the destination value
+                const T valueDelta = comp(srcValue, dstValue);
 
-                //delta of deltas
-                delta2 = delta - delta2;
+                //compute the delta variance
+                patternDeltaVariance = valueDelta - patternDeltaVariance;
 
-                //absolute delta
-                const T absDelta = std::abs(delta);
+                //compute the absolute delta
+                const T valueAbsoluteDelta = std::abs(valueDelta);
 
                 //if the absolute delta between values is greater than epsilon, go to the next pattern
-                if (absDelta > epsilon) goto NEXT_PATTERN;
+                if (valueAbsoluteDelta > epsilon) goto NEXT_PATTERN;
 
-                //sum the absolute deltas
-                absDeltaSum += absDelta;
+                //sum the deltas of the values
+                patternDelta += valueDelta;
+
+                //sum the absolute deltas of the values
+                patternAbsoluteDelta += valueAbsoluteDelta;
             }
 
             //store the result
-            result.push_back(std::make_tuple(index, index + patternSize, absDeltaSum, std::abs(delta2)));
+            result.push_back(Pattern<V, T>{
+                dstData.data[searchIndex + patternSize - 1],
+                searchIndex,
+                searchIndex + patternSize - 1,
+                patternDelta,
+                patternAbsoluteDelta,
+                patternDeltaVariance});
 
             NEXT_PATTERN:
             ;
-        }
-    }
-
-
-    /**
-        Searches for patterns within the whole container of values using the given comparator.
-     */
-    template <class V, class T, class C>
-    void findPatterns(
-        const std::vector<V> &values,
-        const size_t patternSize,
-        const T &epsilon,
-        PatternVector<V, T> &result,
-        const C &comp)
-    {
-        return findPatterns(values, 0U, values.size(), patternSize, epsilon, result, comp);
-    }
-
-
-    /**
-        Returns the last value of the patterns in the given array in the given values.
-     */
-    template <class V, class T>
-    void getPatternMatches(const std::vector<V> &values, const PatternVector<V, T> &patterns, std::vector<PatternMatch<V, T>> &results)
-    {
-        //get the values
-        for (const Pattern<V, T> &pattern : patterns)
-        {
-            const size_t valueIndex = getPatternEndIndex(pattern) - 1;
-            const V &value = values[valueIndex];
-            results.push_back(std::make_tuple(value, getPatternDelta(pattern), getPatternDelta2(pattern)));
         }
     }
 

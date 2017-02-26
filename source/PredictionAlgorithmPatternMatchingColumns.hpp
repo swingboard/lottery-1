@@ -20,12 +20,12 @@ namespace lottery
         /**
             Constructor.
          */
-        PredictionAlgorithmPatternMatchingColumns(size_t patternSize = 3, int numberEpsilon = 3);
+        PredictionAlgorithmPatternMatchingColumns(size_t patternSize = 3, int numberEpsilon = 6);
 
         /**
             Runs the algorithm.
          */
-        virtual std::unordered_set<lottery::Number> predictNumbers(const lottery::SubGame &subGame, const size_t startIndex, const size_t endIndex, const size_t predictedNumbersPerColumn);
+        virtual std::unordered_set<lottery::Number> predictNumbers(const lottery::SubGame &subGame, const size_t indexFirst, const size_t indexLast, const size_t predictedNumbersPerColumn);
 
     private:
         const size_t m_patternSize;

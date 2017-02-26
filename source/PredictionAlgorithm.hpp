@@ -38,10 +38,10 @@ namespace lottery
         virtual void preprocessResults(const lottery::SubGame &subGame) {}
 
         //interface for preparing the algorithm for rediction.
-        virtual void doTraining(const lottery::SubGame &subGame, const size_t startIndex, const size_t endIndex, const size_t predictedNumbersPerColumn) {}
+        virtual void doTraining(const lottery::SubGame &subGame, const size_t indexFirst, const size_t indexLast, const size_t predictedNumbersPerColumn) {}
 
         //interface for predicting numbers.
-        virtual std::unordered_set<lottery::Number> predictNumbers(const lottery::SubGame &subGame, const size_t startIndex, const size_t endIndex, const size_t predictedNumbersPerColumn) = 0;
+        virtual std::unordered_set<lottery::Number> predictNumbers(const lottery::SubGame &subGame, const size_t indexFirst, const size_t indexLast, const size_t predictedNumbersPerColumn) = 0;
 
     private:
         std::string m_name;
