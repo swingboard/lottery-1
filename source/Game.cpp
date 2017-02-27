@@ -30,13 +30,13 @@ namespace lottery
 
         //set the selection types
         size_t beginNumberIndex = 0;
-        for (size_t nstIndex = 0; nstIndex < data.size(); ++nstIndex)
+        for (size_t nsIndex = 0; nsIndex < data.size(); ++nsIndex)
         {
             //get the row of data
-            const RowType &row = data[nstIndex];
+            const RowType &row = data[nsIndex];
 
             //get the number selection
-            NumberSelection &ns = numberSelections[nstIndex];
+            NumberSelection &ns = numberSelections[nsIndex];
             
             //set the number selection members from the csv data
             ns.minNumber = std::get<1>(row);
