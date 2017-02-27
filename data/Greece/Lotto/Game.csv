@@ -1,2 +1,2 @@
-Type,MinNumber,MaxNumber,DrawSize
+NumberSelection,MinNumber,MaxNumber,NumberCount
 Lotto,1,49,6
