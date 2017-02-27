@@ -1,4 +1,4 @@
-SubGameName,MinNumber,MaxNumber,ColumnCount
+Type,MinNumber,MaxNumber,DrawSize
 Main,1,45,5
 Joker,1,20,1
 

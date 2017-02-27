@@ -1,2 +1,2 @@
-SubGameName,MinNumber,MaxNumber,ColumnCount
+Type,MinNumber,MaxNumber,DrawSize
 Lotto,1,49,6
