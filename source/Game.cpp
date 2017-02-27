@@ -23,13 +23,10 @@ namespace lottery
         if (!loadCSV(filename, RowType(), data)) return false;
 
         //resize to the number selection types to the appropriate size
-        m_numberSelectionTypes.resize(data.size());
+        numberSelections.resize(data.size());
 
-        //recalculate the draw size
-        m_drawSize = 0;
-
-        //recalculate the drawn number index to selection type
-        m_numberIndexToNumberSelectionType.clear();
+        //recalculate the draw number count
+        drawNumberCount = 0;
 
         //set the selection types
         size_t beginNumberIndex = 0;
@@ -38,28 +35,16 @@ namespace lottery
             //get the row of data
             const RowType &row = data[nstIndex];
 
-            //get the number selection type
-            NumberSelectionType &nst = m_numberSelectionTypes[nstIndex];
+            //get the number selection
+            NumberSelection &ns = numberSelections[nstIndex];
             
-            //set the number selection type members from the csv data
-            nst.name = std::get<0>(row);
-            nst.minNumber = std::get<1>(row);
-            nst.maxNumber = std::get<2>(row);
-            nst.drawSize = std::get<3>(row);
+            //set the number selection members from the csv data
+            ns.minNumber = std::get<1>(row);
+            ns.maxNumber = std::get<2>(row);
+            ns.numberCount = std::get<3>(row);
 
-            //calculate the number indexes 
-            nst.beginNumberIndex = beginNumberIndex;
-            beginNumberIndex += nst.drawSize;
-            nst.endNumberIndex = beginNumberIndex;
-
-            //calculate the total draw size
-            m_drawSize += nst.drawSize;
-
-            //add the appropriate drawn number index to selection type index
-            for (size_t numberIndex = 0; numberIndex < nst.drawSize; ++numberIndex)
-            {
-                m_numberIndexToNumberSelectionType.push_back(nstIndex);
-            }
+            //calculate the total draw number count
+            drawNumberCount += ns.numberCount;
         }
 
         //success
@@ -75,13 +60,13 @@ namespace lottery
     bool Game::loadDraws(const std::string &filename/* = "Draws.csv"*/)
     {
         //row
-        Draw defaultRow(m_drawSize);
+        Draw defaultRow(drawNumberCount);
 
         //reset the data
-        m_draws.clear();
+        draws.clear();
 
         //load the data
-        return loadCSV(filename, defaultRow, m_draws);
+        return loadCSV(filename, defaultRow, draws);
     }
 
 
