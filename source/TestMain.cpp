@@ -47,7 +47,7 @@ int main()
     }
 
     //prepare the test parameters
-    const size_t PredictedNumberCount = 18;
+    const size_t PredictedNumberCount = 12;
     const size_t SampleDrawsSize = game.draws.size() * 2 / 3;
     const size_t TestDrawsSize = game.draws.size() - 1 - SampleDrawsSize;
 
@@ -55,10 +55,10 @@ int main()
     std::vector<std::shared_ptr<PredictionAlgorithm>> predictionAlgorithms;
     predictionAlgorithms.push_back(std::make_shared<PredictionAlgorithm_Random>());
     predictionAlgorithms.push_back(std::make_shared<PredictionAlgorithm_PatternMatch_Columns>(1, INT_MAX, INT_MAX));
-    predictionAlgorithms.push_back(std::make_shared<PredictionAlgorithm_PatternMatch_ColumnDeltas>(1, INT_MAX, INT_MAX));
-    predictionAlgorithms.push_back(std::make_shared<PredictionAlgorithm_MostPopularSuccessor_Columns>());
-    predictionAlgorithms.push_back(std::make_shared<PredictionAlgorithm_Average_ColumnPrevious>(3));
-    predictionAlgorithms.push_back(std::make_shared<PredictionAlgorithm_PatternMatch_Rows>(1, 36, INT_MAX));
+    //predictionAlgorithms.push_back(std::make_shared<PredictionAlgorithm_PatternMatch_ColumnDeltas>(1, INT_MAX, INT_MAX));
+    //predictionAlgorithms.push_back(std::make_shared<PredictionAlgorithm_MostPopularSuccessor_Columns>());
+    //predictionAlgorithms.push_back(std::make_shared<PredictionAlgorithm_Average_ColumnPrevious>(3));
+    //predictionAlgorithms.push_back(std::make_shared<PredictionAlgorithm_PatternMatch_Rows>(1, 36, INT_MAX));
 
     //initialize the success tables algorithms
     std::vector<std::vector<size_t>> predictionAlgorithmSuccesses(predictionAlgorithms.size(), std::vector<size_t>(game.numberCount + 1));

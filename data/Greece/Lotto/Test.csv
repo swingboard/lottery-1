@@ -1,7 +1,0 @@
-Algorithm,NumberCount,Successes_0,Successes_1,Successes_2,Successes_3,Successes_4,Successes_5,Successes_6
-Random,18,5.59441,20.3963,33.5664,28.4382,10.2564,1.74825,0
-PatternMatch_Columns,18,4.662,22.8438,31.5851,26.9231,11.1888,2.331,0.4662
-PatternMatch_ColumnDeltas,18,4.31235,24.0093,35.3147,25.4079,8.27506,2.44755,0.2331
-MostPopularSuccessor_Columns,17.9464,5.94406,23.7762,32.634,24.7086,11.0723,1.6317,0.2331
-Average_ColumnPrevious,18,5.47786,23.8928,33.4499,26.8065,8.74126,1.1655,0.4662
-PatternMatch_Rows,18,4.8951,23.6597,31.9347,27.1562,9.09091,2.68065,0.582751

@@ -4,6 +4,9 @@
 
 #include <algorithm>
 #include <numeric>
+#include <utility>
+#include <functional>
+#include "Tuple.hpp"
 
 
 namespace lottery

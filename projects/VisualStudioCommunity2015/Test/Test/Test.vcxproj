@@ -153,6 +153,7 @@
     <ClInclude Include="..\..\..\..\source\Algorithm.hpp" />
     <ClInclude Include="..\..\..\..\source\DrawColumnDeltaIterator.hpp" />
     <ClInclude Include="..\..\..\..\source\DrawColumnIterator.hpp" />
+    <ClInclude Include="..\..\..\..\source\KnownSequence.hpp" />
     <ClInclude Include="..\..\..\..\source\PatternMatching.hpp" />
     <ClInclude Include="..\..\..\..\source\PredictionAlgorithm_Average_ColumnPrevious.hpp" />
     <ClInclude Include="..\..\..\..\source\PredictionAlgorithm_MostPopularSuccessor_Columns.hpp" />

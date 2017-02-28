@@ -70,8 +70,8 @@ namespace lottery
             if (a.delta > b.delta) return false;
 
             //compare patterns by variance
-            if (std::abs(a.variance) < std::abs(b.variance)) return true;
-            if (std::abs(a.variance) > std::abs(b.variance)) return false;
+            if (a.variance < b.variance) return true;
+            if (a.variance > b.variance) return false;
 
             //if the patterns are equal, sort them by begin iterator
             return a.begin < b.begin;
@@ -191,7 +191,8 @@ namespace lottery
 
                 const typename ContainerType::const_iterator sampleEnd = std::next(it, testDataSize);
                 const auto value = *sampleEnd;
-                results.push_back(Pattern<typename ContainerType::const_iterator, EpsilonType>{value, it, sampleEnd, patternDelta, patternVariance});
+                results.push_back(Pattern<typename ContainerType::const_iterator, int>{
+                    value, it, sampleEnd, patternDelta, std::abs(patternVariance)});
             }
 
             NEXT_SAMPLE:

@@ -1,6 +1,7 @@
 #include "PredictionAlgorithm_PatternMatch_Columns.hpp"
 #include "DrawColumnIterator.hpp"
 #include "PatternMatching.hpp"
+#include "KnownSequence.hpp"
 
 
 namespace lottery
@@ -43,6 +44,9 @@ namespace lottery
         */
     void PredictionAlgorithm_PatternMatch_Columns::predict(const Game &game, const DrawVector &draws, size_t numberCount, std::unordered_set<Number> &numbers)
     {
+        std::vector<int> vals{1, 3, 5};
+        int v = getKnownSequenceValue(vals.begin(), vals.end(), 10, 1);
+
         //number count per column
         const size_t numberCountPerColumn = numberCount / game.numberCount;
 
@@ -66,8 +70,10 @@ namespace lottery
             size_t count = 0;
             for (size_t index = 0; index < results.size() && count < numberCountPerColumn; ++index)
             {
-                const auto p = numbers.insert(results[index].value);
-                if (p.second) ++count;
+                const auto &pattern = results[index];
+                const Number number = getKnownSequenceValue(pattern.begin, pattern.end, pattern.value, 1);
+                const auto r = numbers.insert(number);
+                if (r.second) ++count;
             }
         }
     }
