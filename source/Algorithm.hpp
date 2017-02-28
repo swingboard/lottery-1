@@ -45,6 +45,14 @@ namespace lottery
     }
 
 
+    ///check if value is within a range.
+    template <class T>
+    bool isMid(const T &minValue, const T &value, const T &maxValue)
+    {
+        return minValue <= value && value <= maxValue;
+    }
+
+
 } //namespace lottery
 
 

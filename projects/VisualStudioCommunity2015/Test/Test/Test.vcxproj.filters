@@ -23,7 +23,7 @@
     <ClInclude Include="..\..\..\..\source\PredictionAlgorithm_MostPopularSuccessor_Columns.hpp" />
     <ClInclude Include="..\..\..\..\source\PredictionAlgorithm_Average_ColumnPrevious.hpp" />
     <ClInclude Include="..\..\..\..\source\PredictionAlgorithm_PatternMatch_Rows.hpp" />
-    <ClInclude Include="..\..\..\..\source\KnownSequence.hpp" />
+    <ClInclude Include="..\..\..\..\source\PredictionAlgorithm_MathFunction.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\source\TestMain.cpp" />
@@ -35,5 +35,6 @@
     <ClCompile Include="..\..\..\..\source\PredictionAlgorithm_Average_ColumnPrevious.cpp" />
     <ClCompile Include="..\..\..\..\source\PredictionAlgorithm_PatternMatch_Rows.cpp" />
     <ClCompile Include="..\..\..\..\source\Draw.cpp" />
+    <ClCompile Include="..\..\..\..\source\PredictionAlgorithm_MathFunction.cpp" />
   </ItemGroup>
 </Project>

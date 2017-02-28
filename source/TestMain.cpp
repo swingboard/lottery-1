@@ -8,6 +8,7 @@
 #include "PredictionAlgorithm_MostPopularSuccessor_Columns.hpp"
 #include "PredictionAlgorithm_Average_ColumnPrevious.hpp"
 #include "PredictionAlgorithm_PatternMatch_Rows.hpp"
+#include "PredictionAlgorithm_MathFunction.hpp"
 
 
 using namespace std;
@@ -54,11 +55,12 @@ int main()
     //set up a vector of prediction algorithms
     std::vector<std::shared_ptr<PredictionAlgorithm>> predictionAlgorithms;
     predictionAlgorithms.push_back(std::make_shared<PredictionAlgorithm_Random>());
-    predictionAlgorithms.push_back(std::make_shared<PredictionAlgorithm_PatternMatch_Columns>(1, INT_MAX, INT_MAX));
+    //predictionAlgorithms.push_back(std::make_shared<PredictionAlgorithm_PatternMatch_Columns>(1, INT_MAX, INT_MAX));
     //predictionAlgorithms.push_back(std::make_shared<PredictionAlgorithm_PatternMatch_ColumnDeltas>(1, INT_MAX, INT_MAX));
     //predictionAlgorithms.push_back(std::make_shared<PredictionAlgorithm_MostPopularSuccessor_Columns>());
     //predictionAlgorithms.push_back(std::make_shared<PredictionAlgorithm_Average_ColumnPrevious>(3));
     //predictionAlgorithms.push_back(std::make_shared<PredictionAlgorithm_PatternMatch_Rows>(1, 36, INT_MAX));
+    predictionAlgorithms.push_back(std::make_shared<PredictionAlgorithm_MathFunction>(3));
 
     //initialize the success tables algorithms
     std::vector<std::vector<size_t>> predictionAlgorithmSuccesses(predictionAlgorithms.size(), std::vector<size_t>(game.numberCount + 1));

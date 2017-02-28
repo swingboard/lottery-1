@@ -56,7 +56,7 @@ namespace lottery
             {
                 const Number n = pattern.value[numberIndex];
                 const int delta = pattern.delta / game.getNumberCount(numberIndex) / m_patternSize;
-                const Number number = mid(game.getMinNumber(numberIndex), n + delta * sign(pattern.variance), game.getMaxNumber(numberIndex));
+                const Number number = mid(game.getMinNumber(numberIndex), n + delta, game.getMaxNumber(numberIndex));
                 const auto r = numbers.insert(number);
                 if (r.second && numbers.size() == numberCount) return;
             }

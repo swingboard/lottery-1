@@ -76,8 +76,7 @@ namespace lottery
             {
                 const auto &pattern = results[index];
                 const int delta = *(pattern.end - 1);
-                const int deltaAdjustement = (pattern.delta / game.getNumberCount(numberIndex)) * sign(pattern.variance);
-                Number number = mid(game.getMinNumber(numberIndex), testNumber + delta + deltaAdjustement, game.getMaxNumber(numberIndex));
+                Number number = mid(game.getMinNumber(numberIndex), testNumber + delta, game.getMaxNumber(numberIndex));
                 const auto p = numbers.insert(number);
                 if (p.second) ++count;
             }

@@ -153,9 +153,9 @@
     <ClInclude Include="..\..\..\..\source\Algorithm.hpp" />
     <ClInclude Include="..\..\..\..\source\DrawColumnDeltaIterator.hpp" />
     <ClInclude Include="..\..\..\..\source\DrawColumnIterator.hpp" />
-    <ClInclude Include="..\..\..\..\source\KnownSequence.hpp" />
     <ClInclude Include="..\..\..\..\source\PatternMatching.hpp" />
     <ClInclude Include="..\..\..\..\source\PredictionAlgorithm_Average_ColumnPrevious.hpp" />
+    <ClInclude Include="..\..\..\..\source\PredictionAlgorithm_MathFunction.hpp" />
     <ClInclude Include="..\..\..\..\source\PredictionAlgorithm_MostPopularSuccessor_Columns.hpp" />
     <ClInclude Include="..\..\..\..\source\PredictionAlgorithm_PatternMatch_ColumnDeltas.hpp" />
     <ClInclude Include="..\..\..\..\source\PredictionAlgorithm_PatternMatch_Columns.hpp" />
@@ -178,6 +178,7 @@
     <ClCompile Include="..\..\..\..\source\Draw.cpp" />
     <ClCompile Include="..\..\..\..\source\Game.cpp" />
     <ClCompile Include="..\..\..\..\source\PredictionAlgorithm_Average_ColumnPrevious.cpp" />
+    <ClCompile Include="..\..\..\..\source\PredictionAlgorithm_MathFunction.cpp" />
     <ClCompile Include="..\..\..\..\source\PredictionAlgorithm_MostPopularSuccessor_Columns.cpp" />
     <ClCompile Include="..\..\..\..\source\PredictionAlgorithm_PatternMatch_ColumnDeltas.cpp" />
     <ClCompile Include="..\..\..\..\source\PredictionAlgorithm_PatternMatch_Columns.cpp" />
