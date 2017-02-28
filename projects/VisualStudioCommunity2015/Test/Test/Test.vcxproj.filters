@@ -13,10 +13,25 @@
     <ClInclude Include="..\..\..\..\source\PredictionAlgorithm_Random.hpp" />
     <ClInclude Include="..\..\..\..\source\Random.hpp" />
     <ClInclude Include="..\..\..\..\source\String.hpp" />
+    <ClInclude Include="..\..\..\..\source\PredictionAlgorithm_PatternMatch_Columns.hpp" />
+    <ClInclude Include="..\..\..\..\source\DrawColumnIterator.hpp" />
+    <ClInclude Include="..\..\..\..\source\Range.hpp" />
+    <ClInclude Include="..\..\..\..\source\PatternMatching.hpp" />
+    <ClInclude Include="..\..\..\..\source\PredictionAlgorithm_PatternMatch_ColumnDeltas.hpp" />
+    <ClInclude Include="..\..\..\..\source\DrawColumnDeltaIterator.hpp" />
+    <ClInclude Include="..\..\..\..\source\Algorithm.hpp" />
+    <ClInclude Include="..\..\..\..\source\PredictionAlgorithm_MostPopularSuccessor_Columns.hpp" />
+    <ClInclude Include="..\..\..\..\source\PredictionAlgorithm_Average_ColumnPrevious.hpp" />
+    <ClInclude Include="..\..\..\..\source\PredictionAlgorithm_PatternMatch_Rows.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\source\TestMain.cpp" />
     <ClCompile Include="..\..\..\..\source\Game.cpp" />
     <ClCompile Include="..\..\..\..\source\PredictionAlgorithm_Random.cpp" />
+    <ClCompile Include="..\..\..\..\source\PredictionAlgorithm_PatternMatch_Columns.cpp" />
+    <ClCompile Include="..\..\..\..\source\PredictionAlgorithm_PatternMatch_ColumnDeltas.cpp" />
+    <ClCompile Include="..\..\..\..\source\PredictionAlgorithm_MostPopularSuccessor_Columns.cpp" />
+    <ClCompile Include="..\..\..\..\source\PredictionAlgorithm_Average_ColumnPrevious.cpp" />
+    <ClCompile Include="..\..\..\..\source\PredictionAlgorithm_PatternMatch_Rows.cpp" />
   </ItemGroup>
 </Project>

@@ -4,6 +4,7 @@
 
 #include <vector>
 #include "Number.hpp"
+#include "algorithm.hpp"
 
 
 namespace lottery
@@ -20,6 +21,19 @@ namespace lottery
         A vector of draws.
      */
     typedef std::vector<Draw> DrawVector;
+
+
+    /**
+        Draw delta function.
+     */
+    class DrawDeltaFunction
+    {
+    public:
+        int operator ()(const Draw &a, const Draw &b) const
+        {
+            return sum(a) - sum(b);
+        }
+    };
 
 
 } //namespace lottery

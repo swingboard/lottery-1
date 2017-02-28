@@ -1,8 +1,13 @@
 #include <iostream>
 #include <unordered_map>
 #include "Game.hpp"
-#include "PredictionAlgorithm_Random.hpp"
 #include "CSVOutputFileStream.hpp"
+#include "PredictionAlgorithm_Random.hpp"
+#include "PredictionAlgorithm_PatternMatch_Columns.hpp"
+#include "PredictionAlgorithm_PatternMatch_ColumnDeltas.hpp"
+#include "PredictionAlgorithm_MostPopularSuccessor_Columns.hpp"
+#include "PredictionAlgorithm_Average_ColumnPrevious.hpp"
+#include "PredictionAlgorithm_PatternMatch_Rows.hpp"
 
 
 using namespace std;
@@ -27,7 +32,7 @@ int main()
     }
 
     //open the results file
-    CSVOutputFileStream testResultsFile(3 + game.drawNumberCount, "Test.csv");
+    CSVOutputFileStream testResultsFile(3 + game.numberCount, "Test.csv");
     if (!testResultsFile.is_open())
     {
         cerr << "ERROR: the test results output file cannot be opened.\n";
@@ -36,7 +41,7 @@ int main()
 
     //setup the result's file headers
     testResultsFile << "Algorithm" << "NumberCount";
-    for (size_t successesIndex = 0; successesIndex <= game.drawNumberCount; ++successesIndex)
+    for (size_t successesIndex = 0; successesIndex <= game.numberCount; ++successesIndex)
     {
         testResultsFile << ("Successes_"_s + successesIndex);
     }
@@ -49,14 +54,18 @@ int main()
     //set up a vector of prediction algorithms
     std::vector<std::shared_ptr<PredictionAlgorithm>> predictionAlgorithms;
     predictionAlgorithms.push_back(std::make_shared<PredictionAlgorithm_Random>());
+    predictionAlgorithms.push_back(std::make_shared<PredictionAlgorithm_PatternMatch_Columns>(1, INT_MAX, INT_MAX));
+    predictionAlgorithms.push_back(std::make_shared<PredictionAlgorithm_PatternMatch_ColumnDeltas>(1, INT_MAX, INT_MAX));
+    predictionAlgorithms.push_back(std::make_shared<PredictionAlgorithm_MostPopularSuccessor_Columns>());
+    predictionAlgorithms.push_back(std::make_shared<PredictionAlgorithm_Average_ColumnPrevious>(3));
+    predictionAlgorithms.push_back(std::make_shared<PredictionAlgorithm_PatternMatch_Rows>(1, INT_MAX, INT_MAX));
 
     //initialize the success tables algorithms
-    std::unordered_map<std::shared_ptr<PredictionAlgorithm>, std::vector<size_t>> predictionAlgorithmSuccesses;
-    std::unordered_map<std::shared_ptr<PredictionAlgorithm>, size_t> predictionAlgorithmPredictedNumberCount;
+    std::vector<std::vector<size_t>> predictionAlgorithmSuccesses(predictionAlgorithms.size(), std::vector<size_t>(game.numberCount + 1));
+    std::vector<size_t> predictionAlgorithmPredictedNumberCount(predictionAlgorithms.size());
     DrawVector sampleDraws(game.draws.begin(), game.draws.begin() + SampleDrawsSize);
     for (const auto &predictionAlgorithmPtr : predictionAlgorithms)
     {
-        predictionAlgorithmSuccesses[predictionAlgorithmPtr].resize(game.drawNumberCount + 1);
         predictionAlgorithmPtr->initialize(game, sampleDraws);
     }
 
@@ -70,8 +79,10 @@ int main()
         const Draw &testDraw = game.draws[testEndIndex];
 
         //invoke the algorithms and test their predictions for the given test set
-        for (const auto &predictionAlgorithmPtr : predictionAlgorithms)
+        for (size_t predictionAlgorithmIndex = 0; predictionAlgorithmIndex < predictionAlgorithms.size(); ++predictionAlgorithmIndex)
         {
+            const auto &predictionAlgorithmPtr = predictionAlgorithms[predictionAlgorithmIndex];
+
             //get the prediction
             std::unordered_set<Number> predictedNumbers;
             predictionAlgorithmPtr->predict(game, testDraws, PredictedNumberCount, predictedNumbers);
@@ -87,19 +98,21 @@ int main()
             }
 
             //note the successes of the algorithm
-            ++predictionAlgorithmSuccesses[predictionAlgorithmPtr][successes];
-            predictionAlgorithmPredictedNumberCount[predictionAlgorithmPtr] += predictedNumbers.size();
+            ++predictionAlgorithmSuccesses[predictionAlgorithmIndex][successes];
+            predictionAlgorithmPredictedNumberCount[predictionAlgorithmIndex] += predictedNumbers.size();
         }
     }
 
     //save the total successes
-    for (const auto &p : predictionAlgorithmSuccesses)
+    for (size_t predictionAlgorithmIndex = 0; predictionAlgorithmIndex < predictionAlgorithms.size(); ++predictionAlgorithmIndex)
     {
-        testResultsFile << p.first->getName();
-        testResultsFile << (predictionAlgorithmPredictedNumberCount[p.first] / (double)TestDrawsSize);
-        for (size_t successesIndex = 0; successesIndex <= game.drawNumberCount; ++successesIndex)
+        const auto &predictionAlgorithmPtr = predictionAlgorithms[predictionAlgorithmIndex];
+
+        testResultsFile << predictionAlgorithmPtr->getName();
+        testResultsFile << (predictionAlgorithmPredictedNumberCount[predictionAlgorithmIndex] / (double)TestDrawsSize);
+        for (size_t successesIndex = 0; successesIndex <= game.numberCount; ++successesIndex)
         {
-            testResultsFile << (100.0 * predictionAlgorithmSuccesses[p.first][successesIndex] / (double)TestDrawsSize);
+            testResultsFile << (100.0 * predictionAlgorithmSuccesses[predictionAlgorithmIndex][successesIndex] / (double)TestDrawsSize);
         }
     }
 

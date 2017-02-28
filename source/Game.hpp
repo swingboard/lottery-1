@@ -38,7 +38,7 @@ namespace lottery
         std::vector<NumberSelection> numberSelections;
 
         //count of numbers per draw.
-        size_t drawNumberCount;
+        size_t numberCount;
 
         //drawn numbers so far.
         DrawVector draws;
@@ -56,6 +56,42 @@ namespace lottery
             @return true if the draws were loaded successfully, false otherwise.
          */
         bool loadDraws(const std::string &filename = "Draws.csv");
+
+        /**
+            Returns the number selection from the number index.
+         */
+        const NumberSelection &getNumberSelection(size_t numberIndex) const
+        {
+            return *m_numberIndexToNumberSelection[numberIndex];
+        }
+
+        /**
+            Returns the min number of the number selection of the given number index.
+         */
+        Number getMinNumber(size_t numberIndex) const
+        {
+            return getNumberSelection(numberIndex).minNumber;
+        }
+
+        /**
+            Returns the max number of the number selection of the given number index.
+         */
+        Number getMaxNumber(size_t numberIndex) const
+        {
+            return getNumberSelection(numberIndex).maxNumber;
+        }
+
+        /**
+            Returns the number count of the number selection of the given number index.
+         */
+        size_t getNumberCount(size_t numberIndex) const
+        {
+            return getNumberSelection(numberIndex).numberCount;
+        }
+
+    private:
+        //internal array that contains a function from number index to number selection.
+        std::vector<NumberSelection *> m_numberIndexToNumberSelection;
     };
 
 

@@ -26,7 +26,10 @@ namespace lottery
         numberSelections.resize(data.size());
 
         //recalculate the draw number count
-        drawNumberCount = 0;
+        numberCount = 0;
+
+        //recalculate the number to selection index
+        m_numberIndexToNumberSelection.clear();
 
         //set the selection types
         size_t beginNumberIndex = 0;
@@ -44,7 +47,13 @@ namespace lottery
             ns.numberCount = std::get<3>(row);
 
             //calculate the total draw number count
-            drawNumberCount += ns.numberCount;
+            numberCount += ns.numberCount;
+
+            //add the appropriate pointers to the number selections
+            for (size_t i = 0; i < ns.numberCount; ++i)
+            {
+                m_numberIndexToNumberSelection.push_back(&ns);
+            }
         }
 
         //success
@@ -60,7 +69,7 @@ namespace lottery
     bool Game::loadDraws(const std::string &filename/* = "Draws.csv"*/)
     {
         //row
-        Draw defaultRow(drawNumberCount);
+        Draw defaultRow(numberCount);
 
         //reset the data
         draws.clear();
