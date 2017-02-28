@@ -44,7 +44,7 @@ namespace lottery
             m_valueEpsilon,
             m_patternEpsilon,
             results,
-            DrawDeltaFunction());
+            DrawDeltaFunction(m_valueEpsilon / game.numberCount, m_patternEpsilon / m_patternSize));
 
         //sort the results
         std::sort(results.begin(), results.end(), PatternComparator<DrawVector::const_iterator, int>());
@@ -55,7 +55,7 @@ namespace lottery
             for (size_t numberIndex = 0; numberIndex < pattern.value.size(); ++numberIndex)
             {
                 const Number n = pattern.value[numberIndex];
-                const int delta = pattern.delta / game.getNumberCount(numberIndex);
+                const int delta = pattern.delta / game.getNumberCount(numberIndex) / m_patternSize;
                 const Number number = mid(game.getMinNumber(numberIndex), n + delta * sign(pattern.variance), game.getMaxNumber(numberIndex));
                 const auto r = numbers.insert(number);
                 if (r.second && numbers.size() == numberCount) return;

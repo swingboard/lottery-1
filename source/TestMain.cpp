@@ -58,7 +58,7 @@ int main()
     predictionAlgorithms.push_back(std::make_shared<PredictionAlgorithm_PatternMatch_ColumnDeltas>(1, INT_MAX, INT_MAX));
     predictionAlgorithms.push_back(std::make_shared<PredictionAlgorithm_MostPopularSuccessor_Columns>());
     predictionAlgorithms.push_back(std::make_shared<PredictionAlgorithm_Average_ColumnPrevious>(3));
-    predictionAlgorithms.push_back(std::make_shared<PredictionAlgorithm_PatternMatch_Rows>(1, INT_MAX, INT_MAX));
+    predictionAlgorithms.push_back(std::make_shared<PredictionAlgorithm_PatternMatch_Rows>(1, 36, INT_MAX));
 
     //initialize the success tables algorithms
     std::vector<std::vector<size_t>> predictionAlgorithmSuccesses(predictionAlgorithms.size(), std::vector<size_t>(game.numberCount + 1));

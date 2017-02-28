@@ -29,10 +29,15 @@ namespace lottery
     class DrawDeltaFunction
     {
     public:
-        int operator ()(const Draw &a, const Draw &b) const
-        {
-            return sum(a) - sum(b);
-        }
+        ///constructor.
+        DrawDeltaFunction(int valueEpsilon, int drawEpsilon);
+
+        ///delta operator.
+        int operator ()(const Draw &a, const Draw &b) const;
+
+    private:
+        int m_valueEpsilon;
+        int m_drawEpsilon;
     };
 
 
