@@ -9,9 +9,14 @@
     <ClInclude Include="..\..\..\..\source\Draw.hpp" />
     <ClInclude Include="..\..\..\..\source\CSVFile.hpp" />
     <ClInclude Include="..\..\..\..\source\Tuple.hpp" />
+    <ClInclude Include="..\..\..\..\source\PredictionAlgorithm.hpp" />
+    <ClInclude Include="..\..\..\..\source\PredictionAlgorithm_Random.hpp" />
+    <ClInclude Include="..\..\..\..\source\Random.hpp" />
+    <ClInclude Include="..\..\..\..\source\String.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\source\TestMain.cpp" />
     <ClCompile Include="..\..\..\..\source\Game.cpp" />
+    <ClCompile Include="..\..\..\..\source\PredictionAlgorithm_Random.cpp" />
   </ItemGroup>
 </Project>

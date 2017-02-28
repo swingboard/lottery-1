@@ -1,5 +1,8 @@
 #include <iostream>
+#include <unordered_map>
 #include "Game.hpp"
+#include "PredictionAlgorithm_Random.hpp"
+#include "CSVOutputFileStream.hpp"
 
 
 using namespace std;
@@ -20,7 +23,84 @@ int main()
     if (!game.loadDraws())
     {
         cerr << "ERROR: the draws could not be loaded.\n";
-        return -1;
+        return -2;
+    }
+
+    //open the results file
+    CSVOutputFileStream testResultsFile(3 + game.drawNumberCount, "Test.csv");
+    if (!testResultsFile.is_open())
+    {
+        cerr << "ERROR: the test results output file cannot be opened.\n";
+        return -3;
+    }
+
+    //setup the result's file headers
+    testResultsFile << "Algorithm" << "NumberCount";
+    for (size_t successesIndex = 0; successesIndex <= game.drawNumberCount; ++successesIndex)
+    {
+        testResultsFile << ("Successes_"_s + successesIndex);
+    }
+
+    //prepare the test parameters
+    const size_t PredictedNumberCount = 18;
+    const size_t SampleDrawsSize = game.draws.size() * 2 / 3;
+    const size_t TestDrawsSize = game.draws.size() - 1 - SampleDrawsSize;
+
+    //set up a vector of prediction algorithms
+    std::vector<std::shared_ptr<PredictionAlgorithm>> predictionAlgorithms;
+    predictionAlgorithms.push_back(std::make_shared<PredictionAlgorithm_Random>());
+
+    //initialize the success tables algorithms
+    std::unordered_map<std::shared_ptr<PredictionAlgorithm>, std::vector<size_t>> predictionAlgorithmSuccesses;
+    std::unordered_map<std::shared_ptr<PredictionAlgorithm>, size_t> predictionAlgorithmPredictedNumberCount;
+    DrawVector sampleDraws(game.draws.begin(), game.draws.begin() + SampleDrawsSize);
+    for (const auto &predictionAlgorithmPtr : predictionAlgorithms)
+    {
+        predictionAlgorithmSuccesses[predictionAlgorithmPtr].resize(game.drawNumberCount + 1);
+        predictionAlgorithmPtr->initialize(game, sampleDraws);
+    }
+
+    //do predictions for various sizes of test draws
+    for (size_t testEndIndex = SampleDrawsSize; testEndIndex < game.draws.size() - 1; ++testEndIndex)
+    {
+        //prepare the test draws
+        DrawVector testDraws(game.draws.begin(), game.draws.begin() + testEndIndex);
+
+        //the predicted draw
+        const Draw &testDraw = game.draws[testEndIndex];
+
+        //invoke the algorithms and test their predictions for the given test set
+        for (const auto &predictionAlgorithmPtr : predictionAlgorithms)
+        {
+            //get the prediction
+            std::unordered_set<Number> predictedNumbers;
+            predictionAlgorithmPtr->predict(game, testDraws, PredictedNumberCount, predictedNumbers);
+
+            //test the prediction against the drawn numbers
+            size_t successes = 0;
+            for (const Number number : testDraw)
+            {
+                if (predictedNumbers.find(number) != predictedNumbers.end())
+                {
+                    ++successes;
+                }
+            }
+
+            //note the successes of the algorithm
+            ++predictionAlgorithmSuccesses[predictionAlgorithmPtr][successes];
+            predictionAlgorithmPredictedNumberCount[predictionAlgorithmPtr] += predictedNumbers.size();
+        }
+    }
+
+    //save the total successes
+    for (const auto &p : predictionAlgorithmSuccesses)
+    {
+        testResultsFile << p.first->getName();
+        testResultsFile << (predictionAlgorithmPredictedNumberCount[p.first] / (double)TestDrawsSize);
+        for (size_t successesIndex = 0; successesIndex <= game.drawNumberCount; ++successesIndex)
+        {
+            testResultsFile << (100.0 * predictionAlgorithmSuccesses[p.first][successesIndex] / (double)TestDrawsSize);
+        }
     }
 
     return 0;

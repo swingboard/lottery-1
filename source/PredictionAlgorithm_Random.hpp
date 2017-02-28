@@ -1,0 +1,50 @@
+#ifndef LOTTERY_PREDICTIONALGORITHM_RANDOM_HPP
+#define LOTTERY_PREDICTIONALGORITHM_RANDOM_HPP
+
+
+#include <memory>
+#include "PredictionAlgorithm.hpp"
+#include "Random.hpp"
+
+
+namespace lottery
+{
+
+
+    /**
+        Random number selection.
+        The effectiveness of other prediction algorithms are measured against random selection of numbers.
+     */
+    class PredictionAlgorithm_Random : public PredictionAlgorithm
+    {
+    public:
+        /**
+            Returns the algorithm's name.
+         */
+        virtual const char *getName() const;
+
+        /**
+            Initializes a random number generator for the given game's parameters.
+            @param game game for which the prediction is for.
+            @param draws the sample of draws to initialize the prediction model from.
+         */
+        virtual void initialize(const Game &game, const DrawVector &draws);
+
+        /**
+            Predicts random values.
+            @param draws previous draws.
+            @param numberCount count of numbers to predict.
+            @param numbers predicted numbers.
+         */
+        virtual void predict(const Game &game, const DrawVector &draws, size_t numberCount, std::unordered_set<Number> &numbers);
+
+    private:
+        //random number generator
+        std::unique_ptr<RandomNumberGenerator<Number>> m_randomNumberGenerator;
+    };
+
+
+} //namespace lottery
+
+
+#endif //LOTTERY_PREDICTIONALGORITHM_RANDOM_HPP
