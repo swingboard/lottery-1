@@ -10,8 +10,7 @@ namespace lottery
     template <class ContainerType, class ValueType, class FunctionType>
     static void testMathFunction(
         const ContainerType &values, 
-        ValueType &bestValue, 
-        ValueType &bestDelta, 
+        std::vector<std::pair<ValueType, ValueType>> &results, 
         const ValueType minValue,
         const ValueType maxValue,
         FunctionType &&func)
@@ -27,14 +26,10 @@ namespace lottery
             delta += std::abs(value - sequenceValue);
         }
 
-        if (delta < bestDelta)
+        sequenceValue = func(sequenceValue);
+        if (isMid(minValue, sequenceValue, maxValue))
         {
-            sequenceValue = func(sequenceValue);
-            if (isMid(minValue, sequenceValue, maxValue))
-            {
-                bestDelta = delta;
-                bestValue = sequenceValue;
-            }
+            results.emplace_back(sequenceValue, delta);
         }
     }
 
@@ -84,48 +79,20 @@ namespace lottery
             int sampleValue0 = *sampleValues.begin();
             int sampleValue1 = *(sampleValues.begin() + 1);
 
-            int bestValue = 0;
-            int bestDelta = INT_MAX;
+            std::vector<std::pair<int, int>> results;
 
             //f(x) = y + d
-            testMathFunction(sampleValues, bestValue, bestDelta, minValue, maxValue,
+            testMathFunction(sampleValues, results, minValue, maxValue,
                 [d = sampleValue1 - sampleValue0](int y) { return y + d; });
 
-            //f(x) = y - d
-            testMathFunction(sampleValues, bestValue, bestDelta, minValue, maxValue,
-                [d = sampleValue1 - sampleValue0](int y) { return y - d; });
+            std::sort(results.begin(), results.end(), TupleMemberComparator<std::less<int>, 1>());
 
-            //f(x) = y * d
-            testMathFunction(sampleValues, bestValue, bestDelta, minValue, maxValue,
-                [d = sampleValue1 - sampleValue0](int y) { return y * d; });
-
-            //f(x) = y / d
-            testMathFunction(sampleValues, bestValue, bestDelta, minValue, maxValue,
-                [d = sampleValue1 - sampleValue0](int y) { return d != 0 ? y / d : 1; });
-
-            //f(x) = y + previous(f(x))
-            testMathFunction(sampleValues, bestValue, bestDelta, minValue, maxValue,
-                [prevY = sampleValue1 - sampleValue0](int y) mutable
-                {
-                    int result = y + prevY;
-                    prevY = y;
-                    return result;
-                });
-
-            //f(x) = y - previous(f(x))
-            testMathFunction(sampleValues, bestValue, bestDelta, minValue, maxValue,
-                [prevY = sampleValue1 - sampleValue0](int y) mutable
-                {
-                    int result = y - prevY;
-                    prevY = y;
-                    return result;
-                });
-
-            if (bestValue != INT_MAX &&
-                numbers.insert(bestValue).second &&
-                numbers.size() == numberCount)
+            for (const auto &p : results)
             {
-                break;
+                if (numbers.insert(p.first).second && numbers.size() == numberCount)
+                {
+                    return;
+                }
             }
         }
     }
