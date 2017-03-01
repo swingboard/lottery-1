@@ -151,8 +151,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\source\Algorithm.hpp" />
-    <ClInclude Include="..\..\..\..\source\DrawColumnDeltaIterator.hpp" />
-    <ClInclude Include="..\..\..\..\source\DrawColumnIterator.hpp" />
     <ClInclude Include="..\..\..\..\source\PatternMatching.hpp" />
     <ClInclude Include="..\..\..\..\source\Range.hpp" />
     <ClInclude Include="..\..\..\..\source\String.hpp" />
