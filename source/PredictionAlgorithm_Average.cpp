@@ -139,7 +139,7 @@ namespace lottery
     //predict value via searching for value that satisfies the next projected average.
     static double _predictValueHelper(std::vector<double> &values, std::vector<double> &averages, const int minValue, const double averageValue, const size_t count, const size_t depth, const size_t maxDepth)
     {
-        double targetAverage;
+        double result;
 
         //sum of end sequence minus one value
         const double incompleteSum = sum(values.end() - (count - 1), values.end());
@@ -162,21 +162,18 @@ namespace lottery
             //calculate averages of next level; the next min number is not the lottery min number,
             //but 0 (averages are allowed to be 0, lottery numbers do not).
             std::vector<double> newAverages(averages.size());
-            targetAverage = _predictValueHelper(averages, newAverages, 0, averageValue, count, depth - 1, maxDepth);
+            const double targetAverage = _predictValueHelper(averages, newAverages, 0, averageValue, count, depth - 1, maxDepth);
         
+            //find the result as the number that satisfies the formula:
+            //(incompleteSum + predictedNumber) / count == targetAverage.
+            result = _findAverageComplement(incompleteSum, averageValue, count, targetAverage, minValue);
         }
 
-        //else if in deepest level, the target average is the average of the incomplete sum 
-        //with the average value.
+        //else if in deepest level, the result is the average of the incomplete sum.
         else
         {
-            const double sum = incompleteSum + averageValue;
-            targetAverage = sum / count;
+            result = incompleteSum / (count - 1);
         }
-
-        //find the result as the number that satisfies the formula:
-        //(incompleteSum + predictedNumber) / count == targetAverage.
-        const double result = _findAverageComplement(incompleteSum, averageValue, count, targetAverage, minValue);
 
         //return the predicted value
         return result;

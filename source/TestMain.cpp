@@ -44,13 +44,13 @@ int main()
 
     //prepare the test parameters
     const size_t PredictedNumberCount = 3 * game.numberCount;
-    const size_t SampleDrawsSize = game.draws.size() * 2 / 3;
+    const size_t SampleDrawsSize = game.draws.size() - 1;
     const size_t TestDrawsSize = game.draws.size() - 1 - SampleDrawsSize;
 
     //set up a vector of prediction algorithms
     std::vector<std::shared_ptr<PredictionAlgorithm>> predictionAlgorithms;
     predictionAlgorithms.push_back(std::make_shared<PredictionAlgorithm_Random>());
-    predictionAlgorithms.push_back(std::make_shared<PredictionAlgorithm_Average>(2, 1));
+    predictionAlgorithms.push_back(std::make_shared<PredictionAlgorithm_Average>(3, 2));
 
     //initialize the success tables algorithms
     std::vector<std::vector<size_t>> predictionAlgorithmSuccesses(predictionAlgorithms.size(), std::vector<size_t>(game.numberCount + 1));
@@ -62,7 +62,7 @@ int main()
     }
 
     //do predictions for various sizes of test draws
-    for (size_t testEndIndex = SampleDrawsSize; testEndIndex < game.draws.size() - 1; ++testEndIndex)
+    for (size_t testEndIndex = SampleDrawsSize; testEndIndex < game.draws.size(); ++testEndIndex)
     {
         //prepare the test draws
         DrawVector testDraws(game.draws.begin(), game.draws.begin() + testEndIndex);
