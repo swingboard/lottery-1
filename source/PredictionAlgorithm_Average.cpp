@@ -15,7 +15,7 @@ namespace lottery
         {
             //calculate the averages of all the values, except the last one, which are stored in the 'values' container;
             //the last value will be calculated from the target average.
-            for (auto it = values.begin(), itEnd = values.begin() + values.size() - count, avgIt = averages.begin();
+            for (auto it = values.begin(), itEnd = values.end() - count, avgIt = averages.begin() + count - 1;
                 it != itEnd;
                 ++it, ++avgIt)
             {
@@ -43,7 +43,7 @@ namespace lottery
         {
             //calculate the sum of the end of the value sequence except the last value
             //(the last value is the one we are looking for)
-            const int prevSum = sum(values.end() - avgCount, values.end() - 1);
+            const double prevSum = sum(values.end() - avgCount - 1, values.end() - 1);
 
             //calculate the last value as the complement from what should theoretically be the average
             const double lastValue = (avgCount * lastAverageValue) - prevSum;
@@ -78,6 +78,10 @@ namespace lottery
         {
             throw std::invalid_argument("count shall not be less than 2");
         }
+        if (m_depth >= m_count)
+        {
+            throw std::invalid_argument("depth shall not be greater than or equal to count");
+        }
     }
 
 
@@ -99,8 +103,8 @@ namespace lottery
      */
     void PredictionAlgorithm_Average::predict(const Game &game, const DrawVector &draws, size_t numberCountPerColumn, std::unordered_set<Number> &numbers)
     {
-        //number of values to use for the averages; depends on depth
-        const size_t previousNumberCount = m_depth + 1;
+        //number of values to use for the averages; depends on count
+        const size_t previousNumberCount = m_count * (m_depth + 1);
 
         //values to calculate the averages of
         std::vector<double> values(previousNumberCount + 1);
@@ -129,7 +133,7 @@ namespace lottery
 
             //save the last value as the predicted one for the column
             //TODO is rounding necessary?
-            const Number predictedNumber = static_cast<Number>(std::round(values.back()));
+            const Number predictedNumber = static_cast<Number>(values.back());
             if (numbers.insert(predictedNumber).second && 
                 ++predictedNumberCount == numberCountPerColumn)
             {

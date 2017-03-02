@@ -19,7 +19,7 @@ namespace lottery
             Constructor.
             @param count count of numbers to take the average of.
             @param depth number of averages' sequences to use. 
-            @exception std::invalid_argument thrown if count < 2.
+            @exception std::invalid_argument thrown if count < 2 or depth >= count.
          */
         PredictionAlgorithm_Average(size_t count, size_t depth);
 

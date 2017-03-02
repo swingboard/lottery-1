@@ -33,7 +33,8 @@ namespace lottery
     template <class It>
     typename It::value_type sum(const It begin, const It end)
     {
-        return std::accumulate(begin, end, 0, [](const auto &a, const auto &b) { return a + b; });
+        return std::accumulate(begin, end, static_cast<It::value_type>(0), 
+            [](const auto &a, const auto &b) { return a + b; });
     }
 
 
