@@ -1,36 +1,66 @@
 #include "PredictionAlgorithm_Average.hpp"
+#include "String.hpp"
 
 
 namespace lottery
 {
 
     //calculate the averages
-    static void _calculateLastValue(std::vector<int> &values, std::vector<int> &averages, size_t count, size_t depth)
+    static void _calculateLastValue(std::vector<double> &values, std::vector<double> &averages, const int minValue, const double averageValue, const size_t count, const size_t depth)
     {
+        double lastAverageValue;
+
+        //if not in deepest level, calculate the averages of averages until the deepest level is reached
         if (depth > 0)
         {
-            //calculate the averages of all the values, except the last one, stored in the 'values' container
+            //calculate the averages of all the values, except the last one, which are stored in the 'values' container;
+            //the last value will be calculated from the target average.
             for (auto it = values.begin(), itEnd = values.begin() + values.size() - count, avgIt = averages.begin();
                 it != itEnd;
                 ++it, ++avgIt)
             {
-                *avgIt = sum(it, it + count) / count;
+                *avgIt = sum(it, it + count) / (double)count;
             }
 
-            //calculate inner averages
-            std::swap(values, averages);
-            std::vector<int> newAverages(averages.size());
-            _calculateLastValue(averages, newAverages, count, depth - 1);
+            //calculate averages of next level; the next min number is not the lottery min number,
+            //but 0 (averages are allowed to be 0, lottery numbers do not).
+            std::vector<double> newAverages(averages.size());
+            _calculateLastValue(averages, newAverages, 0, averageValue, count, depth - 1);
 
-            //find the mid value that makes the average of averages equal to the last value of newAverages
+            //the last average value, is the averages' last value
+            lastAverageValue = averages.back();
         }
 
+        //else if deepest level, calculate the last value
+        //from the number required to reach the average value
         else
         {
-            //simply copy the last existing average value to the averages,
-            //because usually, at depth 0, average values should be highly repeatable.
-            averages.back() = *(averages.end() - 2);
+            lastAverageValue = averageValue;
         }
+
+        //calculate the new last value for the current values
+        for (size_t avgCount = count; avgCount > 0; --avgCount)
+        {
+            //calculate the sum of the end of the value sequence except the last value
+            //(the last value is the one we are looking for)
+            const int prevSum = sum(values.end() - avgCount, values.end() - 1);
+
+            //calculate the last value as the complement from what should theoretically be the average
+            const double lastValue = (avgCount * lastAverageValue) - prevSum;
+
+            //if the last value is less than the min number, then it is not a legal value,
+            //so continue using the average test but on smaller count
+            if (lastValue < minValue) continue;
+
+            //found the value; return
+            values.back() = lastValue;
+            return;
+        }
+
+        //if no value could be calculated, then it means all averages of previous values
+        //exceed the average, which means the previous values are all extremely large,
+        //so return the minimum allowed value
+        values.back() = minValue;
     }
 
 
@@ -38,7 +68,7 @@ namespace lottery
         Constructor.
         @param count count of numbers to take the average of.
         @param depth number of averages' sequences to use. 
-        @exception std::invalid_argument thrown if count < 2 or depth < 1.
+        @exception std::invalid_argument thrown if count < 2.
         */
     PredictionAlgorithm_Average::PredictionAlgorithm_Average(size_t count, size_t depth)
         : m_count(count)
@@ -48,10 +78,6 @@ namespace lottery
         {
             throw std::invalid_argument("count shall not be less than 2");
         }
-        if (m_depth < 1)
-        {
-            throw std::invalid_argument("depth shall not be less than 1");
-        }
     }
 
 
@@ -60,7 +86,7 @@ namespace lottery
      */
     std::string PredictionAlgorithm_Average::getName() const
     {
-        return "Average";
+        return "Average"_s + '_' + m_count + '_' + m_depth;
     }
 
 
@@ -77,8 +103,8 @@ namespace lottery
         const size_t previousNumberCount = m_depth + 1;
 
         //values to calculate the averages of
-        std::vector<int> values(previousNumberCount + 1);
-        std::vector<int> averages(previousNumberCount + 1);
+        std::vector<double> values(previousNumberCount + 1);
+        std::vector<double> averages(previousNumberCount + 1);
 
         //for all columns
         for (size_t columnIndex = 0; columnIndex < game.numberCount; ++columnIndex)
@@ -89,14 +115,21 @@ namespace lottery
                 values[numberIndex] = draws[draws.size() - previousNumberCount + numberIndex][columnIndex];
             }
 
+            //the average value of the column is proven to be calculated by the formula:
+            //(columnIndex + 1) * (maxNumber / (columnCount + 1))
+            const double averageValue = (columnIndex + 1.0) * (game.getMaxNumber(columnIndex) / (double)(game.getNumberCount(columnIndex) + 1.0));
+
+            const Number minNumber = game.getMinNumber(columnIndex);
+
             //calculate the last value
-            _calculateLastValue(values, averages, m_count, m_depth);
+            _calculateLastValue(values, averages, minNumber, averageValue, m_count, m_depth);
 
             //insert no more than numberCountPerColumn values to the predicted numbers set
             size_t predictedNumberCount = 0;
 
             //save the last value as the predicted one for the column
-            const Number predictedNumber = values.back();
+            //TODO is rounding necessary?
+            const Number predictedNumber = static_cast<Number>(std::round(values.back()));
             if (numbers.insert(predictedNumber).second && 
                 ++predictedNumberCount == numberCountPerColumn)
             {
@@ -104,7 +137,7 @@ namespace lottery
             }
 
             //calculate numbers that are neighbours to the predicted number
-            const Number minNumber = game.getMinNumber(columnIndex);
+            //until the requested count of predicted numbers for the column is reached
             const Number maxNumber = game.getMaxNumber(columnIndex);
             for (int i = 1; ; ++i)
             {

@@ -3,6 +3,7 @@
 #include "Game.hpp"
 #include "CSVOutputFileStream.hpp"
 #include "PredictionAlgorithm_Random.hpp"
+#include "PredictionAlgorithm_Average.hpp"
 
 
 using namespace std;
@@ -49,6 +50,7 @@ int main()
     //set up a vector of prediction algorithms
     std::vector<std::shared_ptr<PredictionAlgorithm>> predictionAlgorithms;
     predictionAlgorithms.push_back(std::make_shared<PredictionAlgorithm_Random>());
+    predictionAlgorithms.push_back(std::make_shared<PredictionAlgorithm_Average>(2, 0));
 
     //initialize the success tables algorithms
     std::vector<std::vector<size_t>> predictionAlgorithmSuccesses(predictionAlgorithms.size(), std::vector<size_t>(game.numberCount + 1));
