@@ -50,7 +50,7 @@ int main()
     //set up a vector of prediction algorithms
     std::vector<std::shared_ptr<PredictionAlgorithm>> predictionAlgorithms;
     predictionAlgorithms.push_back(std::make_shared<PredictionAlgorithm_Random>());
-    predictionAlgorithms.push_back(std::make_shared<PredictionAlgorithm_Average>(3, 2));
+    predictionAlgorithms.push_back(std::make_shared<PredictionAlgorithm_Average>(4, 2));
 
     //initialize the success tables algorithms
     std::vector<std::vector<size_t>> predictionAlgorithmSuccesses(predictionAlgorithms.size(), std::vector<size_t>(game.numberCount + 1));

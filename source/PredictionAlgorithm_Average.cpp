@@ -88,7 +88,7 @@ namespace lottery
 
 
     //predict value via searching for value that satisfies the next projected average.
-    static double _predictValue(std::vector<double> &values, std::vector<double> &averages, const int minValue, const double averageValue, const size_t count, const size_t depth)
+    static double _predictValueHelper(std::vector<double> &values, std::vector<double> &averages, const int minValue, const double averageValue, const size_t count, const size_t depth, const size_t maxDepth)
     {
         double targetAverage;
 
@@ -98,19 +98,23 @@ namespace lottery
         //if not in deepest level, calculate the averages of averages until the deepest level is reached
         if (depth > 0)
         {
+            const size_t offset = (maxDepth - depth) * (count - 1);
+
             //calculate the averages of all the values, except the last one, which are stored in the 'values' container;
             //the last value will be calculated from the target average.
-            for (auto it = values.begin(), itEnd = values.end() - count + 1, avgIt = averages.begin() + count - 1;
+            for (auto it = values.begin() + offset, itEnd = values.end() - count + 1, avgIt = averages.begin() + offset + count - 1;
                 it != itEnd;
                 ++it, ++avgIt)
             {
-                *avgIt = sum(it, it + count) / (double)count;
+                const double v = sum(it, it + count) / (double)count;
+                *avgIt = v;
+                int x = 0;
             }
 
             //calculate averages of next level; the next min number is not the lottery min number,
             //but 0 (averages are allowed to be 0, lottery numbers do not).
             std::vector<double> newAverages(averages.size());
-            targetAverage = _predictValue(averages, newAverages, 0, averageValue, count, depth - 1);
+            targetAverage = _predictValueHelper(averages, newAverages, 0, averageValue, count, depth - 1, maxDepth);
         
         }
 
@@ -126,6 +130,13 @@ namespace lottery
 
         //return the predicted value
         return result;
+    }
+
+
+    //predict value via searching for value that satisfies the next projected average.
+    static double _predictValue(std::vector<double> &values, std::vector<double> &averages, const int minValue, const double averageValue, const size_t count, const size_t depth)
+    {
+        return _predictValueHelper(values, averages, minValue, averageValue, count, depth, depth);
     }
 
 
