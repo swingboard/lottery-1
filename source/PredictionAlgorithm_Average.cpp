@@ -157,7 +157,6 @@ namespace lottery
             {
                 const double v = sum(it, it + count) / (double)count;
                 *avgIt = v;
-                int x = 0;
             }
 
             //calculate averages of next level; the next min number is not the lottery min number,
@@ -167,10 +166,12 @@ namespace lottery
         
         }
 
-        //else if in deepest level, the target average is the average value.
+        //else if in deepest level, the target average is the average of the incomplete sum 
+        //with the average value.
         else
         {
-            targetAverage = averageValue;
+            const double sum = incompleteSum + averageValue;
+            targetAverage = sum / count;
         }
 
         //find the result as the number that satisfies the formula:
@@ -255,6 +256,7 @@ namespace lottery
             //(columnIndex + 1) * (maxNumber / (columnCount + 1))
             const double averageValue = (columnIndex + 1.0) * (game.getMaxNumber(columnIndex) / (double)(game.getNumberCount(columnIndex) + 1.0));
 
+            //cannot predict numbers lower than this
             const Number minNumber = game.getMinNumber(columnIndex);
 
             //calculate the last value
