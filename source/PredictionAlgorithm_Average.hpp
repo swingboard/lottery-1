@@ -36,7 +36,7 @@ namespace lottery
             @param numbers predicted numbers.
             @exception std::logic_error thrown if the test data are not big enough for the count and depth parameters.
          */
-        virtual void predict(const Game &game, const DrawVector &draws, size_t numberCountPerColumn, std::unordered_set<Number> &numbers);
+        virtual void predict(const Game &game, const DrawVector &draws, const size_t numberCount, std::unordered_set<Number> &numbers);
 
     private:
         size_t m_count;

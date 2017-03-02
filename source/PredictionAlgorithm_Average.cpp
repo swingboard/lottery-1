@@ -228,7 +228,7 @@ namespace lottery
         @param numbers predicted numbers.
         @exception std::logic_error thrown if the test data are not big enough for the count and depth parameters.
      */
-    void PredictionAlgorithm_Average::predict(const Game &game, const DrawVector &draws, size_t numberCountPerColumn, std::unordered_set<Number> &numbers)
+    void PredictionAlgorithm_Average::predict(const Game &game, const DrawVector &draws, const size_t numberCount, std::unordered_set<Number> &numbers)
     {
         //count of values to use
         const size_t previousNumberCount = (m_count - 1) * (m_depth + 1);
@@ -242,6 +242,12 @@ namespace lottery
         //values to calculate the averages of
         std::vector<double> values(previousNumberCount);
         std::vector<double> averages(previousNumberCount);
+
+        //sets of numbers per column
+        std::vector<std::vector<Number>> numbersPerColumn(game.numberCount);
+
+        //calculate how many numbers per column to put, rounded for number count
+        const size_t numberCountPerColumn = (numberCount + game.numberCount - 1) / game.numberCount;
 
         //for all columns
         for (size_t columnIndex = 0; columnIndex < game.numberCount; ++columnIndex)
@@ -262,16 +268,22 @@ namespace lottery
             //calculate the last value
             const double predictedValue = _predictValue(values, averages, minNumber, averageValue, m_count, m_depth);
 
-            //insert no more than numberCountPerColumn values to the predicted numbers set
-            size_t predictedNumberCount = 0;
+            //predicted numbers of the current column
+            std::vector<Number> &numbersOfColumn = numbersPerColumn[columnIndex];
+
+            //this is used to avoid inserting the same numbers twice
+            std::unordered_set<Number> tempNumbers;
 
             //save the last value as the predicted one for the column
             //TODO is rounding necessary?
             const Number predictedNumber = static_cast<Number>(predictedValue);
-            if (numbers.insert(predictedNumber).second && 
-                ++predictedNumberCount == numberCountPerColumn)
+            if (tempNumbers.insert(predictedNumber).second) 
             {
-                goto NEXT_COLUMN;
+                numbersOfColumn.push_back(predictedNumber);
+                if (numbersOfColumn.size() == numberCountPerColumn)
+                {
+                    goto NEXT_COLUMN;
+                }
             }
 
             //calculate numbers that are neighbours to the predicted number
@@ -279,28 +291,32 @@ namespace lottery
             const Number maxNumber = game.getMaxNumber(columnIndex);
             for (int i = 1; ; ++i)
             {
-                const size_t countBeforeInsert = numbers.size();
+                const size_t countBeforeInsert = tempNumbers.size();
 
                 //calculate a number smaller than the predicted value
                 const Number smallerPredictedNumber = predictedNumber - i;
-                if (isMid(minNumber, smallerPredictedNumber, maxNumber) &&
-                    numbers.insert(smallerPredictedNumber).second &&
-                    ++predictedNumberCount == numberCountPerColumn)
+                if (isMid(minNumber, smallerPredictedNumber, maxNumber) && tempNumbers.insert(smallerPredictedNumber).second)
                 {
-                    goto NEXT_COLUMN;
+                    numbersOfColumn.push_back(smallerPredictedNumber);
+                    if (numbersOfColumn.size() == numberCountPerColumn)
+                    {
+                        goto NEXT_COLUMN;
+                    }
                 }
 
                 //calculate a number bigger than the predicted value
                 const Number biggerPredictedNumber = predictedNumber + i;
-                if (isMid(minNumber, biggerPredictedNumber, maxNumber) &&
-                    numbers.insert(biggerPredictedNumber).second &&
-                    ++predictedNumberCount == numberCountPerColumn)
+                if (isMid(minNumber, biggerPredictedNumber, maxNumber) && tempNumbers.insert(biggerPredictedNumber).second)
                 {
-                    goto NEXT_COLUMN;
+                    numbersOfColumn.push_back(biggerPredictedNumber);
+                    if (numbersOfColumn.size() == numberCountPerColumn)
+                    {
+                        goto NEXT_COLUMN;
+                    }
                 }
 
                 //if no value was inserted, stop
-                if (numbers.size() == countBeforeInsert)
+                if (tempNumbers.size() == countBeforeInsert)
                 {
                     goto NEXT_COLUMN;
                 }
@@ -308,6 +324,30 @@ namespace lottery
 
             NEXT_COLUMN:
             ;
+        }
+
+        //now dispatch the predicted numbers to the result, cyclicly, starting from top rows,
+        //until the requested count of numbers is reached
+        size_t row = 0;
+        while (numbers.size() < numberCount)
+        {
+            const size_t numbersSizeBefore = numbers.size();
+
+            //iterate rows of predicted numbers and place them in the results; avoid duplicates
+            for (size_t columnIndex = 0; columnIndex < game.numberCount && numbers.size() < numberCount; ++columnIndex)
+            {
+                if (row < numbersPerColumn[columnIndex].size())
+                {
+                    const Number number = numbersPerColumn[columnIndex][row];
+                    numbers.insert(number);
+                }
+            }
+
+            //detect if no number was added; then break
+            if (numbers.size() == numbersSizeBefore) return;
+
+            //next row
+            ++row;
         }
     }
 
