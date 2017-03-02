@@ -26,7 +26,7 @@ namespace lottery
         /**
             Returns the algorithm's name.
          */
-        virtual const char *getName() const = 0;
+        virtual std::string getName() const = 0;
 
         /**
             Interface for initializing the algorithm, based on the given data.
@@ -41,10 +41,10 @@ namespace lottery
             Interface for predicting values.
             @param game game for which the prediction is for.
             @param draws previous draws.
-            @param numberCount count of numbers to predict.
+            @param numberCountPerColumn count of numbers to predict per column.
             @param numbers predicted numbers.
          */
-        virtual void predict(const Game &game, const DrawVector &draws, size_t numberCount, std::unordered_set<Number> &numbers) = 0;
+        virtual void predict(const Game &game, const DrawVector &draws, size_t numberCountPerColumn, std::unordered_set<Number> &numbers) = 0;
     };
 
 

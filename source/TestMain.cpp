@@ -42,7 +42,7 @@ int main()
     }
 
     //prepare the test parameters
-    const size_t PredictedNumberCount = 12;
+    const size_t PredictedNumberCountPerColumn = 3;
     const size_t SampleDrawsSize = game.draws.size() * 2 / 3;
     const size_t TestDrawsSize = game.draws.size() - 1 - SampleDrawsSize;
 
@@ -75,7 +75,7 @@ int main()
 
             //get the prediction
             std::unordered_set<Number> predictedNumbers;
-            predictionAlgorithmPtr->predict(game, testDraws, PredictedNumberCount, predictedNumbers);
+            predictionAlgorithmPtr->predict(game, testDraws, PredictedNumberCountPerColumn, predictedNumbers);
 
             //test the prediction against the drawn numbers
             size_t successes = 0;

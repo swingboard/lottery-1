@@ -152,6 +152,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\..\source\Algorithm.hpp" />
     <ClInclude Include="..\..\..\..\source\PatternMatching.hpp" />
+    <ClInclude Include="..\..\..\..\source\PredictionAlgorithm_Average.hpp" />
     <ClInclude Include="..\..\..\..\source\Range.hpp" />
     <ClInclude Include="..\..\..\..\source\String.hpp" />
     <ClInclude Include="..\..\..\..\source\CSVFile.hpp" />
@@ -169,6 +170,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\..\source\Draw.cpp" />
     <ClCompile Include="..\..\..\..\source\Game.cpp" />
+    <ClCompile Include="..\..\..\..\source\PredictionAlgorithm_Average.cpp" />
     <ClCompile Include="..\..\..\..\source\PredictionAlgorithm_Random.cpp" />
     <ClCompile Include="..\..\..\..\source\TestMain.cpp" />
   </ItemGroup>

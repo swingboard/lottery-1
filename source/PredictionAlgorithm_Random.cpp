@@ -8,7 +8,7 @@ namespace lottery
     /**
         Returns the algorithm's name.
         */
-    const char *PredictionAlgorithm_Random::getName() const
+    std::string PredictionAlgorithm_Random::getName() const
     {
         return "Random";
     }
@@ -29,12 +29,12 @@ namespace lottery
     /**
         Predicts random values.
         @param draws previous draws.
-        @param numberCount count of numbers to predict.
+        @param numberCountPerColumn count of numbers to predict per column.
         @param numbers predicted numbers.
         */
-    void PredictionAlgorithm_Random::predict(const Game &game, const DrawVector &draws, size_t numberCount, std::unordered_set<Number> &numbers)
+    void PredictionAlgorithm_Random::predict(const Game &game, const DrawVector &draws, size_t numberCountPerColumn, std::unordered_set<Number> &numbers)
     {
-        createRandomNumbers(*m_randomNumberGenerator, numberCount, numbers);
+        createRandomNumbers(*m_randomNumberGenerator, numberCountPerColumn * game.numberCount, numbers);
     }
 
 

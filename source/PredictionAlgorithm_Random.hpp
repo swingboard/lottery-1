@@ -21,7 +21,7 @@ namespace lottery
         /**
             Returns the algorithm's name.
          */
-        virtual const char *getName() const;
+        virtual std::string getName() const;
 
         /**
             Initializes a random number generator for the given game's parameters.
@@ -33,10 +33,10 @@ namespace lottery
         /**
             Predicts random values.
             @param draws previous draws.
-            @param numberCount count of numbers to predict.
+            @param numberCountPerColumn count of numbers to predict per column.
             @param numbers predicted numbers.
          */
-        virtual void predict(const Game &game, const DrawVector &draws, size_t numberCount, std::unordered_set<Number> &numbers);
+        virtual void predict(const Game &game, const DrawVector &draws, size_t numberCountPerColumn, std::unordered_set<Number> &numbers);
 
     private:
         //random number generator
