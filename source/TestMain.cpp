@@ -49,8 +49,8 @@ int main()
 
     //set up a vector of prediction algorithms
     std::vector<std::shared_ptr<PredictionAlgorithm>> predictionAlgorithms;
-    predictionAlgorithms.push_back(std::make_shared<PredictionAlgorithm_Average>(3, 2));
     predictionAlgorithms.push_back(std::make_shared<PredictionAlgorithm_Random>());
+    predictionAlgorithms.push_back(std::make_shared<PredictionAlgorithm_Average>(2, 1));
 
     //initialize the success tables algorithms
     std::vector<std::vector<size_t>> predictionAlgorithmSuccesses(predictionAlgorithms.size(), std::vector<size_t>(game.numberCount + 1));
@@ -70,13 +70,6 @@ int main()
         //the predicted draw
         const Draw &testDraw = game.draws[testEndIndex];
 
-        //start with the parameter value
-        size_t predictedNumberCount = PredictedNumberCount;
-
-        //measure total predicted numbers each round, so as the value passed to the random algorithm is
-        //the average of the previous algorithms
-        size_t totalPredictedNumbers = 0;
-
         //invoke the algorithms and test their predictions for the given test set
         for (size_t predictionAlgorithmIndex = 0; predictionAlgorithmIndex < predictionAlgorithms.size(); ++predictionAlgorithmIndex)
         {
@@ -84,7 +77,7 @@ int main()
 
             //get the prediction
             std::unordered_set<Number> predictedNumbers;
-            predictionAlgorithmPtr->predict(game, testDraws, predictedNumberCount, predictedNumbers);
+            predictionAlgorithmPtr->predict(game, testDraws, PredictedNumberCount, predictedNumbers);
 
             //test the prediction against the drawn numbers
             size_t successes = 0;
@@ -99,14 +92,6 @@ int main()
             //note the successes of the algorithm
             ++predictionAlgorithmSuccesses[predictionAlgorithmIndex][successes];
             predictionAlgorithmPredictedNumberCount[predictionAlgorithmIndex] += predictedNumbers.size();
-
-            //recount the number of predicted numbers so as that the final one, the random one,
-            //uses the proper average
-            totalPredictedNumbers += predictedNumbers.size();
-            if (predictionAlgorithmIndex == predictionAlgorithms.size() - 2)
-            {
-                predictedNumberCount = totalPredictedNumbers / (predictionAlgorithmIndex + 1);
-            }
         }
     }
 

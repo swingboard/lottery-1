@@ -247,7 +247,10 @@ namespace lottery
         std::vector<std::vector<Number>> numbersPerColumn(game.numberCount);
 
         //calculate how many numbers per column to put, rounded for number count
-        const size_t numberCountPerColumn = (numberCount + game.numberCount - 1) / game.numberCount;
+        const size_t numberCountPerColumn = ((numberCount + game.numberCount - 1) / game.numberCount) * 3;
+
+        //this is used to avoid inserting the same numbers twice
+        std::unordered_set<Number> tempNumbers;
 
         //for all columns
         for (size_t columnIndex = 0; columnIndex < game.numberCount; ++columnIndex)
@@ -270,9 +273,6 @@ namespace lottery
 
             //predicted numbers of the current column
             std::vector<Number> &numbersOfColumn = numbersPerColumn[columnIndex];
-
-            //this is used to avoid inserting the same numbers twice
-            std::unordered_set<Number> tempNumbers;
 
             //save the last value as the predicted one for the column
             //TODO is rounding necessary?
@@ -344,7 +344,7 @@ namespace lottery
             }
 
             //detect if no number was added; then break
-            if (numbers.size() == numbersSizeBefore) return;
+            if (numbers.size() == numbersSizeBefore) break;
 
             //next row
             ++row;
