@@ -55,30 +55,79 @@ namespace lottery
     //calculates the value that must be added to the given incomplete sum so as that average(sum + value) is closest to given target average
     static double _findAverageComplement(const double incompleteSum, const double averageValue, const size_t count, const double targetAverage, const double minAllowedValue)
     {
-        double minValue;
+        double minValue, maxValue, value1, value2;
         
-        //find the minimum value below the average value
-        minValue = _findComplementValue(incompleteSum, averageValue, count, targetAverage, -1, minAllowedValue);        
+        //find the first value that causes the averages to converge 
+        value1 = _findComplementValue(incompleteSum, averageValue, count, targetAverage, -1, minAllowedValue);        
 
-        //if not found, then search the values above the average value
-        if (minValue < 0)
+        //if the first value is found
+        if (value1 >= minAllowedValue)
         {
-            minValue = _findComplementValue(incompleteSum, averageValue, count, targetAverage, 1, minAllowedValue);
+            //find the second value below the first one that causes the averages to converge
+            value2 = _findComplementValue(incompleteSum, value1 - 1, count, targetAverage, -1, minAllowedValue);
 
-            //if still not found, set the min value to be the average value
-            if (minValue < 0)
+            //if the second value is found, then since value2 < value1,
+            //the min value is value2, and the max value is value1.
+            if (value2 >= minAllowedValue)
             {
-                minValue = averageValue;
+                minValue = value2;
+                maxValue = value1;
+            }
+
+            //else if no value was found below value1 that caused the averages to converge,
+            //try a value above the average value
+            else
+            {
+                value2 = _findComplementValue(incompleteSum, averageValue, count, targetAverage, 1, minAllowedValue);
+
+                //if the value is found, then since value2 > value1,
+                //the min value is value1, and the max value is value2
+                if (value2 >= minAllowedValue)
+                {
+                    minValue = value1;
+                    maxValue = value2;
+                }
+
+                //else if not found, it means min and max value are equal,
+                //since only one value caused the averages to converge
+                else
+                {
+                    minValue = maxValue = value1;
+                }
             }
         }
 
-        //find the maximum value above the minimum value
-        double maxValue = _findComplementValue(incompleteSum, minValue, count, targetAverage, 1, minAllowedValue);
-
-        //if the maximum value is not found, then set the max value to the min value
-        if (maxValue < 0)
+        //else since the first value was not found below the average value, try above the average value
+        else
         {
-            maxValue = minValue;
+            value1 = _findComplementValue(incompleteSum, averageValue, count, targetAverage, 1, minAllowedValue);        
+
+            //if the first value is found, try to find the second value above the first one
+            if (value1 >= minAllowedValue)
+            {
+                value2 = _findComplementValue(incompleteSum, value1 + 1, count, targetAverage, 1, minAllowedValue);
+
+                //if value2 is found, then since value2 > value1,
+                //then the min value is value1, and the max value is value2
+                if (value2 >= minAllowedValue)
+                {
+                    minValue = value1;
+                    maxValue = value2;
+                }
+
+                //otherwise set min and max value to value1, since value1 was the only value to make the averages converge
+                else
+                {
+                    minValue = maxValue = value1;
+                }
+            }
+
+            //else if the first value is not found either below the average value or above the average value,
+            //then set the min/max values to the average
+            else
+            {
+                minValue = maxValue = averageValue;
+            }
         }
 
         //return the medium value between min and max
