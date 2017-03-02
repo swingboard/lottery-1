@@ -25,6 +25,7 @@ namespace lottery
             //calculate averages of next level; the next min number is not the lottery min number,
             //but 0 (averages are allowed to be 0, lottery numbers do not).
             std::vector<double> newAverages(averages.size());
+
             _calculateLastValue(averages, newAverages, 0, averageValue, count, depth - 1);
 
             //the last average value, is the averages' last value
@@ -43,7 +44,7 @@ namespace lottery
         {
             //calculate the sum of the end of the value sequence except the last value
             //(the last value is the one we are looking for)
-            const double prevSum = sum(values.end() - avgCount - 1, values.end() - 1);
+            const double prevSum = sum(values.end() - avgCount, values.end() - 1);
 
             //calculate the last value as the complement from what should theoretically be the average
             const double lastValue = (avgCount * lastAverageValue) - prevSum;
@@ -100,11 +101,18 @@ namespace lottery
         @param draws previous draws.
         @param numberCountPerColumn count of numbers to predict per column.
         @param numbers predicted numbers.
+        @exception std::logic_error thrown if the test data are not big enough for the count and depth parameters.
      */
     void PredictionAlgorithm_Average::predict(const Game &game, const DrawVector &draws, size_t numberCountPerColumn, std::unordered_set<Number> &numbers)
     {
-        //number of values to use for the averages; depends on count
-        const size_t previousNumberCount = m_count * (m_depth + 1);
+        //number of values to use for the averages; depends on count and depth
+        const size_t previousNumberCount = m_count + ((m_count - 1) * m_depth);
+
+        //check if the previous number count is valid
+        if (previousNumberCount > draws.size() / 2)
+        {
+            throw std::logic_error("test data not big enough for count = "_s + m_count + " and depth = " + m_depth);
+        }
 
         //values to calculate the averages of
         std::vector<double> values(previousNumberCount + 1);

@@ -34,6 +34,7 @@ namespace lottery
             @param draws previous draws.
             @param numberCountPerColumn count of numbers to predict per column.
             @param numbers predicted numbers.
+            @exception std::logic_error thrown if the test data are not big enough for the count and depth parameters.
          */
         virtual void predict(const Game &game, const DrawVector &draws, size_t numberCountPerColumn, std::unordered_set<Number> &numbers);
 
