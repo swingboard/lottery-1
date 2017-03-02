@@ -6,6 +6,7 @@
 #include <numeric>
 #include <utility>
 #include <functional>
+#include <cassert>
 #include "Tuple.hpp"
 
 
@@ -50,7 +51,19 @@ namespace lottery
     template <class T>
     bool isMid(const T &minValue, const T &value, const T &maxValue)
     {
+        assert(minValue <= maxValue);
         return minValue <= value && value <= maxValue;
+    }
+
+
+    ///calculate the medium value.
+    template <class T>
+    T medium(const T &minValue, const T &maxValue)
+    {
+        assert(minValue <= maxValue);
+        const T range = maxValue - minValue;
+        const T halfRange = range / static_cast<T>(2);
+        return minValue + halfRange;
     }
 
 

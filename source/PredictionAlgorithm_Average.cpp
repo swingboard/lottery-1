@@ -5,10 +5,89 @@
 namespace lottery
 {
 
-    //calculate the averages
-    static void _calculateLastValue(std::vector<double> &values, std::vector<double> &averages, const int minValue, const double averageValue, const size_t count, const size_t depth)
+
+    //iterates a value until it finds that the newly calculated average starts to diverge from the target;
+    //returns the number that caused the newly calculated average to converge
+    static double _findComplementValue(const double incompleteSum, double testValue, const size_t count, const double targetAverage, const double inc)
     {
-        double lastAverageValue;
+        //result set to -1 indicates a failure to find a value which causes the averages to converge
+        double result = -1;
+
+        //first step in order to establish the initial difference
+        const double sum = incompleteSum + testValue;
+        const double avg = sum / count;
+        double prevDiff = std::abs(avg - targetAverage);
+        
+        //rest of steps
+        for (;;)
+        {
+            //next test value
+            testValue += inc;
+
+            //compute new difference from average
+            const double sum = incompleteSum + testValue;
+            const double avg = sum / count;
+            const double diff = std::abs(avg - targetAverage);
+
+            //if the averages diverge, stop
+            if (diff > prevDiff)
+            {
+                break;
+            }
+
+            //otherwise if the averages converge, note down the test value
+            else if (diff < prevDiff)
+            {
+                result = testValue;
+            }
+
+            //keep the previous difference in order to compare it with the next
+            prevDiff = diff;
+        }
+
+        return result;
+    }
+
+
+    //calculates the value that must be added to the given incomplete sum so as that average(sum + value) is closest to given target average
+    static double _findAverageComplement(const double incompleteSum, const double averageValue, const size_t count, const double targetAverage)
+    {
+        double minValue;
+        
+        //find the minimum value below the average value
+        minValue = _findComplementValue(incompleteSum, averageValue, count, targetAverage, -1);        
+
+        //if not found, then search the values above the average value
+        if (minValue < 0)
+        {
+            minValue = _findComplementValue(incompleteSum, averageValue, count, targetAverage, 1);
+
+            //if still not found, set the min value to be the average value
+            if (minValue < 0)
+            {
+                minValue = averageValue;
+            }
+        }
+
+        //find the maximum value above the minimum value
+        double maxValue = _findComplementValue(incompleteSum, minValue, count, targetAverage, 1);
+
+        //if the maximum value is not found, then set the max value to the average value
+        if (maxValue < 0)
+        {
+            maxValue = averageValue;
+        }
+
+        //return the medium value between min and max
+        const double result = medium(minValue, maxValue);
+        return result;
+    }
+
+
+    //predict value via searching for value that satisfies the next projected average.
+    static double _predictValue(std::vector<double> &values, std::vector<double> &averages, const int minValue, const double averageValue, const size_t count, const size_t depth)
+    {
+        double result;
 
         //if not in deepest level, calculate the averages of averages until the deepest level is reached
         if (depth > 0)
@@ -25,43 +104,24 @@ namespace lottery
             //calculate averages of next level; the next min number is not the lottery min number,
             //but 0 (averages are allowed to be 0, lottery numbers do not).
             std::vector<double> newAverages(averages.size());
+            const double targetAverage = _predictValue(averages, newAverages, 0, averageValue, count, depth - 1);
+        
+            //sum of end sequence minus one value
+            const double incompleteSum = sum(values.end() - count, values.end() - 1);
 
-            _calculateLastValue(averages, newAverages, 0, averageValue, count, depth - 1);
-
-            //the last average value, is the averages' last value
-            lastAverageValue = averages.back();
+            //find the result as the number that satisfies the formula:
+            //(incompleteSum + predictedNumber) / count == targetAverage.
+            result = _findAverageComplement(incompleteSum, averageValue, count, targetAverage);
         }
 
-        //else if deepest level, calculate the last value
-        //from the number required to reach the average value
+        //else if in deepest level, set the result from the average of the end sequence plus the average value
         else
         {
-            lastAverageValue = averageValue;
+            result = (sum(values.end() - count, values.end() - 1) + averageValue) / (double)count;
         }
 
-        //calculate the new last value for the current values
-        for (size_t avgCount = count; avgCount > 0; --avgCount)
-        {
-            //calculate the sum of the end of the value sequence except the last value
-            //(the last value is the one we are looking for)
-            const double prevSum = sum(values.end() - avgCount, values.end() - 1);
-
-            //calculate the last value as the complement from what should theoretically be the average
-            const double lastValue = (avgCount * lastAverageValue) - prevSum;
-
-            //if the last value is less than the min number, then it is not a legal value,
-            //so continue using the average test but on smaller count
-            if (lastValue < minValue) continue;
-
-            //found the value; return
-            values.back() = lastValue;
-            return;
-        }
-
-        //if no value could be calculated, then it means all averages of previous values
-        //exceed the average, which means the previous values are all extremely large,
-        //so return the minimum allowed value
-        values.back() = minValue;
+        //return the predicted value
+        return result;
     }
 
 
@@ -115,8 +175,8 @@ namespace lottery
         }
 
         //values to calculate the averages of
-        std::vector<double> values(previousNumberCount + 1);
-        std::vector<double> averages(previousNumberCount + 1);
+        std::vector<double> values(previousNumberCount);
+        std::vector<double> averages(previousNumberCount);
 
         //for all columns
         for (size_t columnIndex = 0; columnIndex < game.numberCount; ++columnIndex)
@@ -134,14 +194,14 @@ namespace lottery
             const Number minNumber = game.getMinNumber(columnIndex);
 
             //calculate the last value
-            _calculateLastValue(values, averages, minNumber, averageValue, m_count, m_depth);
+            const double predictedValue = _predictValue(values, averages, minNumber, averageValue, m_count, m_depth);
 
             //insert no more than numberCountPerColumn values to the predicted numbers set
             size_t predictedNumberCount = 0;
 
             //save the last value as the predicted one for the column
             //TODO is rounding necessary?
-            const Number predictedNumber = static_cast<Number>(values.back());
+            const Number predictedNumber = static_cast<Number>(predictedValue);
             if (numbers.insert(predictedNumber).second && 
                 ++predictedNumberCount == numberCountPerColumn)
             {
