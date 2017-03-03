@@ -151,6 +151,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\source\Algorithm.hpp" />
+    <ClInclude Include="..\..\..\..\source\OStream.hpp" />
     <ClInclude Include="..\..\..\..\source\PatternMatching.hpp" />
     <ClInclude Include="..\..\..\..\source\Range.hpp" />
     <ClInclude Include="..\..\..\..\source\String.hpp" />

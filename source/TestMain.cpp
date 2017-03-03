@@ -1,6 +1,7 @@
 #include <iostream>
 #include <unordered_map>
 #include <iomanip>
+#include <ostream>
 #include "Game.hpp"
 #include "CSVOutputFileStream.hpp"
 #include "PredictionAlgorithm_Random.hpp"
@@ -8,13 +9,6 @@
 
 using namespace std;
 using namespace lottery;
-
-
-void test(Game &game)
-{
-    std::ofstream file("data.txt");
-
-}
 
 
 int main()
@@ -34,9 +28,6 @@ int main()
         return -2;
     }
 
-    test(game);
-    return 0;
-
     //open the results file
     CSVOutputFileStream testResultsFile(3 + game.numberCount, "Test.csv");
     if (!testResultsFile.is_open())
@@ -53,8 +44,8 @@ int main()
     }
 
     //prepare the test parameters
-    const size_t PredictedNumberCount = 3 * game.numberCount;
-    const size_t SampleDrawsSize = game.draws.size() - 1;
+    const size_t PredictedNumberCount = 12;
+    const size_t SampleDrawsSize = game.draws.size()*2/3;
     const size_t TestDrawsSize = game.draws.size() - 1 - SampleDrawsSize;
 
     //set up a vector of prediction algorithms
