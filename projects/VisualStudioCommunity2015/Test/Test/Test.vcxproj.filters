@@ -16,13 +16,13 @@
     <ClInclude Include="..\..\..\..\source\Range.hpp" />
     <ClInclude Include="..\..\..\..\source\PatternMatching.hpp" />
     <ClInclude Include="..\..\..\..\source\Algorithm.hpp" />
-    <ClInclude Include="..\..\..\..\source\PredictionAlgorithm_Average.hpp" />
+    <ClInclude Include="..\..\..\..\source\PredictionAlgorithm_AverageDelta.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\source\TestMain.cpp" />
     <ClCompile Include="..\..\..\..\source\Game.cpp" />
     <ClCompile Include="..\..\..\..\source\PredictionAlgorithm_Random.cpp" />
     <ClCompile Include="..\..\..\..\source\Draw.cpp" />
-    <ClCompile Include="..\..\..\..\source\PredictionAlgorithm_Average.cpp" />
+    <ClCompile Include="..\..\..\..\source\PredictionAlgorithm_AverageDelta.cpp" />
   </ItemGroup>
 </Project>
