@@ -4,7 +4,6 @@
 #include "Game.hpp"
 #include "CSVOutputFileStream.hpp"
 #include "PredictionAlgorithm_Random.hpp"
-#include "PredictionAlgorithm_AverageDelta.hpp"
 
 
 using namespace std;
@@ -15,50 +14,6 @@ void test(Game &game)
 {
     std::ofstream file("data.txt");
 
-    size_t bestAvgCount = 0;
-    size_t bestAvgSize = UINT_MAX;
-    std::unordered_map<int, size_t> bestAvgs;
-
-    for (size_t avgCount = 1; avgCount < game.draws.size() / 2; ++avgCount)
-    {
-        std::unordered_map<int, size_t> avgs;
-
-        for (size_t drawIndex = game.draws.size(); drawIndex >= avgCount; --drawIndex)
-        {
-            int sum = 0;
-            for (size_t index = drawIndex - avgCount; index < drawIndex; ++index)
-            {
-                sum += game.draws[index][0];
-            }
-            int avg = sum / avgCount;
-            ++avgs[avg];
-        }
-
-        if (avgs.size() < bestAvgSize)
-        {
-            bestAvgSize = avgs.size();
-            bestAvgCount = avgCount;
-            bestAvgs = std::move(avgs);
-        }
-    }
-
-    file << "bestAvgCount = " << bestAvgCount << '\n';
-
-    std::vector<std::pair<int, size_t>> bestAvgsSorted(bestAvgs.begin(), bestAvgs.end());
-    std::sort(bestAvgsSorted.begin(), bestAvgsSorted.end(), TupleMemberComparator<std::greater<size_t>, 1>());
-    for (const auto &p : bestAvgsSorted)
-    {
-        file << setw(5) << p.first << " -> " << setw(5) << p.second << '\n';
-    }
-    file << '\n';
-
-    size_t successes = 0;
-    for (size_t i = 0; i < std::min(bestAvgsSorted.size(), 3U); ++i)
-    {
-        successes += bestAvgsSorted[i].second;
-    }
-
-    file << "total success: " << (100.0 * successes / (double)(game.draws.size() - bestAvgCount)) << "%\n";
 }
 
 
@@ -105,7 +60,6 @@ int main()
     //set up a vector of prediction algorithms
     std::vector<std::shared_ptr<PredictionAlgorithm>> predictionAlgorithms;
     predictionAlgorithms.push_back(std::make_shared<PredictionAlgorithm_Random>());
-    predictionAlgorithms.push_back(std::make_shared<PredictionAlgorithm_AverageDelta>());
 
     //initialize the success tables algorithms
     std::vector<std::vector<size_t>> predictionAlgorithmSuccesses(predictionAlgorithms.size(), std::vector<size_t>(game.numberCount + 1));
