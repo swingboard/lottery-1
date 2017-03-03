@@ -89,6 +89,22 @@ namespace lottery
             return getNumberSelection(numberIndex).numberCount;
         }
 
+        /**
+            Returns the max number out of all selections.
+         */
+        int getMaxMaxNumber() const
+        {
+            int result = 0;
+            for (const NumberSelection &selection : numberSelections)
+            {
+                if (selection.maxNumber > result)
+                {
+                    result = selection.maxNumber;
+                }
+            }
+            return result;
+        }
+
     private:
         //internal array that contains a function from number index to number selection.
         std::vector<NumberSelection *> m_numberIndexToNumberSelection;
