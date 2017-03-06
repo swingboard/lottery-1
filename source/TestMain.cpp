@@ -7,8 +7,68 @@
 #include "PredictionAlgorithm_Random.hpp"
 
 
+#include "Vector2.hpp"
+
+
+/**
+    Algorithm for predicting values.
+    @param values values to use for prediction.
+    @return the next predicted value.
+ */
+double predictValue(const std::vector<double> &values)
+{
+    //count of values
+    const size_t valueCount = values.size();
+
+    //averages stored here
+    lottery::Vector2<double> averages(valueCount, valueCount);
+
+    //initialize the first column of averages from the values
+    for (size_t indexY = 0; indexY < valueCount; ++indexY)
+    {
+        averages[0][indexY] = values[indexY];
+    }
+
+    //calculate the averages
+    for (size_t indexX = 1; indexX < valueCount; ++indexX)
+    {
+        for (size_t indexY = indexX; indexY < valueCount; ++indexY)
+        {
+            averages[indexX][indexY] = (averages[indexX - 1][indexY] + averages[indexX - 1][indexY - 1]) / 2.0;
+        }
+    }
+
+    lottery::CSVOutputFileStream file(valueCount, "data.csv");
+
+    for (size_t indexY = 0; indexY < averages.getRowCount(); ++indexY)
+    {
+        for (size_t indexX = 0; indexX < averages.getColumnCount(); ++indexX)
+        {
+            file.stream() << std::setprecision(15);
+            file << averages[indexX][indexY];
+        }
+    }
+
+    return 0;
+}
+
+
 using namespace std;
 using namespace lottery;
+
+
+
+void test(const Game &game)
+{
+    std::vector<double> numbers;
+
+    for (size_t index = game.draws.size() - 19; index < game.draws.size() - 1; ++index)
+    {
+        numbers.push_back(game.draws[index][0]);
+    }
+
+    double predictedValue = predictValue(numbers);
+}
 
 
 int main()
@@ -27,6 +87,9 @@ int main()
         cerr << "ERROR: the draws could not be loaded.\n";
         return -2;
     }
+
+    test(game);
+    return 0;
 
     //open the results file
     CSVOutputFileStream testResultsFile(3 + game.numberCount, "Test.csv");

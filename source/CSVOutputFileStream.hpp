@@ -74,6 +74,19 @@ namespace lottery
             m_currentColumn = 0;
         }
 
+        /**
+            Returns this as an std::ofstream, allowing setting precision and other parameters
+            of the stream. Unfortunately, c++ does not allow overloading of operator <<
+            for all parameters except those returned by I/O manipulators, because
+            the result of I/O manipulator functions is not specified by the standard.
+            It could be done with a combination of SFINAE tricks and decltype,
+            but this is an exercise left to the reader.
+         */
+        std::ofstream &stream()
+        {
+            return *this;
+        }
+
     private:
         //number of columns
         size_t m_columnCount;
