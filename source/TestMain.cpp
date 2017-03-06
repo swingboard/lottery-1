@@ -38,18 +38,133 @@ double predictValue(const std::vector<double> &values)
         }
     }
 
-    lottery::CSVOutputFileStream file(valueCount, "data.csv");
+    //vector of results
+    std::vector<double> results(valueCount);
 
-    for (size_t indexY = 0; indexY < averages.getRowCount(); ++indexY)
+    //vector of factors required to compute the prediction
+    std::vector<double> factors(valueCount);
+
+    //vector of formulas to allow for result computation
+    std::vector<std::function<void()>> formulas(valueCount);
+
+    //initialize the last formula cell simply takes the value of the last average
+    formulas.back() = [&averages, &valueCount, &results]()
     {
-        for (size_t indexX = 0; indexX < averages.getColumnCount(); ++indexX)
+        const double averageAtLastX = averages[valueCount - 1][valueCount - 1];
+        results[valueCount - 1] = averageAtLastX;
+    };
+
+    //initialize the rest of the formula cells from the formula:
+    //value-at-index(x) = result-at-index(x + 1) * 2 - average-at-index(x, last y) - factor-at-index(x + 1)
+    for (size_t indexX = 0; indexX < valueCount - 1; ++indexX)
+    {
+        formulas[indexX] = [&formulas, indexX, &results, &averages, &factors, valueCount]()
         {
-            file.stream() << std::setprecision(15);
-            file << averages[indexX][indexY];
-        }
+            //do next formula first
+            formulas[indexX + 1]();
+
+            //result of next formula doubled
+            const double prevResult = results[indexX + 1] * 2.0;
+
+            //average at index x, last y
+            const double averageAtX = averages[indexX][valueCount - 1];
+
+            //factor at index x
+            const double factorAtX = factors[indexX];
+
+            //result
+            const double result = prevResult - averageAtX + factorAtX;
+
+            results[indexX] = result;
+        };
     }
 
-    return 0;
+    //compute all the factors, except the first one
+    for (size_t indexX = valueCount - 1; indexX >= 1; --indexX)
+    {
+        //compute the initial target value
+        double targetValue = formulas[0]() / 2;
+
+        //test values initially by this delta
+        double delta = 1;
+
+        //start from middle factor (initially it is to be zero)
+        double rangeMiddle = factors[indexX];
+        double rangeStart, rangeEnd;
+
+        //loop until the target value is reached with good enough precision
+        for (;;)
+        {
+            //find range start
+            rangeStart = rangeMiddle - delta;
+            for (;;)
+            {
+                //find value at range start
+                factors[indexX] = rangeStart;
+                const double startValue1 = formulas[0]();
+                const double startDelta1 = std::abs(startValue1 - targetValue);
+
+                //find next value at range start
+                const double rangeStart2 = rangeStart - delta;
+                factors[indexX] = rangeStart2;
+                const double startValue2 = formulas[0]();
+                const double startDelta2 = std::abs(startValue2 - targetValue);
+
+                //stop finding the range start if found a bigger delta than before
+                if (startDelta2 > startDelta1) break;
+
+                //continue with the next range start
+                rangeStart = rangeStart2;
+            }
+
+            //find range end
+            rangeEnd = rangeMiddle + delta;
+            for (;;)
+            {
+                //find value at range end
+                factors[indexX] = rangeEnd;
+                const double endValue1 = formulas[0]();
+                const double endDelta1 = std::abs(endValue1 - targetValue);
+
+                //find next value at range end
+                const double rangeEnd2 = rangeEnd + delta;
+                factors[indexX] = rangeEnd2;
+                const double endValue2 = formulas[0]();
+                const double endDelta2 = std::abs(endValue2 - targetValue);
+
+                //stop finding the range end if found a bigger delta than before
+                if (endDelta2 > endDelta1) break;
+
+                //continue with the next range end
+                rangeEnd = rangeEnd2;
+            }
+
+            //compute new range middle and continue with smaller delta
+            rangeMiddle = rangeStart + (rangeEnd - rangeStart) / 2.0;
+
+            //set the factor
+            factors[indexX] = rangeMiddle;
+
+            //if the delta betwen range end and range start is less than a predefined constant,
+            //consider the range middle as the factor found, and proceed with the next factor
+            if (rangeEnd - rangeStart < 0.0001)
+            {
+                goto NEXT_FACTOR;
+            }
+
+            //proceed with next level of precision
+            targetValue = formulas[0]() / 2.0;
+            delta /= 2.0;
+        }
+
+        NEXT_FACTOR:
+        ;
+    }
+
+    //the final result is the value computed by the last version of the formula + factors
+    const double result = formulas[0]();
+
+    return result;
 }
 
 
