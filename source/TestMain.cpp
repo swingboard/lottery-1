@@ -10,169 +10,9 @@
 #include "Vector2.hpp"
 
 
-/**
-    Algorithm for predicting values.
-    @param values values to use for prediction.
-    @return the next predicted value.
- */
 double predictValue(const std::vector<double> &values)
 {
-    //count of values
-    const size_t valueCount = values.size();
-
-    //averages stored here
-    lottery::Vector2<double> averages(valueCount, valueCount);
-
-    //initialize the first column of averages from the values
-    for (size_t indexY = 0; indexY < valueCount; ++indexY)
-    {
-        averages[0][indexY] = values[indexY];
-    }
-
-    //calculate the averages
-    for (size_t indexX = 1; indexX < valueCount; ++indexX)
-    {
-        for (size_t indexY = indexX; indexY < valueCount; ++indexY)
-        {
-            averages[indexX][indexY] = (averages[indexX - 1][indexY] + averages[indexX - 1][indexY - 1]) / 2.0;
-        }
-    }
-
-    //vector of factors required to compute the prediction
-    std::vector<double> factors(valueCount);
-
-    //vector of formulas to allow for result computation
-    std::vector<std::function<double()>> formulas(valueCount);
-
-    //initialize the last formula cell from the formula:
-    //last value = last average.
-    formulas.back() = [&valueCount, &averages, &factors]()
-    {
-        const double result = averages[valueCount - 1][valueCount - 1];
-        return result;
-    };
-
-    //initialize the rest of the formula cells from the formula:
-    //value-at-index(x) = result-at-index(x + 1) * 2 - average-at-index(x, last y) + factor-at-index(x + 1)
-    for (size_t indexX = 0; indexX < valueCount - 1; ++indexX)
-    {
-        formulas[indexX] = [&formulas, &averages, &valueCount, &factors, indexX]()
-        {
-            const size_t nextIndexX = indexX + 1;
-
-            //get value from next formula; this allows us to get the value from
-            //first formula only, and the rest of the values will be recomputed on the fly,
-            //spreadsheet-style
-            const double nextValue = formulas[nextIndexX]();
-
-            //double the above
-            const double nextValueDoubled = nextValue * 2.0;
-
-            //average at index x, last y
-            const double average = averages[indexX][valueCount - 1];
-
-            //factor at index x
-            const double factor = factors[nextIndexX];
-
-            //result
-            const double result = nextValueDoubled - average + factor;
-
-            return result;
-        };
-    }
-
-    //compute all the factors, except the first one
-    for (size_t indexX = valueCount - 1; indexX > 0; --indexX)
-    {
-        //compute the initial target value
-        double targetValue = formulas[0]() / 2;
-
-        //test values initially by this delta
-        double delta = 1;
-
-        //start from middle factor (initially it is to be zero)
-        double rangeMiddle = factors[indexX];
-        double rangeStart, rangeEnd;
-
-        //loop until the target value is reached with good enough precision
-        for (;;)
-        {
-            //find range start
-            rangeStart = rangeMiddle - delta;
-            for (;;)
-            {
-                //find value at range start
-                factors[indexX] = rangeStart;
-                const double startValue1 = formulas[0]();
-                const double startDelta1 = std::abs(startValue1 - targetValue);
-
-                //find next value at range start
-                const double rangeStart2 = rangeStart - delta;
-                factors[indexX] = rangeStart2;
-                const double startValue2 = formulas[0]();
-                const double startDelta2 = std::abs(startValue2 - targetValue);
-
-                //stop finding the range start if found a bigger delta than before
-                if (startDelta2 > startDelta1) break;
-
-                //continue with the next range start
-                rangeStart = rangeStart2;
-            }
-
-            //find range end
-            rangeEnd = rangeMiddle + delta;
-            for (;;)
-            {
-                //find value at range end
-                factors[indexX] = rangeEnd;
-                const double endValue1 = formulas[0]();
-                const double endDelta1 = std::abs(endValue1 - targetValue);
-
-                //find next value at range end
-                const double rangeEnd2 = rangeEnd + delta;
-                factors[indexX] = rangeEnd2;
-                const double endValue2 = formulas[0]();
-                const double endDelta2 = std::abs(endValue2 - targetValue);
-
-                //stop finding the range end if found a bigger delta than before
-                if (endDelta2 > endDelta1) break;
-
-                //continue with the next range end
-                rangeEnd = rangeEnd2;
-            }
-
-            //compute new range middle and continue with smaller delta
-            rangeMiddle = rangeStart + (rangeEnd - rangeStart) / 2.0;
-
-            //if the delta betwen range end and range start is less than a predefined constant,
-            //consider the range middle as the factor found, and proceed with the next factor
-            if (rangeEnd - rangeStart < 0.001)
-            {
-                factors[indexX] = rangeMiddle;
-                goto NEXT_FACTOR;
-            }
-
-            //proceed with next level of precision
-            delta /= 5.0;
-        }
-
-        NEXT_FACTOR:
-        ;
-
-        //proceed with the next target value
-        targetValue = formulas[0]() / 2.0;
-    }
-
-    std::vector<double> results(valueCount);
-    for (size_t index = 0; index < valueCount; ++index)
-    {
-        results[index] = formulas[index]();
-    }
-
-    //the final result
-    const double result = formulas[0]();
-
-    return result;
+    return 0;
 }
 
 
@@ -185,7 +25,10 @@ void test(const Game &game)
 {
     std::vector<double> numbers;
 
-    for (size_t index = game.draws.size() - 19; index < game.draws.size() - 1; ++index)
+    const size_t sampleSize = 18;
+    const size_t offset = 10;
+
+    for (size_t index = game.draws.size() - sampleSize - offset; index < game.draws.size() - offset; ++index)
     {
         numbers.push_back(game.draws[index][0]);
     }
