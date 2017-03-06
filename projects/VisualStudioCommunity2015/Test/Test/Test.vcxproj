@@ -166,6 +166,7 @@
     <ClInclude Include="..\..\..\..\source\PredictionAlgorithm_Random.hpp" />
     <ClInclude Include="..\..\..\..\source\Random.hpp" />
     <ClInclude Include="..\..\..\..\source\Tuple.hpp" />
+    <ClInclude Include="..\..\..\..\source\Vector2.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\source\Draw.cpp" />
