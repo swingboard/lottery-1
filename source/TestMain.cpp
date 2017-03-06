@@ -38,49 +38,51 @@ double predictValue(const std::vector<double> &values)
         }
     }
 
-    //vector of results
-    std::vector<double> results(valueCount);
-
     //vector of factors required to compute the prediction
     std::vector<double> factors(valueCount);
 
     //vector of formulas to allow for result computation
-    std::vector<std::function<void()>> formulas(valueCount);
+    std::vector<std::function<double()>> formulas(valueCount);
 
-    //initialize the last formula cell simply takes the value of the last average
-    formulas.back() = [&averages, &valueCount, &results]()
+    //initialize the last formula cell from the formula:
+    //last value = last average.
+    formulas.back() = [&valueCount, &averages, &factors]()
     {
-        const double averageAtLastX = averages[valueCount - 1][valueCount - 1];
-        results[valueCount - 1] = averageAtLastX;
+        const double result = averages[valueCount - 1][valueCount - 1];
+        return result;
     };
 
     //initialize the rest of the formula cells from the formula:
-    //value-at-index(x) = result-at-index(x + 1) * 2 - average-at-index(x, last y) - factor-at-index(x + 1)
+    //value-at-index(x) = result-at-index(x + 1) * 2 - average-at-index(x, last y) + factor-at-index(x + 1)
     for (size_t indexX = 0; indexX < valueCount - 1; ++indexX)
     {
-        formulas[indexX] = [&formulas, indexX, &results, &averages, &factors, valueCount]()
+        formulas[indexX] = [&formulas, &averages, &valueCount, &factors, indexX]()
         {
-            //do next formula first
-            formulas[indexX + 1]();
+            const size_t nextIndexX = indexX + 1;
 
-            //result of next formula doubled
-            const double prevResult = results[indexX + 1] * 2.0;
+            //get value from next formula; this allows us to get the value from
+            //first formula only, and the rest of the values will be recomputed on the fly,
+            //spreadsheet-style
+            const double nextValue = formulas[nextIndexX]();
+
+            //double the above
+            const double nextValueDoubled = nextValue * 2.0;
 
             //average at index x, last y
-            const double averageAtX = averages[indexX][valueCount - 1];
+            const double average = averages[indexX][valueCount - 1];
 
             //factor at index x
-            const double factorAtX = factors[indexX];
+            const double factor = factors[nextIndexX];
 
             //result
-            const double result = prevResult - averageAtX + factorAtX;
+            const double result = nextValueDoubled - average + factor;
 
-            results[indexX] = result;
+            return result;
         };
     }
 
     //compute all the factors, except the first one
-    for (size_t indexX = valueCount - 1; indexX >= 1; --indexX)
+    for (size_t indexX = valueCount - 1; indexX > 0; --indexX)
     {
         //compute the initial target value
         double targetValue = formulas[0]() / 2;
@@ -142,26 +144,32 @@ double predictValue(const std::vector<double> &values)
             //compute new range middle and continue with smaller delta
             rangeMiddle = rangeStart + (rangeEnd - rangeStart) / 2.0;
 
-            //set the factor
-            factors[indexX] = rangeMiddle;
-
             //if the delta betwen range end and range start is less than a predefined constant,
             //consider the range middle as the factor found, and proceed with the next factor
-            if (rangeEnd - rangeStart < 0.0001)
+            if (rangeEnd - rangeStart < 0.001)
             {
+                factors[indexX] = rangeMiddle;
                 goto NEXT_FACTOR;
             }
 
             //proceed with next level of precision
-            targetValue = formulas[0]() / 2.0;
-            delta /= 2.0;
+            delta /= 5.0;
         }
 
         NEXT_FACTOR:
         ;
+
+        //proceed with the next target value
+        targetValue = formulas[0]() / 2.0;
     }
 
-    //the final result is the value computed by the last version of the formula + factors
+    std::vector<double> results(valueCount);
+    for (size_t index = 0; index < valueCount; ++index)
+    {
+        results[index] = formulas[index]();
+    }
+
+    //the final result
     const double result = formulas[0]();
 
     return result;
