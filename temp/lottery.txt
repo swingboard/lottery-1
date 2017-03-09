@@ -1,0 +1,11 @@
+General calculation rules:
+
+1) average = round((value1 + value2) / 2.0)
+
+Column "DIF1" calculation rules:
+
+1) if DISTMAX.row >= 0:
+		while DIF1.row < NORM.row modify factor
+	else:
+		while DIF1.row < NORM.row-1 modify factor
+	
