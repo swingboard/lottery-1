@@ -92,7 +92,7 @@ namespace lottery
         /**
             Returns the max number out of all selections.
          */
-        int getMaxMaxNumber() const
+        int getSelectionMaxNumber() const
         {
             int result = 0;
             for (const NumberSelection &selection : numberSelections)
