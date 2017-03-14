@@ -4,6 +4,7 @@
 
 #include <fstream>
 #include "String.hpp"
+#include "Tuple.hpp"
 
 
 namespace lottery
@@ -107,6 +108,29 @@ namespace lottery
     CSVOutputFileStream &operator << (CSVOutputFileStream &stream, const T &value)
     {
         stream.insertColumnValue(value);
+        return stream;
+    }
+
+
+    /**
+        Inserts a pair of values to a CSV output file stream.
+     */
+    template <class F, class S>
+    CSVOutputFileStream &operator << (CSVOutputFileStream &stream, const std::pair<F, S> &p)
+    {
+        stream.insertColumnValue(p.first);
+        stream.insertColumnValue(p.second);
+        return stream;
+    }
+
+
+    /**
+        Inserts a tuple of values to a CSV output file stream.
+     */
+    template <class ...T>
+    CSVOutputFileStream &operator << (CSVOutputFileStream &stream, const std::tuple<T...> &tpl)
+    {
+        forEach(tpl, [&](const auto &v) { stream.insertColumnValue(v); });
         return stream;
     }
 
