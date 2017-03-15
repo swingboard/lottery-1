@@ -135,60 +135,11 @@ void testAverageDelta(const Game &game)
 }
 
 
-void testAverage(const Game &game)
-{
-    std::unordered_map<int, size_t> data;
-
-    std::vector<size_t> counts(game.draws.size());
-
-    const size_t ColumnIndex = 0;
-
-    size_t total = 0;
-
-    for (size_t index = 2; index < game.draws.size(); ++index)
-    {
-        const int num = game.draws[index][ColumnIndex];
-
-        int sum1 = game.draws[index - 1][ColumnIndex];
-        for (size_t index1 = index - 2, count = 2; index1 != -1; --index1, ++count)
-        {
-            const int num1 = game.draws[index1][ColumnIndex];
-            sum1 += num1;
-            const int average1 = static_cast<int>(std::round(sum1 / count));
-            const int sum2 = sum1 - num1 + num;
-            const int average2 = static_cast<int>(std::round(sum2 / count));
-            if (average1 == average2)
-            {
-                ++data[count];
-                counts[index] = count;
-                goto NEXT;
-            }
-        }
-
-        ++data[0];
-        counts[index] = 0;
-
-        NEXT:
-        ++total;
-    }
-
-    std::vector<std::pair<int, double>> sorted;
-    for (const auto &p : data)
-    {
-        sorted.emplace_back(p.first, 100.0 * p.second / (double)total);
-    }
-    sort(sorted.begin(), sorted.end(), TupleMemberComparator<std::greater<double>, 1>());
-
-    int x = 0;
-}
-
-
 void test(const Game &game)
 {
     //testDistance(game);
     //testTimesAppeared(game);
-    //testAverageDelta(game);
-    testAverage(game);
+    testAverageDelta(game);
 }
 
 
