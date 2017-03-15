@@ -67,6 +67,29 @@ namespace lottery
     }
 
 
+    template <class It, class V>
+    It findFromMiddle(It begin, It end, const V &value)
+    {
+        size_t size = end - begin;
+        size_t leftOfs = size / 2;
+        size_t rightOfs = (size / 2) + ((size & 1) ^ 1);
+        for (;leftOfs < size || rightOfs < size; --leftOfs, ++rightOfs)
+        {
+            if (leftOfs < size)
+            {
+                auto it = begin + leftOfs;
+                if (*it == value) return it;
+            }
+            if (rightOfs < size)
+            {
+                auto it = begin + rightOfs;
+                if (*it == value) return it;
+            }
+        }
+        return end;
+    }
+
+
 } //namespace lottery
 
 

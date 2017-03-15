@@ -1,3 +1,6 @@
+#pragma warning (disable: 4503)
+
+
 #include <iostream>
 #include <unordered_map>
 #include <iomanip>
@@ -10,6 +13,134 @@
 
 using namespace std;
 using namespace lottery;
+
+
+void testDistance(const Game &game)
+{
+    std::unordered_map<size_t, size_t> data;
+
+    size_t total = 0;
+
+    const size_t Range = 1;
+
+    const size_t ColumnIndex = 0;
+
+    for (size_t index = Range; index < game.draws.size(); ++index)
+    {
+        const int num = game.draws[index][ColumnIndex];
+
+        for (size_t index1 = index - Range; index1 != -1; --index1)
+        {
+            const int num1 = game.draws[index1][ColumnIndex];
+            if (num1 == num)
+            {
+                const size_t dist = index - index1;
+                ++data[dist];
+                ++total;
+                break;
+            }
+        }
+    }
+
+    std::vector<std::pair<int, double>> sorted;
+    for (const auto &p : data)
+    {
+        sorted.emplace_back(p.first, 100.0 * p.second / (double)total);
+    }
+    sort(sorted.begin(), sorted.end(), TupleMemberComparator<std::greater<double>, 1>());
+
+    int x = 0;
+}
+
+
+void testTimesAppeared(const Game &game)
+{
+    std::unordered_map<size_t, size_t> data;
+
+    size_t total = 0;
+
+    const size_t Range = 24;
+
+    const size_t ColumnIndex = 0;
+
+    for (size_t index = Range; index < game.draws.size(); ++index)
+    {
+        const int num = game.draws[index][ColumnIndex];
+
+        std::unordered_map<int, size_t> timesAppeared;
+
+        for (size_t index1 = index - 1; index1 != index - Range; --index1)
+        {
+            const int num1 = game.draws[index1][ColumnIndex];
+            if (num1 == num)
+            {
+                ++timesAppeared[num];
+            }
+        }
+
+        ++data[timesAppeared[num]];
+        ++total;
+    }
+
+    std::vector<std::pair<int, double>> sorted;
+    for (const auto &p : data)
+    {
+        sorted.emplace_back(p.first, 100.0 * p.second / (double)total);
+    }
+    sort(sorted.begin(), sorted.end(), TupleMemberComparator<std::greater<double>, 1>());
+
+    int x = 0;
+}
+
+
+void testAverageDelta(const Game &game)
+{
+    std::unordered_map<int, size_t> data;
+
+    size_t total = 0;
+
+    const size_t Range = 3;
+
+    const size_t ColumnIndex = 0;
+
+    for (size_t index = Range; index < game.draws.size(); ++index)
+    {
+        const int num = game.draws[index][ColumnIndex];
+
+        int sum1 = 0;
+        for (size_t index1 = index - Range; index1 < index; ++index1)
+        {
+            const int num1 = game.draws[index1][ColumnIndex];
+            sum1 += num1;
+        }
+        const int average1 = static_cast<int>(std::round(sum1 / (double)Range));
+
+        int sum2 = sum1 - game.draws[index - Range][ColumnIndex] + num;
+        const int average2 = static_cast<int>(std::round(sum2 / (double)Range));
+
+        const int delta = average2 - average1;
+
+        ++data[delta];
+        ++total;
+    }
+
+    std::vector<std::pair<int, double>> sorted;
+    for (const auto &p : data)
+    {
+        sorted.emplace_back(p.first, 100.0 * p.second / (double)total);
+    }
+    sort(sorted.begin(), sorted.end(), TupleMemberComparator<std::greater<double>, 1>());
+
+    int x = 0;
+}
+
+
+void test(const Game &game)
+{
+    //testDistance(game);
+    //testTimesAppeared(game);
+    //testAverageDelta(game);
+}
 
 
 int main()
@@ -27,6 +158,12 @@ int main()
     {
         cerr << "ERROR: the draws could not be loaded.\n";
         return -2;
+    }
+
+    if (1)
+    {
+        test(game);
+        return 0;
     }
 
     //open the results file

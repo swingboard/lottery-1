@@ -18,6 +18,7 @@
     <ClInclude Include="..\..\..\..\source\OStream.hpp" />
     <ClInclude Include="..\..\..\..\source\Vector2.hpp" />
     <ClInclude Include="..\..\..\..\source\PredictionAlgorithm_A.hpp" />
+    <ClInclude Include="..\..\..\..\source\RecursiveMap.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\source\TestMain.cpp" />

@@ -158,6 +158,7 @@
     <ClInclude Include="..\..\..\..\source\OStream.hpp" />
     <ClInclude Include="..\..\..\..\source\PredictionAlgorithm_A.hpp" />
     <ClInclude Include="..\..\..\..\source\Range.hpp" />
+    <ClInclude Include="..\..\..\..\source\RecursiveMap.hpp" />
     <ClInclude Include="..\..\..\..\source\String.hpp" />
     <ClInclude Include="..\..\..\..\source\CSVFile.hpp" />
     <ClInclude Include="..\..\..\..\source\CSVInputFileStream.hpp" />
