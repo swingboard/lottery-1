@@ -71,12 +71,14 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(GITHUB)\lottery\source</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(GITHUB)\lottery\source</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -89,7 +91,8 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\..\..\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
       <AdditionalOptions>/std:c++latest %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
@@ -121,7 +124,8 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\..\..\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
       <AdditionalOptions>/std:c++latest %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
@@ -152,6 +156,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\..\source\Algorithm.hpp" />
     <ClInclude Include="..\..\..\..\source\OStream.hpp" />
+    <ClInclude Include="..\..\..\..\source\PredictionAlgorithm_A.hpp" />
     <ClInclude Include="..\..\..\..\source\Range.hpp" />
     <ClInclude Include="..\..\..\..\source\String.hpp" />
     <ClInclude Include="..\..\..\..\source\CSVFile.hpp" />
@@ -168,6 +173,7 @@
     <ClInclude Include="..\..\..\..\source\Vector2.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\..\..\Google Drive\Lottery\LotteryPrivate\PredictionAlgorithm_A.cpp" />
     <ClCompile Include="..\..\..\..\source\Draw.cpp" />
     <ClCompile Include="..\..\..\..\source\Game.cpp" />
     <ClCompile Include="..\..\..\..\source\PredictionAlgorithm_Random.cpp" />

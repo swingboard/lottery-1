@@ -17,11 +17,13 @@
     <ClInclude Include="..\..\..\..\source\Algorithm.hpp" />
     <ClInclude Include="..\..\..\..\source\OStream.hpp" />
     <ClInclude Include="..\..\..\..\source\Vector2.hpp" />
+    <ClInclude Include="..\..\..\..\source\PredictionAlgorithm_A.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\source\TestMain.cpp" />
     <ClCompile Include="..\..\..\..\source\Game.cpp" />
     <ClCompile Include="..\..\..\..\source\PredictionAlgorithm_Random.cpp" />
     <ClCompile Include="..\..\..\..\source\Draw.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\..\Google Drive\Lottery\LotteryPrivate\PredictionAlgorithm_A.cpp" />
   </ItemGroup>
 </Project>
