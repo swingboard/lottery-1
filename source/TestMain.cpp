@@ -59,7 +59,7 @@ void testTimesAppeared(const Game &game)
 
     size_t total = 0;
 
-    const size_t Range = 24;
+    const size_t Range = 12;
 
     const size_t ColumnIndex = 0;
 
@@ -99,7 +99,7 @@ void testAverageDelta(const Game &game)
 
     size_t total = 0;
 
-    const size_t Range = 3;
+    const size_t Range = 6;
 
     const size_t ColumnIndex = 0;
 
@@ -138,8 +138,8 @@ void testAverageDelta(const Game &game)
 void test(const Game &game)
 {
     //testDistance(game);
-    //testTimesAppeared(game);
-    testAverageDelta(game);
+    testTimesAppeared(game);
+    //testAverageDelta(game);
 }
 
 
@@ -160,7 +160,7 @@ int main()
         return -2;
     }
 
-    if (1)
+    if (0)
     {
         test(game);
         return 0;
