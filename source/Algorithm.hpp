@@ -90,6 +90,44 @@ namespace lottery
     }
 
 
+    template <class ContainerType, class EqualsFuncType> 
+    void compress(
+        const ContainerType &sortedValues, 
+        const EqualsFuncType &equalsFunc, 
+        std::vector<std::pair<typename ContainerType::value_type, size_t>> &result)
+    {
+        for (auto it = sortedValues.begin(); ;)
+        {
+            RESTART:
+
+            const auto &startVal = *it;
+            size_t count = 1;
+
+            NEXT:
+            
+            ++it;
+            if (it == sortedValues.end())
+            {
+                result.emplace_back(startVal, count);
+                return;
+            }
+
+            for (;;)
+            {
+                const auto &secVal = *it;
+                if (equalsFunc(secVal, startVal))
+                {
+                    ++count;
+                    goto NEXT;
+                }
+
+                result.emplace_back(startVal, count);
+                goto RESTART;
+            }
+        }
+    }
+
+
 } //namespace lottery
 
 

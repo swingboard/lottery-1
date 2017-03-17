@@ -118,8 +118,8 @@ namespace lottery
     template <class F, class S>
     CSVOutputFileStream &operator << (CSVOutputFileStream &stream, const std::pair<F, S> &p)
     {
-        stream.insertColumnValue(p.first);
-        stream.insertColumnValue(p.second);
+        stream << p.first;
+        stream << p.second;
         return stream;
     }
 
@@ -130,7 +130,21 @@ namespace lottery
     template <class ...T>
     CSVOutputFileStream &operator << (CSVOutputFileStream &stream, const std::tuple<T...> &tpl)
     {
-        forEach(tpl, [&](const auto &v) { stream.insertColumnValue(v); });
+        forEach(tpl, [&](const auto &v) { stream << v; });
+        return stream;
+    }
+
+
+    /**
+        Inserts a vector to a CSV output file stream.
+     */
+    template <class T>
+    CSVOutputFileStream &operator << (CSVOutputFileStream &stream, const std::vector<T> &vec)
+    {
+        for (const T &v : vec)
+        {
+            stream.insertColumnValue(v);
+        }
         return stream;
     }
 
