@@ -17,11 +17,6 @@ using namespace std;
 using namespace lottery;
 
 
-void test(const Game &game)
-{
-}
-
-
 int main()
 {
     //load the game
@@ -37,12 +32,6 @@ int main()
     {
         cerr << "ERROR: the draws could not be loaded.\n";
         return -2;
-    }
-
-    if (1)
-    {
-        test(game);
-        return 0;
     }
 
     //open the results file
