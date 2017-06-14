@@ -15,7 +15,6 @@
     <ClInclude Include="..\..\..\..\source\String.hpp" />
     <ClInclude Include="..\..\..\..\source\Range.hpp" />
     <ClInclude Include="..\..\..\..\source\Algorithm.hpp" />
-    <ClInclude Include="..\..\..\..\source\OStream.hpp" />
     <ClInclude Include="..\..\..\..\source\Vector2.hpp" />
     <ClInclude Include="..\..\..\..\source\PredictionAlgorithm_A.hpp" />
     <ClInclude Include="..\..\..\..\source\ContainerComparator.hpp" />

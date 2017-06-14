@@ -128,6 +128,40 @@ namespace lottery
     }
 
 
+    template <class T, class F>
+    bool createAllRowsHelper(const std::vector<T> &values, const size_t rowLength, const F &func, const size_t rowIndex, const size_t valueIndex, std::vector<T> &result)
+    {
+        if (rowIndex == rowLength) return func(result);
+        for (size_t vi = valueIndex; vi < values.size() - rowLength + rowIndex + 1; ++vi)
+        {
+            result[rowIndex] = values[vi];
+            if (!createAllRowsHelper(values, rowLength, func, rowIndex + 1, vi + 1, result)) return false;
+        }
+        return true;
+    }
+
+
+    template <class T, class F>
+    bool createAllRows(const std::vector<T> &values, const size_t rowLength, const F &func)
+    {
+        std::vector<T> result(rowLength);
+        return createAllRowsHelper(values, rowLength, func, 0, 0, result);
+    }
+
+
+    template <class F>
+    bool createAllRows(const int minNumber, const int maxNumber, const size_t rowLength, const F &func)
+    {
+        std::vector<int> values;
+        for (int num = minNumber; num <= maxNumber; ++num)
+        {
+            values.push_back(num);
+        }
+        std::vector<int> result(rowLength);
+        return createAllRowsHelper(values, rowLength, func, 0, 0, result);
+    }
+
+
 } //namespace lottery
 
 
