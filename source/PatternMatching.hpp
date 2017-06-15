@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <limits>
 #include "Range.hpp"
+#include "Draw.hpp"
 
 
 namespace lottery
@@ -45,8 +46,8 @@ namespace lottery
         DeltaType maxDelta = std::min(-std::numeric_limits<DeltaType>::max(), std::numeric_limits<DeltaType>::min());
 
         //iterate the data
-        for (auto beginDataIt = data.begin(), dataEnd = std::prev(data.end() - patternSize), patternEnd = pattern.end(); 
-             dataIt != dataEnd; 
+        for (auto beginDataIt = data.begin(), dataEnd = std::prev(data.end(), patternSize - 1), patternEnd = pattern.end(); 
+             beginDataIt != dataEnd; 
             ++beginDataIt)
         {
             //iterate the pattern and data; compute the total delta between data and pattern
@@ -73,10 +74,20 @@ namespace lottery
         //compute the result scores
         std::vector<double> scores;
         scores.reserve(data.size() - patternSize);
-        for (const auto delta : deltas)
+        if (deltaRange > 0)
         {
-            const double score = 1.0 - (delta + minDelta) / (double)deltaRange;
-            scores.push_back(score);
+            for (const auto delta : deltas)
+            {
+                const double score = 1.0 - (delta + minDelta) / (double)deltaRange;
+                scores.push_back(score);
+            }
+        }
+        else
+        {
+            for (const auto delta : deltas)
+            {
+                scores.push_back(1.0);
+            }
         }
 
         //return the match scores

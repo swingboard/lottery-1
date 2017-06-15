@@ -24,7 +24,6 @@
     <ClCompile Include="..\..\..\..\source\TestMain.cpp" />
     <ClCompile Include="..\..\..\..\source\Game.cpp" />
     <ClCompile Include="..\..\..\..\source\PredictionAlgorithm_Random.cpp" />
-    <ClCompile Include="..\..\..\..\source\Draw.cpp" />
     <ClCompile Include="..\..\..\..\..\..\..\Google Drive\Lottery\LotteryPrivate\PredictionAlgorithm_A.cpp" />
   </ItemGroup>
 </Project>

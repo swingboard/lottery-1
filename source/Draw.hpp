@@ -29,15 +29,18 @@ namespace lottery
     class DrawDeltaFunction
     {
     public:
-        ///constructor.
-        DrawDeltaFunction(int valueEpsilon, int drawEpsilon);
-
         ///delta operator.
-        int operator ()(const Draw &a, const Draw &b) const;
-
-    private:
-        int m_valueEpsilon;
-        int m_drawEpsilon;
+        double operator ()(const Draw &a, const Draw &b) const
+        {
+            int delta = 0, absDelta = 0;
+            for (size_t i = 0; i < a.size(); ++i)
+            {
+                const int d = a[i] - b[i];
+                delta += d;
+                absDelta += std::abs(d);
+            }
+            return (delta + absDelta) / 2.0;
+        }
     };
 
 
