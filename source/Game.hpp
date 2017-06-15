@@ -17,11 +17,20 @@ namespace lottery
     class NumberSelection
     {
     public:
+        //index 
+        size_t index;
+
         ///min number allowed.
         Number minNumber;
 
         ///max number allowed.
         Number maxNumber;
+
+        ///start number index
+        size_t beginNumberIndex;
+
+        ///end number index
+        size_t endNumberIndex;
 
         ///count of numbers that must be selected.
         size_t numberCount;
@@ -63,6 +72,14 @@ namespace lottery
         const NumberSelection &getNumberSelection(size_t numberIndex) const
         {
             return *m_numberIndexToNumberSelection[numberIndex];
+        }
+
+        /**
+            Returns the number selection from the number index.
+         */
+        size_t getNumberSelectionIndex(size_t numberIndex) const
+        {
+            return m_numberIndexToNumberSelection[numberIndex]->index;
         }
 
         /**

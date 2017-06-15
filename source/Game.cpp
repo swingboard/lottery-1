@@ -32,7 +32,7 @@ namespace lottery
         m_numberIndexToNumberSelection.clear();
 
         //set the selection types
-        size_t beginNumberIndex = 0;
+        size_t numberIndex = 0;
         for (size_t nsIndex = 0; nsIndex < data.size(); ++nsIndex)
         {
             //get the row of data
@@ -41,10 +41,14 @@ namespace lottery
             //get the number selection
             NumberSelection &ns = numberSelections[nsIndex];
             
-            //set the number selection members from the csv data
+            //setup the number selection 
+            ns.index = nsIndex;
             ns.minNumber = std::get<1>(row);
             ns.maxNumber = std::get<2>(row);
             ns.numberCount = std::get<3>(row);
+            ns.beginNumberIndex = numberIndex;
+            numberIndex += ns.numberCount;
+            ns.endNumberIndex = numberIndex;
 
             //calculate the total draw number count
             numberCount += ns.numberCount;
