@@ -42,9 +42,9 @@ namespace lottery
             @param game game for which the prediction is for.
             @param draws previous draws.
             @param numberCountPerColumn count of numbers to predict per column.
-            @param numbers predicted numbers.
+            @param numbers predicted numbers, per game selection.
          */
-        virtual void predict(const Game &game, const DrawVector &draws, const size_t numberCount, std::unordered_set<Number> &numbers) = 0;
+        virtual void predict(const Game &game, const DrawVector &draws, const size_t numberCount, std::vector<std::unordered_set<Number>> &numbers) = 0;
     };
 
 

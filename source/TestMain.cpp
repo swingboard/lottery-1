@@ -83,16 +83,21 @@ int main()
             const auto &predictionAlgorithmPtr = predictionAlgorithms[predictionAlgorithmIndex];
 
             //get the prediction
-            std::unordered_set<Number> predictedNumbers;
+            std::vector<std::unordered_set<Number>> predictedNumbers(game.numberSelections.size());
             predictionAlgorithmPtr->predict(game, testDraws, PredictedNumberCount, predictedNumbers);
 
             //test the prediction against the drawn numbers
             size_t successes = 0;
-            for (const Number number : testDraw)
+            for (size_t selectionIndex = 0; selectionIndex < game.numberSelections.size(); ++selectionIndex)
             {
-                if (predictedNumbers.find(number) != predictedNumbers.end())
+                const auto &selection = game.numberSelections[selectionIndex];
+                for (size_t numberIndex = selection.beginNumberIndex; numberIndex < selection.endNumberIndex; ++numberIndex)
                 {
-                    ++successes;
+                    const int number = testDraw[numberIndex];
+                    if (predictedNumbers[selectionIndex].find(number) != predictedNumbers[selectionIndex].end())
+                    {
+                        ++successes;
+                    }
                 }
             }
 

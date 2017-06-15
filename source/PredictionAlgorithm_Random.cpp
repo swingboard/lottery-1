@@ -21,8 +21,12 @@ namespace lottery
         */
     void PredictionAlgorithm_Random::initialize(const Game &game, const DrawVector &draws)
     {
-        //create the random number generator
-        m_randomNumberGenerator.reset(new RandomNumberGenerator<Number>(game.numberSelections[0].minNumber, game.numberSelections[0].maxNumber));
+        m_randomNumberGenerators.resize(game.numberSelections.size());
+        for (size_t selectionIndex = 0; selectionIndex < game.numberSelections.size(); ++selectionIndex)
+        {
+            const auto &selection = game.numberSelections[selectionIndex];
+            m_randomNumberGenerators[selectionIndex].reset(new RandomNumberGenerator<Number>(selection.minNumber, selection.maxNumber));
+        }
     }
 
 
@@ -32,9 +36,13 @@ namespace lottery
         @param numberCountPerColumn count of numbers to predict per column.
         @param numbers predicted numbers.
         */
-    void PredictionAlgorithm_Random::predict(const Game &game, const DrawVector &draws, const size_t numberCount, std::unordered_set<Number> &numbers)
+    void PredictionAlgorithm_Random::predict(const Game &game, const DrawVector &draws, const size_t numberCount, std::vector<std::unordered_set<Number>> &numbers)
     {
-        createRandomNumbers(*m_randomNumberGenerator, numberCount, numbers);
+        for (size_t selectionIndex = 0; selectionIndex < game.numberSelections.size(); ++selectionIndex)
+        {
+            const auto &selection = game.numberSelections[selectionIndex];
+            createRandomNumbers(*m_randomNumberGenerators[selectionIndex], selection.numberCount, numbers[selectionIndex]);
+        }
     }
 
 
