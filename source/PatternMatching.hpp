@@ -20,11 +20,11 @@ namespace lottery
         @param data data to match the pattern against.
         @param pattern pattern to match.
         @param deltaFunc function to compute the difference between two values.
-        @return vector table of match scores, per data row.
+        @return vector table of match scores, per data row, sorted in descending order.
         @exception std::invalid_argument thrown if the pattern is greater than the data, in size.
      */
     template <class ItType, class DeltaFuncType> 
-    std::vector<double> matchPattern(const Range<ItType> &data, const Range<ItType> &pattern, const DeltaFuncType &deltaFunc)
+    std::vector<std::pair<size_t, double>> matchPattern(const Range<ItType> &data, const Range<ItType> &pattern, const DeltaFuncType &deltaFunc)
     {
         //check the pattern
         if (pattern.size() > data.size())
@@ -72,13 +72,17 @@ namespace lottery
         }
 
         //compute the result scores
-        std::vector<double> scores;
+        std::vector<std::pair<size_t, double>> scores;
         scores.reserve(data.size() - patternSize);
-        for (const auto delta : deltas)
+        for (size_t index = 0; index < deltas.size(); ++index)
         {
+            const double delta = deltas[index];
             const double score = 1.0 - (delta / (double)maxDelta);
-            scores.push_back(score);
+            scores.push_back(std::make_pair(index, score));
         }
+
+        //sort the result according to scores
+        std::sort(scores.begin(), scores.end(), TupleMemberComparator<std::greater<double>, 1>());
 
         //return the match scores
         return scores;
