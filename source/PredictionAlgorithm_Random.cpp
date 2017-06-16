@@ -36,12 +36,12 @@ namespace lottery
         @param numberCountPerColumn count of numbers to predict per column.
         @param numbers predicted numbers.
         */
-    void PredictionAlgorithm_Random::predict(const Game &game, const DrawVector &draws, const size_t numberCount, std::vector<std::unordered_set<Number>> &numbers)
+    void PredictionAlgorithm_Random::predict(const Game &game, const DrawVector &draws, const std::vector<size_t> &numberCount, std::vector<std::unordered_set<Number>> &numbers)
     {
         for (size_t selectionIndex = 0; selectionIndex < game.numberSelections.size(); ++selectionIndex)
         {
             const auto &selection = game.numberSelections[selectionIndex];
-            createRandomNumbers(*m_randomNumberGenerators[selectionIndex], selection.numberCount, numbers[selectionIndex]);
+            createRandomNumbers(*m_randomNumberGenerators[selectionIndex], numberCount[selectionIndex], numbers[selectionIndex]);
         }
     }
 

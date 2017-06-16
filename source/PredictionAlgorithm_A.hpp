@@ -42,7 +42,7 @@ namespace lottery
         /*
             Does the prediction.
          */
-        virtual void predict(const Game &game, const DrawVector &draws, const size_t numberCount, std::vector<std::unordered_set<Number>> &numbers);
+        virtual void predict(const Game &game, const DrawVector &draws, const std::vector<size_t> &numberCount, std::vector<std::unordered_set<Number>> &numbers);
 
     private:
         //internal data

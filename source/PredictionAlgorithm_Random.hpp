@@ -36,7 +36,7 @@ namespace lottery
             @param numberCountPerColumn count of numbers to predict per column.
             @param numbers predicted numbers.
          */
-        virtual void predict(const Game &game, const DrawVector &draws, const size_t numberCount, std::vector<std::unordered_set<Number>> &numbers);
+        virtual void predict(const Game &game, const DrawVector &draws, const std::vector<size_t> &numberCount, std::vector<std::unordered_set<Number>> &numbers);
 
     private:
         //random number generators per game selection

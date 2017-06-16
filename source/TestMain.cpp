@@ -50,7 +50,12 @@ int main()
     }
 
     //prepare the test parameters
-    const size_t PredictedNumberCount = 18;
+    std::vector<size_t> predictedNumberCount(game.numberSelections.size());
+    for (size_t selectionIndex = 0; selectionIndex < game.numberSelections.size(); ++selectionIndex)
+    {
+        const auto &selection = game.numberSelections[selectionIndex];
+        predictedNumberCount[selectionIndex] = selection.numberCount * 3;
+    }
     const size_t SampleDrawsSize = game.draws.size()*2/3;
     const size_t TestDrawsSize = game.draws.size() - 1 - SampleDrawsSize;
 
@@ -84,7 +89,7 @@ int main()
 
             //get the prediction
             std::vector<std::unordered_set<Number>> predictedNumbers(game.numberSelections.size());
-            predictionAlgorithmPtr->predict(game, testDraws, PredictedNumberCount, predictedNumbers);
+            predictionAlgorithmPtr->predict(game, testDraws, predictedNumberCount, predictedNumbers);
 
             //test the prediction against the drawn numbers
             size_t successes = 0;
