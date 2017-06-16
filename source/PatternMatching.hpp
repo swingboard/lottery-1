@@ -16,6 +16,7 @@ namespace lottery
 
     /**
         Calculates the matching of the given pattern against the given data.
+        The return values are score percentages, relative the max delta computed during the process.
         @param data data to match the pattern against.
         @param pattern pattern to match.
         @param deltaFunc function to compute the difference between two values.
@@ -42,7 +43,6 @@ namespace lottery
         deltas.reserve(data.size() - patternSize);
 
         //min, max deltas
-        DeltaType minDelta = std::numeric_limits<DeltaType>::max();
         DeltaType maxDelta = std::min(-std::numeric_limits<DeltaType>::max(), std::numeric_limits<DeltaType>::min());
 
         //iterate the data
@@ -63,32 +63,21 @@ namespace lottery
                 delta += d * d;
             }
 
-            //store the average delta, also compute min and max delta
+            //store the average delta, also compute the max delta
             deltas.push_back(delta);
-            minDelta = std::min(minDelta, delta);
-            maxDelta = std::max(maxDelta, delta);
+            if (delta > maxDelta)
+            {
+                maxDelta = delta;
+            }
         }
-
-        //compute the delta range
-        const auto deltaRange = maxDelta - minDelta;
 
         //compute the result scores
         std::vector<double> scores;
         scores.reserve(data.size() - patternSize);
-        if (deltaRange > 0)
+        for (const auto delta : deltas)
         {
-            for (const auto delta : deltas)
-            {
-                const double score = 1.0 - (delta + minDelta) / (double)deltaRange;
-                scores.push_back(score);
-            }
-        }
-        else
-        {
-            for (const auto delta : deltas)
-            {
-                scores.push_back(1.0);
-            }
+            const double score = 1.0 - (delta / (double)maxDelta);
+            scores.push_back(score);
         }
 
         //return the match scores
