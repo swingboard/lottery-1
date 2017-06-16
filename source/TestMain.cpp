@@ -93,6 +93,7 @@ int main()
 
             //test the prediction against the drawn numbers
             size_t successes = 0;
+            size_t totalPredictedNumbers = 0;
             for (size_t selectionIndex = 0; selectionIndex < game.numberSelections.size(); ++selectionIndex)
             {
                 const auto &selection = game.numberSelections[selectionIndex];
@@ -104,11 +105,12 @@ int main()
                         ++successes;
                     }
                 }
+                totalPredictedNumbers += predictedNumbers[selectionIndex].size();
             }
 
             //note the successes of the algorithm
             ++predictionAlgorithmSuccesses[predictionAlgorithmIndex][successes];
-            predictionAlgorithmPredictedNumberCount[predictionAlgorithmIndex] += predictedNumbers.size();
+            predictionAlgorithmPredictedNumberCount[predictionAlgorithmIndex] += totalPredictedNumbers;
         }
     }
 
