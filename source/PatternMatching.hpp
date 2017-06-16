@@ -56,11 +56,12 @@ namespace lottery
                  patternIt != patternEnd; 
                 ++dataIt, ++patternIt)
             {
-                delta += deltaFunc(*dataIt, *patternIt);
-            }
+                const auto d = std::abs(deltaFunc(*dataIt, *patternIt));
 
-            //divide the delta by pattern size to find the average delta
-            delta /= patternSize;
+                //square the delta so as that single big delta values
+                //do not equal many small delta values
+                delta += d * d;
+            }
 
             //store the average delta, also compute min and max delta
             deltas.push_back(delta);

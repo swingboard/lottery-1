@@ -32,14 +32,21 @@ namespace lottery
         ///delta operator.
         double operator ()(const Draw &a, const Draw &b) const
         {
-            int delta = 0, absDelta = 0;
+            int delta = 0;
+
+            //assume both draws are of the same size
             for (size_t i = 0; i < a.size(); ++i)
             {
-                const int d = a[i] - b[i];
-                delta += d;
-                absDelta += std::abs(d);
+                //take the absolute difference between two numbers
+                const int d = std::abs(a[i] - b[i]);
+
+                //add to the draw's delta the square of the number delta,
+                //in order to 'scale' bigger deltas so as that
+                //a single big delta does not equal many small deltas
+                delta += d * d;
             }
-            return (delta + absDelta) / 2.0;
+
+            return delta;
         }
     };
 
