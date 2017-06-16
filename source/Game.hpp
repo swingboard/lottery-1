@@ -17,6 +17,9 @@ namespace lottery
     class NumberSelection
     {
     public:
+        //name
+        std::string name;
+
         //index 
         size_t index;
 

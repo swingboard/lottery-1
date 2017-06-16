@@ -42,6 +42,7 @@ namespace lottery
             NumberSelection &ns = numberSelections[nsIndex];
             
             //setup the number selection 
+            ns.name = std::get<0>(row);
             ns.index = nsIndex;
             ns.minNumber = std::get<1>(row);
             ns.maxNumber = std::get<2>(row);
