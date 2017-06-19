@@ -54,7 +54,7 @@ int main()
     for (size_t selectionIndex = 0; selectionIndex < game.numberSelections.size(); ++selectionIndex)
     {
         const auto &selection = game.numberSelections[selectionIndex];
-        predictedNumberCount[selectionIndex] = selection.numberCount * 3;
+        predictedNumberCount[selectionIndex] = selection.numberCount * 2;
     }
     const size_t SampleDrawsSize = game.draws.size()*2/3;
     const size_t TestDrawsSize = game.draws.size() - 1 - SampleDrawsSize;
