@@ -29,13 +29,19 @@ namespace lottery
     class DrawDeltaFunction
     {
     public:
+        DrawDeltaFunction(const size_t beginIndex, const size_t endIndex)
+            : m_beginIndex(beginIndex)
+            , m_endIndex(endIndex)
+        {
+        }
+
         ///delta operator.
         double operator ()(const Draw &a, const Draw &b) const
         {
             int delta = 0;
 
             //assume both draws are of the same size
-            for (size_t i = 0; i < a.size(); ++i)
+            for (size_t i = m_beginIndex; i < m_endIndex; ++i)
             {
                 //take the absolute difference between two numbers
                 const int d = std::abs(a[i] - b[i]);
@@ -48,6 +54,10 @@ namespace lottery
 
             return delta;
         }
+
+    private:
+        size_t m_beginIndex;
+        size_t m_endIndex;
     };
 
 
