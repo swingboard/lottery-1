@@ -15,16 +15,33 @@ namespace lottery
 
 
     /**
+        Function that computes the delta of row scores.
+     */
+    class RowScoreDeltaFunction
+    {
+    public:
+        /**
+            Computes the deltas of row scores.
+         */
+        double operator ()(const std::pair<size_t, double> &a, const std::pair<size_t, double> &b) const
+        {
+            return a.second - b.second;
+        }
+    };
+
+
+    /**
         Calculates the matching of the given pattern against the given data.
         The return values are score percentages, relative the max delta computed during the process.
         @param data data to match the pattern against.
         @param pattern pattern to match.
         @param deltaFunc function to compute the difference between two values.
-        @return vector table of match scores, per data row, sorted in descending order.
+        @param sortResults if true, the results are sorted in descending order.
+        @return vector table of match scores, per data row, sorted in descending order, if 'sortResults' is true.
         @exception std::invalid_argument thrown if the pattern is greater than the data, in size.
      */
     template <class ItType, class DeltaFuncType> 
-    std::vector<std::pair<size_t, double>> matchPattern(const Range<ItType> &data, const Range<ItType> &pattern, const DeltaFuncType &deltaFunc)
+    std::vector<std::pair<size_t, double>> matchPattern(const Range<ItType> &data, const Range<ItType> &pattern, const DeltaFuncType &deltaFunc, bool sortResults = true)
     {
         //check the pattern
         if (pattern.size() > data.size())
@@ -82,7 +99,10 @@ namespace lottery
         }
 
         //sort the result according to scores
-        std::sort(scores.begin(), scores.end(), TupleMemberComparator<std::greater<double>, 1>());
+        if (sortResults)
+        {
+            std::sort(scores.begin(), scores.end(), TupleMemberComparator<std::greater<double>, 1>());
+        }
 
         //return the match scores
         return scores;
