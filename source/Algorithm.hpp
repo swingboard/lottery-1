@@ -162,6 +162,12 @@ namespace lottery
     }
 
 
+    template <class T, class C> void sort(T &container, const C &comparator)
+    {
+        std::sort(container.begin(), container.end(), comparator);
+    }
+
+
 } //namespace lottery
 
 
