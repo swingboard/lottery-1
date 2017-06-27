@@ -15,17 +15,18 @@ namespace lottery
 
 
     /**
-        Function that computes the delta of row scores.
+        Function that computes the delta of two items.
      */
-    class RowScoreDeltaFunction
+    template <class T> class DeltaFunction
     {
     public:
         /**
-            Computes the deltas of row scores.
+            Computes the deltas of two items.
          */
-        double operator ()(const std::pair<size_t, double> &a, const std::pair<size_t, double> &b) const
+        double operator ()(const T &a, const T &b) const
         {
-            return a.second - b.second;
+            const T d = std::abs(a - b);
+            return d*d;
         }
     };
 
@@ -109,6 +110,20 @@ namespace lottery
     }
 
 
+    /**
+        Helper function for matching patterns within a container.
+        @param container container to match.
+        @param patternSize size of pattern to match within a container.
+        @param deltaFunc function to compute the difference between two values.
+        @param sortResults if true, the results are sorted in descending order.
+        @return vector table of match scores, per data row, sorted in descending order, if 'sortResults' is true.
+        @exception std::invalid_argument thrown if the pattern is greater than the data, in size.
+     */
+    template <class ContainerType, class DeltaFuncType> 
+    std::vector<std::pair<size_t, double>> matchPattern(const ContainerType &container, const size_t patternSize, const DeltaFuncType &deltaFunc, bool sortResults = true)
+    {
+        return matchPattern(makeRange(container.begin(), container.end() - 1), makeRange(container.end() - patternSize, container.end()), deltaFunc, sortResults);
+    }
 } //namespace lottery
 
 
