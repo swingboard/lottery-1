@@ -63,6 +63,22 @@ namespace lottery
             return std::distance(begin(), end());
         }
 
+        /**
+            Array access.
+         */
+        const value_type &operator [](size_t index) const
+        {
+            return *(m_begin + index);
+        }
+
+        /**
+            Array access.
+         */
+        value_type &operator [](size_t index)
+        {
+            return *(m_begin + index);
+        }
+
     private:
         //The begin iterator.
         It m_begin;
