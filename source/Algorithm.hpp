@@ -7,6 +7,7 @@
 #include <utility>
 #include <functional>
 #include <cassert>
+#include <unordered_map>
 #include "Tuple.hpp"
 
 
@@ -162,9 +163,51 @@ namespace lottery
     }
 
 
+    //convenience sort
     template <class T, class C> void sort(T &container, const C &comparator)
     {
         std::sort(container.begin(), container.end(), comparator);
+    }
+
+
+    //get top range
+    template <class K> std::pair<K, K> getRange(const std::unordered_map<K, size_t> &m, const double pc = 1.0)
+    {
+        //put the elements into this array, count totals
+        std::vector<std::pair<K, size_t>> sorted;
+        size_t total = 0;
+        for (const auto &p : m)
+        {
+            sorted.push_back(p);
+            total += p.second;
+        }
+
+        //sort the array by size, in descending order
+        sort(sorted, TupleMemberComparator<std::greater<size_t>, 1>());
+
+        //how many to take
+        const size_t limit = static_cast<size_t>(total * std::max(0.0, std::min(pc, 1.0)));
+
+        //range values
+        K min = std::numeric_limits<K>::max();
+        K max = std::min(std::numeric_limits<K>::min(), -std::numeric_limits<K>::max());
+
+        //take at most up to limit items
+        size_t count = 0;
+        for (const auto &p : sorted)
+        {
+            //calculate range
+            min = std::min(min, p.first);
+            max = std::max(max, p.first);
+
+            //count
+            count += p.second;
+
+            //if count is reached, end
+            if (count >= limit) break;
+        }
+
+        return std::make_pair(min, max);
     }
 
 
