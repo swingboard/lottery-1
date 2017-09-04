@@ -13,6 +13,7 @@ Release/
 *.exe
 *.TMP
 *.~*
+*.ipch
 *.metadata
 test*.txt
 test*.csv
