@@ -22,7 +22,7 @@
     <ProjectGuid>{DCD22CE2-7D3F-4F1E-925F-DC3E368AE2CB}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Test</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -91,9 +91,8 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>
-      </AdditionalIncludeDirectories>
-      <AdditionalOptions>/std:c++latest %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>$(HOMEPATH)/Documents/GitHub/Lottery/Source</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -124,9 +123,8 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>
-      </AdditionalIncludeDirectories>
-      <AdditionalOptions>/std:c++latest %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>$(HOMEPATH)/Documents/GitHub/Lottery/Source</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -154,30 +152,30 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\source\Algorithm.hpp" />
-    <ClInclude Include="..\..\..\..\source\PatternMatching.hpp" />
-    <ClInclude Include="..\..\..\..\source\PredictionAlgorithm_A.hpp" />
-    <ClInclude Include="..\..\..\..\source\Range.hpp" />
-    <ClInclude Include="..\..\..\..\source\String.hpp" />
-    <ClInclude Include="..\..\..\..\source\CSVFile.hpp" />
-    <ClInclude Include="..\..\..\..\source\CSVInputFileStream.hpp" />
-    <ClInclude Include="..\..\..\..\source\CSVOutputFileStream.hpp" />
-    <ClInclude Include="..\..\..\..\source\CSVWhitespace.hpp" />
-    <ClInclude Include="..\..\..\..\source\Draw.hpp" />
-    <ClInclude Include="..\..\..\..\source\Game.hpp" />
-    <ClInclude Include="..\..\..\..\source\Number.hpp" />
-    <ClInclude Include="..\..\..\..\source\PredictionAlgorithm.hpp" />
-    <ClInclude Include="..\..\..\..\source\PredictionAlgorithm_Random.hpp" />
-    <ClInclude Include="..\..\..\..\source\Random.hpp" />
-    <ClInclude Include="..\..\..\..\source\Tuple.hpp" />
-    <ClInclude Include="..\..\..\..\source\ContainerComparator.hpp" />
-    <ClInclude Include="..\..\..\..\source\Vector2.hpp" />
+    <ClCompile Include="..\..\..\..\..\..\Google Drive\Lottery\LotteryPrivate\PredictionAlgorithm_A.cpp" />
+    <ClCompile Include="..\..\..\source\Game.cpp" />
+    <ClCompile Include="..\..\..\source\PredictionAlgorithm_Random.cpp" />
+    <ClCompile Include="..\..\..\source\TestMain.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\..\..\Google Drive\Lottery\LotteryPrivate\PredictionAlgorithm_A.cpp" />
-    <ClCompile Include="..\..\..\..\source\Game.cpp" />
-    <ClCompile Include="..\..\..\..\source\PredictionAlgorithm_Random.cpp" />
-    <ClCompile Include="..\..\..\..\source\TestMain.cpp" />
+    <ClInclude Include="..\..\..\source\Algorithm.hpp" />
+    <ClInclude Include="..\..\..\source\ContainerComparator.hpp" />
+    <ClInclude Include="..\..\..\source\CSVFile.hpp" />
+    <ClInclude Include="..\..\..\source\CSVInputFileStream.hpp" />
+    <ClInclude Include="..\..\..\source\CSVOutputFileStream.hpp" />
+    <ClInclude Include="..\..\..\source\CSVWhitespace.hpp" />
+    <ClInclude Include="..\..\..\source\Draw.hpp" />
+    <ClInclude Include="..\..\..\source\Game.hpp" />
+    <ClInclude Include="..\..\..\source\Number.hpp" />
+    <ClInclude Include="..\..\..\source\PatternMatching.hpp" />
+    <ClInclude Include="..\..\..\source\PredictionAlgorithm.hpp" />
+    <ClInclude Include="..\..\..\source\PredictionAlgorithm_A.hpp" />
+    <ClInclude Include="..\..\..\source\PredictionAlgorithm_Random.hpp" />
+    <ClInclude Include="..\..\..\source\Random.hpp" />
+    <ClInclude Include="..\..\..\source\Range.hpp" />
+    <ClInclude Include="..\..\..\source\String.hpp" />
+    <ClInclude Include="..\..\..\source\Tuple.hpp" />
+    <ClInclude Include="..\..\..\source\Vector2.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
