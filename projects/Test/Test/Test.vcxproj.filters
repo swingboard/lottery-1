@@ -7,9 +7,6 @@
     <ClCompile Include="..\..\..\..\..\..\Google Drive\Lottery\LotteryPrivate\PredictionAlgorithm_A.cpp">
       <Filter>PredictionAlgorithmA</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\Google Drive\Lottery\LotteryPrivate\ColumnSumFilter.cpp">
-      <Filter>PredictionAlgorithmA</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\source\Algorithm.hpp" />
@@ -30,12 +27,6 @@
     <ClInclude Include="..\..\..\source\Tuple.hpp" />
     <ClInclude Include="..\..\..\source\Vector2.hpp" />
     <ClInclude Include="..\..\..\source\PredictionAlgorithm_A.hpp" />
-    <ClInclude Include="..\..\..\..\..\..\Google Drive\Lottery\LotteryPrivate\Filter.hpp">
-      <Filter>PredictionAlgorithmA</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\Google Drive\Lottery\LotteryPrivate\ColumnSumFilter.hpp">
-      <Filter>PredictionAlgorithmA</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="PredictionAlgorithmA">
