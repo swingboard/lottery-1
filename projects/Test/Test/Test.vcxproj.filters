@@ -4,9 +4,7 @@
     <ClCompile Include="..\..\..\source\Game.cpp" />
     <ClCompile Include="..\..\..\source\PredictionAlgorithm_Random.cpp" />
     <ClCompile Include="..\..\..\source\TestMain.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\Google Drive\Lottery\LotteryPrivate\PredictionAlgorithm_A.cpp">
-      <Filter>PredictionAlgorithmA</Filter>
-    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\Google Drive\Lottery\LotteryPrivate\PredictionAlgorithm_A.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\source\Algorithm.hpp" />
@@ -27,10 +25,5 @@
     <ClInclude Include="..\..\..\source\Tuple.hpp" />
     <ClInclude Include="..\..\..\source\Vector2.hpp" />
     <ClInclude Include="..\..\..\source\PredictionAlgorithm_A.hpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Filter Include="PredictionAlgorithmA">
-      <UniqueIdentifier>{3d0b8d4b-ef75-4374-8380-1a63fb86a4a6}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
 </Project>
