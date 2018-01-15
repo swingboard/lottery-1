@@ -152,12 +152,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\..\Google Drive\Lottery\LotteryPrivate\ColumnSumFilter.cpp" />
     <ClCompile Include="..\..\..\..\..\..\Google Drive\Lottery\LotteryPrivate\PredictionAlgorithm_A.cpp" />
     <ClCompile Include="..\..\..\source\Game.cpp" />
     <ClCompile Include="..\..\..\source\PredictionAlgorithm_Random.cpp" />
     <ClCompile Include="..\..\..\source\TestMain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\..\..\Google Drive\Lottery\LotteryPrivate\ColumnSumFilter.hpp" />
+    <ClInclude Include="..\..\..\..\..\..\Google Drive\Lottery\LotteryPrivate\Filter.hpp" />
     <ClInclude Include="..\..\..\source\Algorithm.hpp" />
     <ClInclude Include="..\..\..\source\ContainerComparator.hpp" />
     <ClInclude Include="..\..\..\source\CSVFile.hpp" />
