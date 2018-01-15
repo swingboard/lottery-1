@@ -211,6 +211,28 @@ namespace lottery
     }
 
 
+    template <class T, class F> bool createAllPermutationsHelper(const std::vector<T> &symbols, size_t rowSize, size_t pos, std::vector<T> &result, const F &func)
+    {
+        if (rowSize == 0)
+        {
+            return func(result);
+        }
+        for (size_t i = 0; i < symbols.size(); ++i)
+        {
+            result[pos] = symbols[i];
+            if (!createAllPermutationsHelper(symbols, rowSize - 1, pos + 1, result, func)) return false;
+        }
+        return true;
+    }
+
+
+    template <class T, class F> void createAllPermutations(const std::vector<T> &symbols, size_t rowSize, const F &func)
+    {
+        std::vector<T> result(rowSize);
+        createAllPermutationsHelper(symbols, rowSize, 0, result, func);
+    }
+
+
 } //namespace lottery
 
 
