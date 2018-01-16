@@ -61,6 +61,27 @@ namespace lottery
     };
 
 
+    /**
+        Pattern-matches two draws.
+     */
+    inline double matchDraws(const Draw &a, const size_t startColumnA, const Draw &b, const int maxDelta)
+    {
+        double result = 0;
+
+        int totalDelta = 0;
+        for (size_t i = 0; i < b.size(); ++i)
+        {
+            const int num1 = a[i + startColumnA];
+            const int num2 = b[i];
+            const int delta = std::abs(num1 - num2);
+            totalDelta += delta;
+        }
+        result = (maxDelta - totalDelta) / (double)maxDelta;
+
+        return result;
+    }
+
+
 } //namespace lottery
 
 

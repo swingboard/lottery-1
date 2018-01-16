@@ -7,7 +7,6 @@
 #include <algorithm>
 #include <limits>
 #include "Range.hpp"
-#include "Draw.hpp"
 
 
 namespace lottery

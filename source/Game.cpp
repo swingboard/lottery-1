@@ -6,6 +6,21 @@ namespace lottery
 {
 
 
+    ///get max delta
+    int NumberSelection::getMaxDelta() const
+    {
+        int result = 0;
+        for (int index = 0; index < (int)numberCount; ++index)
+        {
+            const int minNum = minNumber + index;
+            const int maxNum = maxNumber - (int)numberCount + 1 + index;
+            const int delta = maxNum - minNum;
+            result += delta;
+        }
+        return result;
+    }
+
+
     /**
         Loads the game definition from a csv file.
         @param filename name of the file.
