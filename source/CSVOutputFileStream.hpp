@@ -60,6 +60,18 @@ namespace lottery
             }
         }
 
+        void insertColumnValue(const std::string &str)
+        {
+            if (str.find_first_of("\t'{ ") != std::string::npos)
+            {
+                insertColumnValue<std::string>('"' + str + '"');
+            }
+            else
+            {
+                insertColumnValue<std::string>(str);
+            }
+        }
+
         /**
             Completes the current row with empty cells,
             until a new row is formed.

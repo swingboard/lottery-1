@@ -8,6 +8,7 @@
 #include <functional>
 #include <cassert>
 #include <unordered_map>
+#include <vector>
 #include "Tuple.hpp"
 
 
@@ -230,6 +231,26 @@ namespace lottery
     {
         std::vector<T> result(rowSize);
         createAllPermutationsHelper(symbols, rowSize, 0, result, func);
+    }
+
+
+    //process container, calling function for every element and function for in between elements
+    template <class Container, class F1, class F2> void forContainer(Container &&container, F1 &&f1, F2 &&f2)
+    {
+        if (container.empty()) return;
+        auto it = container.begin();
+        f2(*it);
+        for (++it; it != container.end(); ++it)
+        {
+            f1();
+            f2(*it);
+        }
+    }
+
+
+    template <class T, class Alloc> std::vector<T, Alloc> subset(const std::vector<T, Alloc> &vec, size_t begin, size_t end)
+    {
+        return std::vector<T, Alloc>{vec.begin() + begin, vec.begin() + end};
     }
 
 
