@@ -5,6 +5,7 @@
 #include <vector>
 #include "Number.hpp"
 #include "algorithm.hpp"
+#include "Range.hpp"
 
 
 namespace lottery
@@ -21,6 +22,12 @@ namespace lottery
         A vector of draws.
      */
     typedef std::vector<Draw> DrawVector;
+
+
+    /**
+        Draw vector range.
+     */
+    typedef Range<DrawVector::const_iterator> DrawVectorRange;
 
 
     /**
