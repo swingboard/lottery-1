@@ -158,14 +158,6 @@
     <ClCompile Include="..\..\..\source\TestMain.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\..\Google Drive\Lottery\LotteryPrivate\DataPerSelection.hpp" />
-    <ClInclude Include="..\..\..\..\..\..\Google Drive\Lottery\LotteryPrivate\DataPerSelection_Multiple.hpp" />
-    <ClInclude Include="..\..\..\..\..\..\Google Drive\Lottery\LotteryPrivate\DataPerSelection_Multiple\DistanceGroup.hpp" />
-    <ClInclude Include="..\..\..\..\..\..\Google Drive\Lottery\LotteryPrivate\DataPerSelection_Multiple\GroupData.hpp" />
-    <ClInclude Include="..\..\..\..\..\..\Google Drive\Lottery\LotteryPrivate\DataPerSelection_Multiple\GroupHasher.hpp" />
-    <ClInclude Include="..\..\..\..\..\..\Google Drive\Lottery\LotteryPrivate\DataPerSelection_Multiple\TotalProbabilityGroup.hpp" />
-    <ClInclude Include="..\..\..\..\..\..\Google Drive\Lottery\LotteryPrivate\DataPerSelection_Single.hpp" />
-    <ClInclude Include="..\..\..\..\..\..\Google Drive\Lottery\LotteryPrivate\Hash.hpp" />
     <ClInclude Include="..\..\..\source\Algorithm.hpp" />
     <ClInclude Include="..\..\..\source\ContainerComparator.hpp" />
     <ClInclude Include="..\..\..\source\CSVFile.hpp" />
@@ -174,6 +166,7 @@
     <ClInclude Include="..\..\..\source\CSVWhitespace.hpp" />
     <ClInclude Include="..\..\..\source\Draw.hpp" />
     <ClInclude Include="..\..\..\source\Game.hpp" />
+    <ClInclude Include="..\..\..\source\Hash.hpp" />
     <ClInclude Include="..\..\..\source\Number.hpp" />
     <ClInclude Include="..\..\..\source\PatternMatching.hpp" />
     <ClInclude Include="..\..\..\source\PredictionAlgorithm.hpp" />
