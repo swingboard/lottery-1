@@ -5,6 +5,7 @@
 #include <map>
 #include <set>
 #include <vector>
+#include <utility>
 #include <boost/functional/hash.hpp>
 
 
@@ -78,6 +79,19 @@ template <class T, class Alloc> struct std::hash<std::vector<T, Alloc>>
         {
             boost::hash_combine(seed, elem);
         }
+        return seed;
+    }
+};
+
+
+//generic hash for std::pair
+template <class X, class Y> struct std::hash<std::pair<X, Y>>
+{
+    size_t operator ()(const std::pair<X, Y> &pair) const
+    {
+        size_t seed = 0;
+        boost::hash_combine(seed, pair.first);
+        boost::hash_combine(seed, pair.second);
         return seed;
     }
 };
