@@ -4,6 +4,7 @@
 
 #include <map>
 #include <set>
+#include <vector>
 #include <boost/functional/hash.hpp>
 
 
@@ -59,6 +60,21 @@ template <class T, class Pred, class Alloc> struct std::hash<std::multiset<T, Pr
     {
         size_t seed = 0;
         for (const auto &elem : set)
+        {
+            boost::hash_combine(seed, elem);
+        }
+        return seed;
+    }
+};
+
+
+//generic hash for std::vector
+template <class T, class Alloc> struct std::hash<std::vector<T, Alloc>>
+{
+    size_t operator ()(const std::vector<T, Alloc> &vec) const
+    {
+        size_t seed = 0;
+        for (const auto &elem : vec)
         {
             boost::hash_combine(seed, elem);
         }
