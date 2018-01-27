@@ -6,6 +6,7 @@
 #include <set>
 #include <vector>
 #include <utility>
+#include <array>
 #include <boost/functional/hash.hpp>
 
 
@@ -92,6 +93,21 @@ template <class X, class Y> struct std::hash<std::pair<X, Y>>
         size_t seed = 0;
         boost::hash_combine(seed, pair.first);
         boost::hash_combine(seed, pair.second);
+        return seed;
+    }
+};
+
+
+//generic hash for std::array
+template <class T, size_t Size> struct std::hash<std::array<T, Size>>
+{
+    size_t operator ()(const std::array<T, Size> &arr) const
+    {
+        size_t seed = 0;
+        for (const auto &elem : arr)
+        {
+            boost::hash_combine(seed, elem);
+        }
         return seed;
     }
 };

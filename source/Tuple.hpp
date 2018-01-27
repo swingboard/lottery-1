@@ -27,45 +27,25 @@ namespace lottery
     };
 
 
-    //tuple for each 
-    template <size_t N, size_t M> class TupleForEach
-    {
-    public:
-        template <class F, class ...T> static void exec(const std::tuple<T...> &tpl, F &&f)
-        {
-            f(std::get<N>(tpl));
-            TupleForEach<N + 1, M>::exec(tpl, std::forward<F>(f));
-        }
-        template <class F, class ...T> static void exec(std::tuple<T...> &tpl, F &&f)
-        {
-            f(std::get<N>(tpl));
-            TupleForEach<N + 1, M>::exec(tpl, std::forward<F>(f));
-        }
-    };
-    template <size_t N> class TupleForEach<N, N>
-    {
-    public:
-        template <class F, class ...T> static void exec(const std::tuple<T...> &tpl, F &&f)
-        {
-        }
-    };
-
-
     /**
-        Applies a function to each member of a tuple.
+        Apply function to some members of a tuple.
      */
-    template <class F, class ...T> void forEach(const std::tuple<T...> &tpl, F &&f)
+    template <size_t I, size_t N, class Tpl, class F> void forEach(Tpl &&tpl, F &&func)
     {
-        TupleForEach<0, std::tuple_size<std::tuple<T...>>::value>::exec(tpl, std::forward<F>(f));
+        if constexpr(I < N)
+        {
+            func(std::get<I>(std::forward<Tpl>(tpl)));
+            forEach<I + 1, N>(std::forward<Tpl>(tpl), std::forward<F>(func));
+        }
     }
 
 
     /**
-        Applies a function to each member of a tuple.
+        Apply function to each member of a tuple.
      */
-    template <class F, class ...T> void forEach(std::tuple<T...> &tpl, F &&f)
+    template <class Tpl, class F> void forEach(Tpl &&tpl, F &&func)
     {
-        TupleForEach<0, std::tuple_size<std::tuple<T...>>::value>::exec(tpl, std::forward<F>(f));
+        forEach<0, std::tuple_size<std::decay_t<Tpl>>::value>(std::forward<Tpl>(tpl), std::forward<F>(func));
     }
 
 
