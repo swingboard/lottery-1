@@ -49,6 +49,27 @@ namespace lottery
     }
 
 
+    //sum values
+    template <class H, class ...T> auto sum(H first, T ...rest)
+    {
+        return first + sum(rest...);
+    }
+
+
+    //sum value
+    template <class T> T sum(T first)
+    {
+        return first;
+    }
+
+
+    //average
+    template <class ...T> auto average(T ...values)
+    {
+        return sum(values...) / sizeof...(values);
+    }
+
+
     ///check if value is within a range.
     template <class T>
     bool isMid(const T &minValue, const T &value, const T &maxValue)

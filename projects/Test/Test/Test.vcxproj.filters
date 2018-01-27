@@ -4,7 +4,9 @@
     <ClCompile Include="..\..\..\source\Game.cpp" />
     <ClCompile Include="..\..\..\source\PredictionAlgorithm_Random.cpp" />
     <ClCompile Include="..\..\..\source\TestMain.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\Google Drive\Lottery\LotteryPrivate\PredictionAlgorithm_A.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\Google Drive\Lottery\LotteryPrivate\PredictionAlgorithm_A.cpp">
+      <Filter>PredictionAlgorithm_A</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\source\Algorithm.hpp" />
@@ -25,5 +27,37 @@
     <ClInclude Include="..\..\..\source\Tuple.hpp" />
     <ClInclude Include="..\..\..\source\Vector2.hpp" />
     <ClInclude Include="..\..\..\source\PredictionAlgorithm_A.hpp" />
+    <ClInclude Include="..\..\..\..\..\..\Google Drive\Lottery\LotteryPrivate\Hash.hpp">
+      <Filter>PredictionAlgorithm_A</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\Google Drive\Lottery\LotteryPrivate\DataPerSelection.hpp">
+      <Filter>PredictionAlgorithm_A</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\Google Drive\Lottery\LotteryPrivate\DataPerSelection_Single.hpp">
+      <Filter>PredictionAlgorithm_A</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\Google Drive\Lottery\LotteryPrivate\DataPerSelection_Multiple.hpp">
+      <Filter>PredictionAlgorithm_A</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\Google Drive\Lottery\LotteryPrivate\DataPerSelection_Multiple\GroupHasher.hpp">
+      <Filter>PredictionAlgorithm_A\DataPerSelection_Multiple</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\Google Drive\Lottery\LotteryPrivate\DataPerSelection_Multiple\GroupData.hpp">
+      <Filter>PredictionAlgorithm_A\DataPerSelection_Multiple</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\Google Drive\Lottery\LotteryPrivate\DataPerSelection_Multiple\DistanceGroup.hpp">
+      <Filter>PredictionAlgorithm_A\DataPerSelection_Multiple</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\Google Drive\Lottery\LotteryPrivate\DataPerSelection_Multiple\TotalProbabilityGroup.hpp">
+      <Filter>PredictionAlgorithm_A\DataPerSelection_Multiple</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="PredictionAlgorithm_A">
+      <UniqueIdentifier>{70a8e29a-7c37-42c7-af94-5a6804667fb7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PredictionAlgorithm_A\DataPerSelection_Multiple">
+      <UniqueIdentifier>{cce82022-5c2d-4850-85cd-6b0c436cf7b6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>
