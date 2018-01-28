@@ -38,6 +38,9 @@ namespace lottery
         ///count of numbers that must be selected.
         size_t numberCount;
 
+        ///number span, i.e. max number - min number + 1
+        size_t numberSpan;
+
         ///get max delta
         int getMaxDelta() const;
     };

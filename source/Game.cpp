@@ -65,6 +65,7 @@ namespace lottery
             ns.beginNumberIndex = numberIndex;
             numberIndex += ns.numberCount;
             ns.endNumberIndex = numberIndex;
+            ns.numberSpan = ns.maxNumber - ns.minNumber + 1;
 
             //calculate the total draw number count
             numberCount += ns.numberCount;
