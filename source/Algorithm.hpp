@@ -248,10 +248,48 @@ namespace lottery
     }
 
 
-    template <class T, class F> void createAllPermutations(const std::vector<T> &symbols, size_t rowSize, const F &func)
+    template <class T, class F> bool createAllPermutations(const std::vector<T> &symbols, size_t rowSize, const F &func)
     {
         std::vector<T> result(rowSize);
-        createAllPermutationsHelper(symbols, rowSize, 0, result, func);
+        return createAllPermutationsHelper(symbols, rowSize, 0, result, func);
+    }
+
+
+    template <class T, class F> bool createAllPermutationsHelper(
+        const std::vector<std::vector<T>> &symbols, 
+        size_t symbolsIndex, 
+        const std::vector<size_t> &config,
+        std::vector<T> &result, 
+        const F &func)
+    {
+        if (symbolsIndex < symbols.size())
+        {
+            return createAllPermutations(symbols[symbolsIndex], config[symbolsIndex], [&](const std::vector<T> &row)
+            {
+                const size_t resultSize = result.size();
+                result.insert(result.end(), row.begin(), row.end());
+                bool res = createAllPermutationsHelper(symbols, symbolsIndex + 1, config, result, func);
+                result.resize(resultSize);
+                return res;
+            });
+        }
+        std::sort(result.begin(), result.end(), std::less<T>());
+        return func(result);
+    }
+
+
+    template <class T, class F> bool createAllPermutations(const std::vector<std::vector<T>> &symbols, size_t rowSize, const F &func)
+    {
+        std::vector<T> result;
+        std::vector<size_t> symbolSizes;
+        for (size_t i = symbols.size(); i <= rowSize; ++i)
+        {
+            symbolSizes.push_back(i - symbols.size() + 1);
+        }
+        return createAllPermutations(symbolSizes, symbols.size(), [&](const std::vector<size_t> &config)
+        {
+            return createAllPermutationsHelper(symbols, 0, config, result, func);
+        });
     }
 
 
