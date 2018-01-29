@@ -274,9 +274,7 @@ namespace lottery
                 return res;
             });
         }
-        sortedResult = result;
-        std::sort(sortedResult.begin(), sortedResult.end(), std::less<T>());
-        return func(sortedResult);
+        return func(result);
     }
 
 
