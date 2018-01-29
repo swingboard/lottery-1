@@ -260,6 +260,7 @@ namespace lottery
         size_t symbolsIndex, 
         const std::vector<size_t> &config,
         std::vector<T> &result, 
+        std::vector<T> &sortedResult, 
         const F &func)
     {
         if (symbolsIndex < symbols.size())
@@ -268,19 +269,20 @@ namespace lottery
             {
                 const size_t resultSize = result.size();
                 result.insert(result.end(), row.begin(), row.end());
-                bool res = createAllPermutationsHelper(symbols, symbolsIndex + 1, config, result, func);
+                bool res = createAllPermutationsHelper(symbols, symbolsIndex + 1, config, result, sortedResult, func);
                 result.resize(resultSize);
                 return res;
             });
         }
-        std::sort(result.begin(), result.end(), std::less<T>());
-        return func(result);
+        sortedResult = result;
+        std::sort(sortedResult.begin(), sortedResult.end(), std::less<T>());
+        return func(sortedResult);
     }
 
 
     template <class T, class F> bool createAllPermutations(const std::vector<std::vector<T>> &symbols, size_t rowSize, const F &func)
     {
-        std::vector<T> result;
+        std::vector<T> result, sortedResult;
         std::vector<size_t> symbolSizes;
         for (size_t i = symbols.size(); i <= rowSize; ++i)
         {
@@ -288,7 +290,7 @@ namespace lottery
         }
         return createAllPermutations(symbolSizes, symbols.size(), [&](const std::vector<size_t> &config)
         {
-            return createAllPermutationsHelper(symbols, 0, config, result, func);
+            return createAllPermutationsHelper(symbols, 0, config, result, sortedResult, func);
         });
     }
 
