@@ -33,7 +33,7 @@ namespace lottery
             @param game game for which the prediction is for.
             @param draws the sample of draws to initialize the prediction model from.
          */
-        virtual void initialize(const Game &game, const DrawVector &draws)
+        virtual void initialize(const Game &game, const DrawVectorRange &draws)
         {
         }
 
@@ -44,7 +44,7 @@ namespace lottery
             @param numberCount count of numbers to predict per selection.
             @param numbers predicted numbers, per game selection.
          */
-        virtual void predict(const Game &game, const DrawVector &draws, const std::vector<size_t> &numberCount, std::vector<std::unordered_set<Number>> &numbers) = 0;
+        virtual void predict(const Game &game, const DrawVectorRange &draws, const std::vector<size_t> &numberCount, std::vector<std::unordered_set<Number>> &numbers) = 0;
     };
 
 

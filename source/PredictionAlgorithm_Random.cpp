@@ -19,7 +19,7 @@ namespace lottery
         @param game game for which the prediction is for.
         @param draws the sample of draws to initialize the prediction model from.
         */
-    void PredictionAlgorithm_Random::initialize(const Game &game, const DrawVector &draws)
+    void PredictionAlgorithm_Random::initialize(const Game &game, const DrawVectorRange &draws)
     {
         m_randomNumberGenerators.resize(game.numberSelections.size());
         for (size_t selectionIndex = 0; selectionIndex < game.numberSelections.size(); ++selectionIndex)
@@ -36,7 +36,7 @@ namespace lottery
         @param numberCountPerColumn count of numbers to predict per column.
         @param numbers predicted numbers.
         */
-    void PredictionAlgorithm_Random::predict(const Game &game, const DrawVector &draws, const std::vector<size_t> &numberCount, std::vector<std::unordered_set<Number>> &numbers)
+    void PredictionAlgorithm_Random::predict(const Game &game, const DrawVectorRange &draws, const std::vector<size_t> &numberCount, std::vector<std::unordered_set<Number>> &numbers)
     {
         for (size_t selectionIndex = 0; selectionIndex < game.numberSelections.size(); ++selectionIndex)
         {

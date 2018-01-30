@@ -77,7 +77,7 @@ int main()
     for (size_t testEndIndex = SampleDrawsSize; testEndIndex < game.draws.size(); ++testEndIndex)
     {
         //prepare the test draws
-        DrawVector testDraws(game.draws.begin(), game.draws.begin() + testEndIndex);
+        DrawVectorRange testDraws(game.draws.begin(), game.draws.begin() + testEndIndex);
 
         //the predicted draw
         const Draw &testDraw = game.draws[testEndIndex];
