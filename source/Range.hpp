@@ -73,6 +73,14 @@ namespace lottery
         }
 
         /**
+            Returns true if empty.
+         */
+        bool empty() const
+        {
+            return m_begin == m_end;
+        }
+
+        /**
             Array access.
          */
         const value_type &operator [](size_t index) const
