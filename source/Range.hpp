@@ -40,6 +40,15 @@ namespace lottery
         }
 
         /**
+            Constructor from container.
+         */
+        template <class Cont> Range(const Cont &container)
+            : m_begin(container.begin())
+            , m_end(container.end())
+        {
+        }
+
+        /**
             Returns the begin iterator.
          */
         const It &begin() const
