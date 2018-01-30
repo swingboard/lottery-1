@@ -41,6 +41,15 @@ namespace lottery
 
 
     /**
+        Apply function to each member of a tuple, starting from specific index.
+     */
+    template <size_t I, class Tpl, class F> void forEach(Tpl &&tpl, F &&func)
+    {
+        forEach<I, std::tuple_size<std::decay_t<Tpl>>::value>(std::forward<Tpl>(tpl), std::forward<F>(func));
+    }
+
+
+    /**
         Apply function to each member of a tuple.
      */
     template <class Tpl, class F> void forEach(Tpl &&tpl, F &&func)
