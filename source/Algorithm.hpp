@@ -119,6 +119,33 @@ namespace lottery
     }
 
 
+    template <size_t Size> int getGroup(int value, const std::array<int, Size> &values)
+    {
+        if (value >= 0)
+        {
+            for (size_t i = 1; i < Size; ++i)
+            {
+                if (value < values[i])
+                {
+                    return values[i - 1];
+                }
+            }
+            return values[Size - 1];
+        }
+        else
+        {
+            for (size_t i = 1; i < Size; ++i)
+            {
+                if (value > -values[i])
+                {
+                    return -values[i - 1];
+                }
+            }
+            return -values[Size - 1];
+        }
+    }
+
+
 } //namespace lottery
 
 
