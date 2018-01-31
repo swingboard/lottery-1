@@ -35,7 +35,7 @@ int main()
     }
 
     //open the results file
-    CSVOutputFileStream testResultsFile(3 + game.numberCount, "Test.csv");
+    CSVOutputFileStream testResultsFile(3 + game.numberCount, std::string(getenv("HOMEPATH")) + "/Google Drive/Lottery/TestData/Test.csv");
     if (!testResultsFile.is_open())
     {
         cerr << "ERROR: the test results output file cannot be opened.\n";
@@ -54,7 +54,7 @@ int main()
     for (size_t selectionIndex = 0; selectionIndex < game.numberSelections.size(); ++selectionIndex)
     {
         const auto &selection = game.numberSelections[selectionIndex];
-        predictedNumberCount[selectionIndex] = selection.numberCount * 2;
+        predictedNumberCount[selectionIndex] = selection.numberCount * 3;
     }
     const size_t SampleDrawsSize = game.draws.size()*2/3;
     const size_t TestDrawsSize = game.draws.size() - 1 - SampleDrawsSize;

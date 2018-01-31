@@ -58,6 +58,29 @@ namespace lottery
     }
 
 
+    template <size_t I, size_t E, class Tpl, class V, class F> auto get(Tpl &&tpl, size_t index, V &&def, F &&func)
+    {
+        if constexpr(I < E)
+        {
+            if (I == index)
+            {
+                return func(std::get<I>(tpl));
+            }
+            else if (index < std::tuple_size<std::decay_t<Tpl>>::value)
+            {
+                return get<I + 1, E>(std::forward<Tpl>(tpl), index, std::forward<V>(def), std::forward<F>(func));
+            }
+        }
+        return def;
+    }
+
+
+    template <class Tpl, class V, class F> auto get(Tpl &&tpl, size_t index, V &&def, F &&func)
+    {
+        return get<0, std::tuple_size<std::decay_t<Tpl>>::value>(std::forward<Tpl>(tpl), index, std::forward<V>(def), std::forward<F>(func));
+    }
+
+
 } //namespace lottery
 
 

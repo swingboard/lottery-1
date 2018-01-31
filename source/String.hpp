@@ -46,7 +46,7 @@ namespace lottery
     {
         std::stringstream stream;
         stream << '{';
-        forContainer(std::move(container), [&]() { stream << ','; }, [&](const auto &elem){ stream << toString(elem); });
+        forEach(container, [&]() { stream << ','; }, [&](const auto &elem){ stream << toString(elem); });
         stream << '}';
         return stream.str();
     }
