@@ -96,6 +96,38 @@ namespace lottery
             return *(m_begin + index);
         }
 
+        /**
+            Returns front element.
+         */
+        const value_type &front() const
+        {
+            return *m_begin;
+        }
+
+        /**
+            Returns front element.
+         */
+        value_type &front()
+        {
+            return *m_begin;
+        }
+
+        /**
+            Returns back element.
+         */
+        const value_type &back() const
+        {
+            return *(m_end - 1);
+        }
+
+        /**
+            Returns back element.
+         */
+        value_type &back()
+        {
+            return *(m_end - 1);
+        }
+
     private:
         //The begin iterator.
         It m_begin;
