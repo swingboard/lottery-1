@@ -42,6 +42,12 @@ namespace lottery
 
         ///get max delta
         int getMaxDelta() const;
+
+        ///get draw range
+        DrawRange getDrawRange(const Draw &draw) const
+        {
+            return DrawRange(draw.begin() + beginNumberIndex, draw.begin() + endNumberIndex);
+        }
     };
 
 
@@ -134,6 +140,21 @@ namespace lottery
         //internal array that contains a function from number index to number selection.
         std::vector<NumberSelection *> m_numberIndexToNumberSelection;
     };
+
+
+    /**
+        Iterate draws backwards.
+     */
+    template <class F> bool forEachReverse(const NumberSelection &selection, const DrawVectorRange &draws, const F &func)
+    {
+        for (auto it = draws.end(); it != draws.begin(); --it)
+        {
+            const Draw &draw = *(it - 1);
+            const DrawRange drawRange = selection.getDrawRange(draw);
+            if (!func(drawRange)) return false;
+        }
+        return true;
+    }
 
 
 } //namespace lottery

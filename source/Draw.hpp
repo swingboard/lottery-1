@@ -94,6 +94,118 @@ namespace lottery
     }
 
 
+    /**
+        Iterate numbers of a draw.
+     */
+    template <class F> bool forEach1(const DrawRange &draw, size_t startIndex, const F &func)
+    {
+        for (auto it = draw.begin() + startIndex; it != draw.end(); ++it)
+        {
+            if (!func(*it)) return false;
+        }
+        return true;
+    }
+
+
+    /**
+        Iterate pairs of a draw.
+     */
+    template <class F> bool forEach2(const DrawRange &draw, size_t startIndex, const F &func)
+    {
+        for (auto it = draw.begin() + startIndex + 1; it != draw.end(); ++it)
+        {
+            if (!func(*(it - 1), *it)) return false;
+        }
+        return true;
+    }
+
+
+    /**
+        Iterate triplets of a draw.
+     */
+    template <class F> bool forEach3(const DrawRange &draw, size_t startIndex, const F &func)
+    {
+        for (auto it = draw.begin() + startIndex + 2; it != draw.end(); ++it)
+        {
+            if (!func(*(it - 2), *(it - 1), *it)) return false;
+        }
+        return true;
+    }
+
+
+    /**
+        Iterate quadruplets of a draw.
+     */
+    template <class F> bool forEach4(const DrawRange &draw, size_t startIndex, const F &func)
+    {
+        for (auto it = draw.begin() + startIndex + 3; it != draw.end(); ++it)
+        {
+            if (!func(*(it - 3), *(it - 2), *(it - 1), *it)) return false;
+        }
+        return true;
+    }
+
+
+    /**
+        For each combination of numbers of two draws.
+     */
+    template <class F> bool forEach1(const DrawRange &range1, size_t index1, const DrawRange &range2, size_t index2, const F &func)
+    {
+        return forEach1(range1, index1, [&](Number a1)
+        {
+            return forEach1(range2, index2, [&](Number b1)
+            {
+                return func(a1, b1);
+            });
+        });
+    }
+
+
+    /**
+        For each combination of pairs of numbers of two draws.
+     */
+    template <class F> bool forEach2(const DrawRange &range1, size_t index1, const DrawRange &range2, size_t index2, const F &func)
+    {
+        return forEach2(range1, index1, [&](Number a1, Number a2)
+        {
+            return forEach2(range2, index2, [&](Number b1, Number b2)
+            {
+                return func(a1, a2, b1, b2);
+            });
+        });
+    }
+
+
+    /**
+        For each combination of triplets of numbers of two draws.
+     */
+    template <class F> bool forEach3(const DrawRange &range1, size_t index1, const DrawRange &range2, size_t index2, const F &func)
+    {
+        return forEach3(range1, index1, [&](Number a1, Number a2, Number a3)
+        {
+            return forEach3(range2, index2, [&](Number b1, Number b2, Number b3)
+            {
+                return func(a1, a2, a3, b1, b2, b3);
+            });
+        });
+    }
+
+
+    /**
+        For each combination of quadruplets of numbers of two draws.
+     */
+    template <class F> bool forEach4(const DrawRange &range1, size_t index1, const DrawRange &range2, size_t index2, const F &func)
+    {
+        return forEach4(range1, index1, [&](Number a1, Number a2, Number a3, Number a4)
+        {
+            return forEach4(range2, index2, [&](Number b1, Number b2, Number b3, Number b4)
+            {
+                return func(a1, a2, a3, a4, b1, b2, b3, b4);
+            });
+        });
+    }
+
+
 } //namespace lottery
 
 
