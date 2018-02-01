@@ -206,6 +206,45 @@ namespace lottery
     }
 
 
+    /**
+        For each combination of pairs of numbers of one draw.
+     */
+    template <class F> bool forEach2x2(const DrawRange &range, size_t index, const F &func)
+    {
+        size_t index2 = index;
+        return forEach1(range, index, [&](Number n1)
+        {
+            ++index2;
+            return forEach1(range, index2, [&](Number n2)
+            {
+                return func(n1, n2);
+            });
+        });
+    }
+
+
+    /**
+        For each combination of triplets of numbers of one draw.
+     */
+    template <class F> bool forEach3x3(const DrawRange &range, size_t index, const F &func)
+    {
+        size_t index2 = index;
+        return forEach1(range, index, [&](Number n1)
+        {
+            ++index2;
+            size_t index3 = index2;
+            return forEach1(range, index2, [&](Number n2)
+            {
+                ++index3;
+                return forEach1(range, index3, [&](Number n3)
+                {
+                    return func(n1, n2, n3);
+                });
+            });
+        });
+    }
+
+
 } //namespace lottery
 
 
