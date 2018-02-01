@@ -146,6 +146,12 @@ namespace lottery
     }
 
 
+    template <class N, class G> G getBase(N value, G granularity)
+    {
+        return (G)value - ((G)value % granularity);
+    }
+
+
 } //namespace lottery
 
 
