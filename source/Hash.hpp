@@ -7,6 +7,7 @@
 #include <vector>
 #include <utility>
 #include <array>
+#include "Tuple.hpp"
 #include <boost/functional/hash.hpp>
 
 
@@ -108,6 +109,21 @@ template <class T, size_t Size> struct std::hash<std::array<T, Size>>
         {
             boost::hash_combine(seed, elem);
         }
+        return seed;
+    }
+};
+
+
+//generic hash for std::tuple
+template <class ...T> struct std::hash<std::tuple<T...>>
+{
+    size_t operator ()(const std::tuple<T...> &tpl) const
+    {
+        size_t seed = 0;
+        forEach(tpl, [&](const auto &elem)
+        {
+            boost::hash_combine(seed, elem);
+        });
         return seed;
     }
 };
