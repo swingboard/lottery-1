@@ -5,7 +5,6 @@
 #include <vector>
 #include "Number.hpp"
 #include "algorithm.hpp"
-#include "Range.hpp"
 
 
 namespace lottery
@@ -16,6 +15,12 @@ namespace lottery
         A draw is a collection of numbers.
      */
     typedef std::vector<Number> Draw;
+
+
+    /**
+        Draw range.
+     */
+    typedef Range<Draw::const_iterator> DrawRange;
 
 
     /**

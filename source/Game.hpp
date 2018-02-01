@@ -2,7 +2,6 @@
 #define LOTTERY_GAME_HPP
 
 
-#include <string>
 #include "Draw.hpp"
 
 

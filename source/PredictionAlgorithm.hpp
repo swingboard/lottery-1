@@ -2,7 +2,6 @@
 #define LOTTERY_PREDICTIONALGORITHM_HPP
 
 
-#include <unordered_set>
 #include "Game.hpp"
 
 

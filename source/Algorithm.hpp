@@ -2,14 +2,19 @@
 #define LOTTERY_ALGORITHM_HPP
 
 
+#include <cassert>
+#include <string>
+#include <array>
+#include <vector>
+#include <unordered_map>
+#include <unordered_set>
+#include <map>
+#include <set>
 #include <algorithm>
 #include <numeric>
-#include <utility>
 #include <functional>
-#include <cassert>
-#include <unordered_map>
-#include <vector>
-#include "Tuple.hpp"
+#include "Hash.hpp"
+#include "Range.hpp"
 
 
 namespace lottery

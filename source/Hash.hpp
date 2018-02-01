@@ -7,8 +7,8 @@
 #include <vector>
 #include <utility>
 #include <array>
-#include "Tuple.hpp"
 #include <boost/functional/hash.hpp>
+#include "Tuple.hpp"
 
 
 //generic hash for std::map
