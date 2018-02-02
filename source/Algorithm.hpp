@@ -111,47 +111,7 @@ namespace lottery
     }
 
 
-    template <size_t Size> size_t getGroup(size_t value, const std::array<size_t, Size> &values)
-    {
-        for (size_t i = 1; i < Size; ++i)
-        {
-            if (value < values[i])
-            {
-                return values[i - 1];
-            }
-        }
-        return values[Size - 1];
-    }
-
-
-    template <size_t Size> int getGroup(int value, const std::array<int, Size> &values)
-    {
-        if (value >= 0)
-        {
-            for (size_t i = 1; i < Size; ++i)
-            {
-                if (value < values[i])
-                {
-                    return values[i - 1];
-                }
-            }
-            return values[Size - 1];
-        }
-        else
-        {
-            for (size_t i = 1; i < Size; ++i)
-            {
-                if (value > -values[i])
-                {
-                    return -values[i - 1];
-                }
-            }
-            return -values[Size - 1];
-        }
-    }
-
-
-    template <class N, class G, class M> G round(N value, G granularity, M minValue)
+    template <class N, class G, class M> G group(N value, G granularity, M minValue)
     {
         return std::max((G)value - ((G)value % granularity), (G)minValue);
     }
