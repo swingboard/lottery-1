@@ -151,7 +151,7 @@ namespace lottery
     }
 
 
-    template <class N, class G, class M> G getBase(N value, G granularity, M minValue)
+    template <class N, class G, class M> G round(N value, G granularity, M minValue)
     {
         return std::max((G)value - ((G)value % granularity), (G)minValue);
     }
