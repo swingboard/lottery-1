@@ -245,6 +245,33 @@ namespace lottery
     }
 
 
+    /**
+        For each combination of quadruplets of numbers of one draw.
+     */
+    template <class F> bool forEach4x4(const DrawRange &range, size_t index, const F &func)
+    {
+        size_t index2 = index;
+        return forEach1(range, index, [&](Number n1)
+        {
+            ++index2;
+            size_t index3 = index2;
+            return forEach1(range, index2, [&](Number n2)
+            {
+                ++index3;
+                size_t index4 = index3;
+                return forEach1(range, index3, [&](Number n3)
+                {
+                    ++index4;
+                    return forEach1(range, index4, [&](Number n4)
+                    {
+                        return func(n1, n2, n3, n4);
+                    });
+                });
+            });
+        });
+    }
+
+
 } //namespace lottery
 
 
