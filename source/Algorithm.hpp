@@ -19,6 +19,14 @@
 #include "Range.hpp"
 
 
+/**
+    Declares a dynamic array on the stack, using alloca.
+ */
+#define DYNAMIC_STACK_ARRAY(TYPE, NAME, SIZE, DEFAULT_VALUE)\
+    TYPE *NAME = (TYPE *)alloca(sizeof(TYPE) * SIZE);\
+    for (size_t i = 0; i < SIZE; ++i) { NAME[i] = DEFAULT_VALUE; }
+
+
 namespace lottery
 {
 

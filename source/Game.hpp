@@ -48,6 +48,16 @@ namespace lottery
         {
             return DrawRange(draw.begin() + beginNumberIndex, draw.begin() + endNumberIndex);
         }
+
+        ///for each number
+        template <class F> bool forEach(const F &func)
+        {
+            for (Number n = minNumber; n <= maxNumber; ++n)
+            {
+                if (!func(n)) return false;
+            }
+            return true;
+        }
     };
 
 
