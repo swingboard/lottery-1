@@ -23,7 +23,7 @@ namespace Lottery
                 goto END;
             }
 
-            //if the file is not good, throw errow
+            //if the file is not good, throw error
             if (!file.good())
             {
                 throw std::runtime_error("read failure");

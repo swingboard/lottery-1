@@ -2,7 +2,8 @@
 #define LOTTERY_GAME_HPP
 
 
-#include <string>
+#include <vector>
+#include "SubGame.hpp"
 
 
 namespace Lottery
@@ -26,6 +27,16 @@ namespace Lottery
         void load(
             const std::string &game = "Game.csv",
             const std::string draws = "Draws.csv");
+
+        ///returns the subgames of this game.
+        const std::vector<SubGame> &getSubGames() const
+        {
+            return m_subGames;
+        }
+
+    private:
+        std::vector<SubGame> m_subGames;
+        size_t m_numberCount = 0;
     };
 
 

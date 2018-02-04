@@ -43,6 +43,8 @@ namespace Lottery
             throw std::runtime_error("Invalid game file");
         }
 
+        m_numberCount = 0;
+
         //read subgame
         for (;;)
         {
@@ -88,8 +90,72 @@ namespace Lottery
                 throw std::runtime_error("Invalid game file");
             }
 
-            //TODO add subgame
-            int x = 0;
+            //add subgame
+            m_subGames.push_back(SubGame(subGame, minNumber, maxNumber, numberCount));
+
+            m_numberCount += numberCount;
+        }
+
+        //draws file
+        CSVFile drawsFile;
+        drawsFile.openForReading(draws.c_str());
+
+        //read the header
+        for (size_t i = 0; i < m_numberCount; ++i)
+        {
+            drawsFile.read(str);
+            if (str.empty())
+            {
+                throw std::runtime_error("invalid draws file");
+            }
+        }
+
+        //read the numbers into the subgames
+        for (;;)
+        {
+            for (size_t i = 0; i < m_subGames.size(); ++i)
+            {
+                SubGame &subGame = m_subGames[i];
+
+                size_t num = 0;
+
+                //read the first number
+                drawsFile.read(num);
+
+                //if the first number could not be read,
+                //then all the numbers were read
+                if (i == 0 && num == 0)
+                {
+                    return;
+                }
+
+                //check if the first number is ok
+                if (num < subGame.m_minNumber || num > subGame.m_maxNumber)
+                {
+                    throw std::runtime_error("invalid number in draws file");
+                }
+
+                subGame.m_draws.emplace_back(subGame.m_numberCount);
+
+                //store the first number
+                subGame.m_draws.back()[0] = (Number)num;
+
+                //read the rest of the numbers
+                for (size_t j = 1; j < subGame.m_numberCount; ++j)
+                {
+                    num = 0;
+                    drawsFile.read(num);
+
+                    //check if the number is valid
+                    if (num < subGame.m_minNumber || num > subGame.m_maxNumber)
+                    {
+                        throw std::runtime_error("invalid number in draws file");
+                    }
+
+                    //store the number
+                    subGame.m_draws.back()[j] = (Number)num;
+                }
+            }
         }
     }
 
