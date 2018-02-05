@@ -78,6 +78,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(LOTTERYPRIVATE)/Source</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -120,10 +121,18 @@
     <ClCompile Include="Source\CSVFile.cpp" />
     <ClCompile Include="Source\Game.cpp" />
     <ClCompile Include="Source\main.cpp" />
+    <ClCompile Include="Source\RandomPredictionAlgorithm.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CSVFile.hpp" />
+    <ClInclude Include="Source\Draw.hpp" />
+    <ClInclude Include="Source\DrawVector.hpp" />
     <ClInclude Include="Source\Game.hpp" />
+    <ClInclude Include="Source\Number.hpp" />
+    <ClInclude Include="Source\PredictionAlgorithm.hpp" />
+    <ClInclude Include="Source\RandomPredictionAlgorithm.hpp" />
+    <ClInclude Include="Source\Range.hpp" />
+    <ClInclude Include="Source\SubGame.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

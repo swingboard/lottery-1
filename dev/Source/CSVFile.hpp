@@ -20,6 +20,14 @@ namespace Lottery
         void openForReading(const char *filename);
 
         /**
+            Opens the file for writing.
+            @param filename name of the file.
+            @param columnCount number of columns to write.
+            @exception std::runtime_error if there is an error.
+         */
+        void openForWriting(const char *filename, size_t columnCount);
+
+        /**
             Closes the file.
          */
         void close();
@@ -48,9 +56,27 @@ namespace Lottery
             return m_file.eof();
         }
 
+        ///Writes a string.
+        void write(const std::string &str);
+
+        ///writes a number.
+        void write(size_t num);
+
+        ///writes a percentage.
+        void writePercent(double percent);
+
     private:
         //file
         std::fstream m_file;
+
+        //number of columns
+        size_t m_columnCount = 0;
+
+        //current column
+        size_t m_currentColumn = 0;
+
+        //add column
+        void _addColumn();
     };
 
 

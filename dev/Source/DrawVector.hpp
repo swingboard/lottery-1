@@ -4,6 +4,7 @@
 
 #include <vector>
 #include "Draw.hpp"
+#include "Range.hpp"
 
 
 namespace Lottery
@@ -12,6 +13,10 @@ namespace Lottery
 
     ///draw vector.
     typedef std::vector<Draw> DrawVector;
+
+
+    ///draw vector range.
+    typedef Range<DrawVector> DrawVectorRange;
 
 
 } //namespace Lottery

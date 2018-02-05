@@ -34,6 +34,12 @@ namespace Lottery
             return m_subGames;
         }
 
+        ///Returns the number of loaded draws.
+        size_t getDrawsCount() const
+        {
+            return m_subGames.empty() ? 0 : m_subGames[0].m_draws.size();
+        }
+
     private:
         std::vector<SubGame> m_subGames;
         size_t m_numberCount = 0;

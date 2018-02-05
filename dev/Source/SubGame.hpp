@@ -27,6 +27,12 @@ namespace Lottery
             return m_name;
         }
 
+        ///returns index into the Game object.
+        size_t getIndex() const
+        {
+            return m_index;
+        }
+
         ///returns the minimum number of the subgame.
         size_t getMinNumber() const
         {
@@ -59,6 +65,7 @@ namespace Lottery
 
     private:
         std::string m_name;
+        size_t m_index;
         size_t m_minNumber;
         size_t m_maxNumber;
         size_t m_numberCount;

@@ -85,7 +85,21 @@ namespace Lottery
     {
         m_file.open(filename, std::ios_base::in);
         if (m_file.is_open()) return;
-        throw std::runtime_error("the file could not be opened");
+        throw std::runtime_error("the file could not be opened for reading");
+    }
+
+
+    //Opens the file for writing.
+    void CSVFile::openForWriting(const char *filename, size_t columnCount)
+    {
+        if (columnCount == 0) throw std::invalid_argument("columnCount is 0");
+        m_file.open(filename, std::ios_base::out);
+        if (m_file.is_open())
+        {
+            m_columnCount = columnCount;
+            return;
+        }
+        throw std::runtime_error("the file could not be opened for writing");
     }
 
 
@@ -106,6 +120,46 @@ namespace Lottery
     void CSVFile::read(size_t &num)
     {
         _read(m_file, num);
+    }
+
+
+    ///Writes a string.
+    void CSVFile::write(const std::string &str)
+    {
+        m_file << str;
+        _addColumn();
+    }
+
+
+    ///writes a number.
+    void CSVFile::write(size_t num)
+    {
+        m_file << num;
+        _addColumn();
+    }
+
+
+    ///writes a percentage.
+    void CSVFile::writePercent(double percent)
+    {
+        m_file << percent << '%';
+        _addColumn();
+    }
+
+
+    //add column
+    void CSVFile::_addColumn()
+    {
+        ++m_currentColumn;
+        if (m_currentColumn < m_columnCount)
+        {
+            m_file << ',';
+        }
+        else
+        {
+            m_file << '\n';
+            m_currentColumn = 0;
+        }
     }
 
 
