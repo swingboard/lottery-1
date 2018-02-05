@@ -70,6 +70,12 @@ namespace Lottery
             return m_size > 0;
         }
 
+        ///array access.
+        const value_type &operator [](size_t index) const
+        {
+            return m_begin[index];
+        }
+
     private:
         const_iterator m_begin;
         const_iterator m_end;
