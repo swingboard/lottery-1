@@ -4,7 +4,7 @@
 
 #include <unordered_set>
 #include <string>
-#include "SubGame.hpp"
+#include "Game.hpp"
 
 
 namespace Lottery

@@ -5,6 +5,7 @@
 #include "CSVFile.hpp"
 #include "Game.hpp"
 #include "RandomPredictionAlgorithm.hpp"
+#include "PredictionAlgorithmA.hpp"
 
 
 using namespace std;
@@ -40,7 +41,8 @@ int main()
     std::vector<std::unique_ptr<PredictionAlgorithm>> predictionAlgorithms;
 
     //add a random prediction to compare against
-    predictionAlgorithms.push_back(std::make_unique<RandomPredictionAlgorithm>());
+    predictionAlgorithms.push_back(std::make_unique<RandomPredictionAlgorithm>(game));
+    predictionAlgorithms.push_back(std::make_unique<PredictionAlgorithmA>(game));
 
     //sample size (currently at 2/3 of total data)
     const size_t SampleSize = 2 * TotalDraws / 3;

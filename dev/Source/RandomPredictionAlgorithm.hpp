@@ -16,6 +16,13 @@ namespace Lottery
     {
     public:
         /**
+            The constructor.
+         */
+        RandomPredictionAlgorithm(const Game &game)
+        {
+        }
+
+        /**
             Returns the algorithm's name.
          */
         virtual std::string getName() const

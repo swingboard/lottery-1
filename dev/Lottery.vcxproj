@@ -76,7 +76,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(LOTTERYPRIVATE)/Source</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Source</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
@@ -118,6 +118,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\Google Drive\Lottery\Source\PredictionAlgorithmA.cpp" />
     <ClCompile Include="Source\CSVFile.cpp" />
     <ClCompile Include="Source\Game.cpp" />
     <ClCompile Include="Source\main.cpp" />
@@ -130,6 +131,7 @@
     <ClInclude Include="Source\Game.hpp" />
     <ClInclude Include="Source\Number.hpp" />
     <ClInclude Include="Source\PredictionAlgorithm.hpp" />
+    <ClInclude Include="Source\PredictionAlgorithmA.hpp" />
     <ClInclude Include="Source\RandomPredictionAlgorithm.hpp" />
     <ClInclude Include="Source\Range.hpp" />
     <ClInclude Include="Source\SubGame.hpp" />
