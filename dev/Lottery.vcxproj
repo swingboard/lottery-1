@@ -130,6 +130,7 @@
     <ClInclude Include="Source\CSVFile.hpp" />
     <ClInclude Include="Source\Draw.hpp" />
     <ClInclude Include="Source\DrawVector.hpp" />
+    <ClInclude Include="Source\DynamicStackArray.hpp" />
     <ClInclude Include="Source\Game.hpp" />
     <ClInclude Include="Source\Hash.hpp" />
     <ClInclude Include="Source\Number.hpp" />
