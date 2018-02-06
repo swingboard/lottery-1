@@ -91,7 +91,7 @@ namespace Lottery
             }
 
             //add subgame
-            m_subGames.push_back(SubGame(subGame, minNumber, maxNumber, numberCount));
+            m_subGames.push_back(SubGame(subGame, (Number)minNumber, (Number)maxNumber, numberCount));
             m_subGames.back().m_index = m_subGames.size() - 1;
 
             m_numberCount += numberCount;

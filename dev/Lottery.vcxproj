@@ -127,6 +127,7 @@
     <ClCompile Include="Source\RandomPredictionAlgorithm.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\addToContainer.hpp" />
     <ClInclude Include="Source\CSVFile.hpp" />
     <ClInclude Include="Source\Draw.hpp" />
     <ClInclude Include="Source\DrawVector.hpp" />

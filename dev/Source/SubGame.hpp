@@ -34,13 +34,13 @@ namespace Lottery
         }
 
         ///returns the minimum number of the subgame.
-        size_t getMinNumber() const
+        Number getMinNumber() const
         {
             return m_minNumber;
         }
 
         ///returns the max number of the subgame.
-        size_t getMaxNumber() const
+        Number getMaxNumber() const
         {
             return m_maxNumber;
         }
@@ -66,8 +66,8 @@ namespace Lottery
     private:
         std::string m_name;
         size_t m_index;
-        size_t m_minNumber;
-        size_t m_maxNumber;
+        Number m_minNumber;
+        Number m_maxNumber;
         size_t m_numberCount;
         size_t m_numberSpan;
         DrawVector m_draws;
@@ -75,8 +75,8 @@ namespace Lottery
         //constructor
         SubGame(
             const std::string &name,
-            size_t minNumber,
-            size_t maxNumber,
+            Number minNumber,
+            Number maxNumber,
             size_t numberCount)
             : m_name(name)
             , m_minNumber(minNumber)
