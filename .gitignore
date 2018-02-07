@@ -1,6 +1,7 @@
 Bin/
 Debug/
 Release/
+*.bin
 *.user
 *.db
 *.suo

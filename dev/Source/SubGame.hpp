@@ -4,6 +4,7 @@
 
 #include <string>
 #include "DrawVector.hpp"
+#include "calcAllColumnsCount.hpp"
 
 
 namespace Lottery
@@ -63,6 +64,12 @@ namespace Lottery
             return m_draws;
         }
 
+        ///returns the number of all possible draws for this subgame.
+        size_t getAllDrawsCount() const
+        {
+            return m_allDrawsCount;
+        }
+
     private:
         std::string m_name;
         size_t m_index;
@@ -71,6 +78,7 @@ namespace Lottery
         size_t m_numberCount;
         size_t m_numberSpan;
         DrawVector m_draws;
+        size_t m_allDrawsCount;
 
         //constructor
         SubGame(
@@ -83,6 +91,7 @@ namespace Lottery
             , m_maxNumber(maxNumber)
             , m_numberCount(numberCount)
             , m_numberSpan(maxNumber - minNumber + 1)
+            , m_allDrawsCount(calcAllColumnsCount(m_numberCount, m_maxNumber))
         {
         }
 

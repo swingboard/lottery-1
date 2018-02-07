@@ -30,6 +30,9 @@
     <ClCompile Include="..\..\..\..\Google Drive\Lottery\Source\PredictionAlgorithmA.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\ColumnsFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Game.hpp">
@@ -78,6 +81,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\createPermutations.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\createRows.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\calcAllColumnsCount.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ColumnsFile.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

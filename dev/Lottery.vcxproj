@@ -72,6 +72,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(LIBBOOST)</IncludePath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);;$(LIBBOOST)</IncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -99,6 +102,9 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>Source</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -125,9 +131,12 @@
     <ClCompile Include="Source\Game.cpp" />
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\RandomPredictionAlgorithm.cpp" />
+    <ClCompile Include="Source\ColumnsFile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\addToContainer.hpp" />
+    <ClInclude Include="Source\calcAllColumnsCount.hpp" />
+    <ClInclude Include="Source\createRows.hpp" />
     <ClInclude Include="Source\createPermutations.hpp" />
     <ClInclude Include="Source\CSVFile.hpp" />
     <ClInclude Include="Source\Draw.hpp" />
@@ -140,6 +149,7 @@
     <ClInclude Include="Source\PredictionAlgorithmA.hpp" />
     <ClInclude Include="Source\RandomPredictionAlgorithm.hpp" />
     <ClInclude Include="Source\Range.hpp" />
+    <ClInclude Include="Source\ColumnsFile.hpp" />
     <ClInclude Include="Source\SubGame.hpp" />
     <ClInclude Include="Source\Tuple.hpp" />
     <ClInclude Include="Source\VectorComparator.hpp" />
