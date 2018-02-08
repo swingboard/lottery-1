@@ -9,22 +9,19 @@ namespace Lottery
     /**
         Template representation of double.
      */
-    template <int Decimal, int Fractional> class Double
+    template <int Decimal, size_t Fractional = 0> class Double
     {
-    public:        
-        /**
-            Get the fractional part.
-            It devides the given value by 10 until it becomes smaller than 1.
-         */
-        static constexpr double getFractional(const double d)
+    private:
+        static constexpr double _fractional(const double d)
         {
-            return d > 1.0 ? getFractional(d / 10.0) : (d < 1.0 ? d : 0.1);
+            return d > 1.0 ? _fractional(d / 10.0) : (d < 1.0 ? d : 0.1);
         }
 
+    public:        
         /**
             Value.
          */
-        static constexpr double Value = Decimal + getFractional(Fractional);
+        static constexpr double Value = Decimal + (Fractional > 0 ? _fractional(Fractional) : 0);
     };
 
 
