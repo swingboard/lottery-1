@@ -98,5 +98,11 @@
     <ClInclude Include="Source\profile.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Double.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\getGroup.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
