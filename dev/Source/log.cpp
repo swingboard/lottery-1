@@ -33,16 +33,16 @@ namespace Lottery
 
         //create the full logging message
         std::stringstream stream;
-        stream  << '[' << std::put_time(&tm, "%Y-%m-%d %H:%M:%S") << "] " << str;
+        stream  << '[' << std::put_time(&tm, "%Y-%m-%d %H:%M:%S") << "] " << str << '\n';
 
         //the message to write
         const std::string msg = stream.str();
 
         //write the log
-        _logFile << msg << std::endl;
+        _logFile << msg;
 
         //write the log into the console
-        std::cout << msg << std::endl;
+        std::cout << msg;
 
         //in windows, also print the message in the debug output
         #if defined(_WIN32) || defined(_WIN64)
