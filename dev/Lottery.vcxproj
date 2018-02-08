@@ -146,7 +146,6 @@
     <ClInclude Include="Source\DrawVector.hpp" />
     <ClInclude Include="Source\DynamicStackArray.hpp" />
     <ClInclude Include="Source\Game.hpp" />
-    <ClInclude Include="Source\getGroup.hpp" />
     <ClInclude Include="Source\Hash.hpp" />
     <ClInclude Include="Source\log.hpp" />
     <ClInclude Include="Source\Number.hpp" />
