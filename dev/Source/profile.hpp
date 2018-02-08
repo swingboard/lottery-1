@@ -23,6 +23,7 @@ namespace Lottery
             : m_name(name)
             , m_startTime(std::chrono::high_resolution_clock::now())
         {
+                LOTTERY_LOG("Profile begin: ", m_name);
         }
 
         /**
@@ -34,7 +35,7 @@ namespace Lottery
                 const auto duration = endTime - m_startTime;
                 const auto durationSecs = std::chrono::duration_cast<std::chrono::seconds>(duration);
                 const auto durationMS = std::chrono::duration_cast<std::chrono::milliseconds>(duration - durationSecs);
-                LOTTERY_LOG("Profile: ", m_name, ": ", durationSecs.count(), " secs, ", durationMS.count(), " msecs");
+                LOTTERY_LOG("Profile end: ", m_name, ": ", durationSecs.count(), " secs, ", durationMS.count(), " msecs");
         }
 
     private:
