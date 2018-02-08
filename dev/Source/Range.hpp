@@ -76,6 +76,18 @@ namespace Lottery
             return m_begin[index];
         }
 
+        ///returns first value.
+        const value_type &front() const
+        {
+            return *m_begin;
+        }
+
+        ///returns last value.
+        const value_type &back() const
+        {
+            return *(std::prev(m_end));
+        }
+
     private:
         const_iterator m_begin;
         const_iterator m_end;
