@@ -6,6 +6,7 @@
 #include "Game.hpp"
 #include "RandomPredictionAlgorithm.hpp"
 #include "PredictionAlgorithmA.hpp"
+#include "profile.hpp"
 
 
 using namespace std;
@@ -14,6 +15,7 @@ using namespace Lottery;
 
 int main()
 {
+    LOTTERY_PROFILE(Test);
     const char *outDir = getenv("LOTTERYPRIVATE");
     if (!outDir)
     {
@@ -26,6 +28,7 @@ int main()
     //load the game
     try
     {
+        LOTTERY_PROFILE(LoadGame);
         game.load();
     }
     catch (const std::runtime_error &error)
@@ -48,18 +51,21 @@ int main()
     const size_t SampleSize = 2 * TotalDraws / 3;
 
     //initialize each the algorithm for each subgame
-    for (size_t i = 0; i < game.getSubGames().size(); ++i)
     {
-        const SubGame &subGame = game.getSubGames()[i];
-
-        //prepare the sample draws
-        DrawVectorRange sampleDraws(subGame.getDraws().begin(), subGame.getDraws().begin() + SampleSize);
-
-        //initialize the algorithms
-        for (const auto &algo : predictionAlgorithms)
+        LOTTERY_PROFILE(InitializeAlgorithms);
+        for (size_t i = 0; i < game.getSubGames().size(); ++i)
         {
-            algo->initialize(subGame, sampleDraws);
-        }
+            const SubGame &subGame = game.getSubGames()[i];
+
+            //prepare the sample draws
+            DrawVectorRange sampleDraws(subGame.getDraws().begin(), subGame.getDraws().begin() + SampleSize);
+
+            //initialize the algorithms
+            for (const auto &algo : predictionAlgorithms)
+            {
+                algo->initialize(subGame, sampleDraws);
+            }
+        };
     }
 
     //successes per algorithm per subgame
@@ -67,42 +73,45 @@ int main()
         predictionAlgorithms.size(), std::vector<std::unordered_map<size_t, size_t>>(game.getSubGames().size()));
 
     //iterate the rest of the data and create the predictions
-    for (size_t testDrawIndex = SampleSize; testDrawIndex < TotalDraws - 1; ++testDrawIndex)
     {
-        //for each subgame
-        for (size_t subGameIndex = 0; subGameIndex < game.getSubGames().size(); ++subGameIndex)
+        LOTTERY_PROFILE(CreatePredictions);
+        for (size_t testDrawIndex = SampleSize; testDrawIndex < TotalDraws - 1; ++testDrawIndex)
         {
-            const SubGame &subGame = game.getSubGames()[subGameIndex];
-
-            //current draw
-            const Draw &currentDraw = subGame.getDraws()[testDrawIndex];
-
-            //create the previous draw range
-            DrawVectorRange previousDraws(subGame.getDraws().begin(), subGame.getDraws().begin() + testDrawIndex);
-
-            //for each algorithm
-            for (size_t algoIndex = 0; algoIndex < predictionAlgorithms.size(); ++algoIndex)
+            //for each subgame
+            for (size_t subGameIndex = 0; subGameIndex < game.getSubGames().size(); ++subGameIndex)
             {
-                const auto &algo = predictionAlgorithms[algoIndex];
+                const SubGame &subGame = game.getSubGames()[subGameIndex];
 
-                Prediction prediction;
-                prediction.desiredPredictedNumberCount = subGame.getNumberCount() * 3;
+                //current draw
+                const Draw &currentDraw = subGame.getDraws()[testDrawIndex];
 
-                //get the prediction
-                algo->predict(subGame, previousDraws, prediction);
+                //create the previous draw range
+                DrawVectorRange previousDraws(subGame.getDraws().begin(), subGame.getDraws().begin() + testDrawIndex);
 
-                //count how many numbers from the current draw are within the prediction
-                size_t numbersFound = 0;
-                for (const Number number : currentDraw)
+                //for each algorithm
+                for (size_t algoIndex = 0; algoIndex < predictionAlgorithms.size(); ++algoIndex)
                 {
-                    if (prediction.predictedNumbers.find(number) != prediction.predictedNumbers.end())
-                    {
-                        ++numbersFound;
-                    }
-                }
+                    const auto &algo = predictionAlgorithms[algoIndex];
 
-                //set up the relevant count
-                ++successes[algoIndex][subGameIndex][numbersFound];
+                    Prediction prediction;
+                    prediction.desiredPredictedNumberCount = subGame.getNumberCount() * 3;
+
+                    //get the prediction
+                    algo->predict(subGame, previousDraws, prediction);
+
+                    //count how many numbers from the current draw are within the prediction
+                    size_t numbersFound = 0;
+                    for (const Number number : currentDraw)
+                    {
+                        if (prediction.predictedNumbers.find(number) != prediction.predictedNumbers.end())
+                        {
+                            ++numbersFound;
+                        }
+                    }
+
+                    //set up the relevant count
+                    ++successes[algoIndex][subGameIndex][numbersFound];
+                }
             }
         }
     }
