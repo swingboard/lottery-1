@@ -149,6 +149,7 @@
     <ClInclude Include="Source\Hash.hpp" />
     <ClInclude Include="Source\log.hpp" />
     <ClInclude Include="Source\Number.hpp" />
+    <ClInclude Include="Source\output.hpp" />
     <ClInclude Include="Source\PredictionAlgorithm.hpp" />
     <ClInclude Include="Source\PredictionAlgorithmA.hpp" />
     <ClInclude Include="Source\profile.hpp" />
