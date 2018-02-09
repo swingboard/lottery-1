@@ -19,12 +19,12 @@ namespace Lottery
         /**
             Count of numbers requested to be predicted.
          */
-        size_t desiredPredictedNumberCount;
+        size_t count;
 
         /**
             Predicted numbers.
          */
-        std::unordered_set<Number> predictedNumbers;
+        std::unordered_set<Number> numbers;
     };
 
 

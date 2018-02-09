@@ -16,10 +16,10 @@ namespace Lottery
         std::uniform_int_distribution<size_t> uid(subGame.getMinNumber(), subGame.getMaxNumber());
             
         //fill the requested number of numbers to predict
-        while (prediction.predictedNumbers.size() < prediction.desiredPredictedNumberCount)
+        while (prediction.numbers.size() < prediction.count)
         {
             const Number randomNumber = (Number)uid(rd);
-            prediction.predictedNumbers.insert(randomNumber);
+            prediction.numbers.insert(randomNumber);
         }
     }
 

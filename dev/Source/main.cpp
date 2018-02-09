@@ -94,7 +94,7 @@ int main()
                     const auto &algo = predictionAlgorithms[algoIndex];
 
                     Prediction prediction;
-                    prediction.desiredPredictedNumberCount = subGame.getNumberCount() * 3;
+                    prediction.count = subGame.getNumberCount() * 3;
 
                     //get the prediction
                     algo->predict(subGame, previousDraws, prediction);
@@ -103,7 +103,7 @@ int main()
                     size_t numbersFound = 0;
                     for (const Number number : currentDraw)
                     {
-                        if (prediction.predictedNumbers.find(number) != prediction.predictedNumbers.end())
+                        if (prediction.numbers.find(number) != prediction.numbers.end())
                         {
                             ++numbersFound;
                         }
