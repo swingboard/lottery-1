@@ -32,7 +32,7 @@ namespace Lottery
             //if the character is a comma
             //or line end, then the end
             //of the string is found
-            if (c == ',' || c == '\n')
+            if (c == '\t' || c == ',' || c == '\n')
             {
                 goto END;
             }
@@ -153,7 +153,7 @@ namespace Lottery
         ++m_currentColumn;
         if (m_currentColumn < m_columnCount)
         {
-            m_file << ',';
+            m_file << '\t';
         }
         else
         {
