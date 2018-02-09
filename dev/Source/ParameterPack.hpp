@@ -6,21 +6,31 @@ namespace Lottery
 {
 
 
-    template <class F, class H, class ...T> void forEach(const F &func, const H& arg0, const T&... args)
+    /**
+        Executes a function for each argument of a parameter pack.
+     */
+    template <class F, class H, class ...T> bool forEach(const F &func, const H& arg0, const T&... args)
     {
-        func(arg0);
-        forEach(func, args...);
+        if (!func(arg0)) return false;
+        return forEach(func, args...);
     }
 
 
-    template <class F, class H> void forEach(const F &func, const H& arg0)
+    /**
+        Executes a function for a parameter pack with one parameter.
+     */
+    template <class F, class H> bool forEach(const F &func, const H& arg0)
     {
-        func(arg0);
+        return func(arg0);
     }
 
 
-    template <class F> void forEach(const F &func)
+    /**
+        Does not execute the function, since the parameter pack is empty.
+     */
+    template <class F> bool forEach(const F &func)
     {
+        return false;
     }
 
 

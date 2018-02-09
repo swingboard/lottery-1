@@ -30,7 +30,7 @@
     <ClCompile Include="..\..\..\..\Google Drive\Lottery\Source\PredictionAlgorithmA.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\log.cpp">
+    <ClCompile Include="Source\Log.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -92,19 +92,19 @@
     <ClInclude Include="Source\toString.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\log.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\profile.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Double.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\output.hpp">
+    <ClInclude Include="Source\ParameterPack.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ParameterPack.hpp">
+    <ClInclude Include="Source\Output.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Profile.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Log.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

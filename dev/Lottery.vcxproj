@@ -131,7 +131,7 @@
     <ClCompile Include="..\..\..\..\Google Drive\Lottery\Source\PredictionAlgorithmA.cpp" />
     <ClCompile Include="Source\CSVFile.cpp" />
     <ClCompile Include="Source\Game.cpp" />
-    <ClCompile Include="Source\log.cpp" />
+    <ClCompile Include="Source\Log.cpp" />
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\RandomPredictionAlgorithm.cpp" />
   </ItemGroup>
@@ -147,13 +147,13 @@
     <ClInclude Include="Source\DynamicStackArray.hpp" />
     <ClInclude Include="Source\Game.hpp" />
     <ClInclude Include="Source\Hash.hpp" />
-    <ClInclude Include="Source\log.hpp" />
+    <ClInclude Include="Source\Log.hpp" />
     <ClInclude Include="Source\Number.hpp" />
-    <ClInclude Include="Source\output.hpp" />
+    <ClInclude Include="Source\Output.hpp" />
     <ClInclude Include="Source\ParameterPack.hpp" />
     <ClInclude Include="Source\PredictionAlgorithm.hpp" />
     <ClInclude Include="Source\PredictionAlgorithmA.hpp" />
-    <ClInclude Include="Source\profile.hpp" />
+    <ClInclude Include="Source\Profile.hpp" />
     <ClInclude Include="Source\RandomPredictionAlgorithm.hpp" />
     <ClInclude Include="Source\Range.hpp" />
     <ClInclude Include="Source\SubGame.hpp" />
