@@ -58,6 +58,13 @@ namespace Lottery
             @param prediction prediction.
          */
         virtual void predict(const SubGame &subGame, const DrawVectorRange &previousDraws, Prediction &prediction) = 0;
+
+        /**
+            Interface for finalizing the algorithm.
+            @param subGame the sub-game for which the sample draws are about.
+            @param sampleDraws sample draws to initialize the prediction model from.
+         */
+        virtual void finalize(const SubGame &subGame, const DrawVectorRange &sampleDraws) = 0;
     };
 
 

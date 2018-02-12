@@ -116,6 +116,19 @@ int main()
         }
     }
 
+    //finalize the algorithms for each subgame
+    {
+        LOTTERY_PROFILE(FinalizeAlgorithms);
+        for (size_t i = 0; i < game.getSubGames().size(); ++i)
+        {
+            const SubGame &subGame = game.getSubGames()[i];
+            for (const auto &algo : predictionAlgorithms)
+            {
+                algo->finalize(subGame, subGame.getDraws());
+            }
+        };
+    }
+
     //find out how many columns the output file must have
     size_t totalColumns = 1;
     for (size_t i = 0; i < game.getSubGames().size(); ++i)

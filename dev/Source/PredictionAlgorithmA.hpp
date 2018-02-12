@@ -30,6 +30,11 @@ namespace Lottery
             m_predictionAlgorithms[subGame.getIndex()]->predict(subGame, previousDraws, prediction);
         }
 
+        virtual void finalize(const SubGame &subGame, const DrawVectorRange &sampleDraws)
+        {
+            m_predictionAlgorithms[subGame.getIndex()]->finalize(subGame, sampleDraws);
+        }
+
     private:
         std::vector<std::unique_ptr<PredictionAlgorithm>> m_predictionAlgorithms;
     };

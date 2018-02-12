@@ -46,6 +46,15 @@ namespace Lottery
             @param prediction prediction.
          */
         virtual void predict(const SubGame &subGame, const DrawVectorRange &previousDraws, Prediction &prediction);
+
+        /**
+            Does nothing for the random prediction model.
+            @param subGame the sub-game for which the sample draws are about.
+            @param sampleDraws sample draws to initialize the prediction model from.
+         */
+        virtual void finalize(const SubGame &subGame, const DrawVectorRange &sampleDraws)
+        {
+        }
     };
 
 
