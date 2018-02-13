@@ -57,13 +57,13 @@ namespace Lottery
         }
 
         ///Writes a string.
-        void write(const std::string &str);
+        void write(const std::string &str, size_t maxLength = 0);
 
         ///writes a number.
         void write(size_t num);
 
         ///writes a percentage.
-        void writePercent(double percent);
+        void writePercent(double percent, int w = 0, int p = 0);
 
     private:
         //file

@@ -1,4 +1,5 @@
 #include <sstream>
+#include <iomanip>
 #include "CSVFile.hpp"
 
 
@@ -124,9 +125,20 @@ namespace Lottery
 
 
     ///Writes a string.
-    void CSVFile::write(const std::string &str)
+    void CSVFile::write(const std::string &str, size_t maxLength)
     {
-        m_file << str;
+        if (!maxLength || str.length() == maxLength)
+        {
+            m_file << str;
+        }
+        else if (maxLength > str.length())
+        {
+            m_file << str << std::string(maxLength - str.length(), ' ');
+        }
+        else if (maxLength < str.length())
+        {
+            m_file << str.substr(0, maxLength);
+        }
         _addColumn();
     }
 
@@ -140,9 +152,20 @@ namespace Lottery
 
 
     ///writes a percentage.
-    void CSVFile::writePercent(double percent)
+    void CSVFile::writePercent(double percent, int w, int p)
     {
-        m_file << percent << '%';
+        if (w)
+        {
+            std::stringstream stream;
+            if (p) stream << std::setprecision(p);
+            stream << percent << '%';
+            m_file << std::left << std::setw(w) << stream.str();
+        }
+        else if (p)
+        {
+            if (p) m_file << std::setprecision(p);
+            m_file << percent << '%';
+        }
         _addColumn();
     }
 

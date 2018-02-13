@@ -142,7 +142,7 @@ int main()
     outFile.openForWriting(outFileName.c_str(), totalColumns);
 
     //write the header
-    outFile.write("Algorithm");
+    outFile.write("Algorithm", 12);
     for (size_t i = 0; i < game.getSubGames().size(); ++i)
     {
         const SubGame &subGame = game.getSubGames()[i];
@@ -150,7 +150,7 @@ int main()
         {
             std::stringstream stream;
             stream << subGame.getName() << '_' << success;
-            outFile.write(stream.str());
+            outFile.write(stream.str(), 8);
         }
     }
 
@@ -161,7 +161,7 @@ int main()
     {
         const auto &algo = predictionAlgorithms[algoIndex];
 
-        outFile.write(algo->getName());
+        outFile.write(algo->getName(), 12);
 
         for (size_t subGameIndex = 0; subGameIndex < game.getSubGames().size(); ++subGameIndex)
         {
@@ -171,7 +171,7 @@ int main()
             {
                 const size_t count = successes[algoIndex][subGameIndex][success];
                 const double percentage = count * 100.0 / TestSize;
-                outFile.writePercent(percentage);
+                outFile.writePercent(percentage, 8, 3);
             }
         }
     }
