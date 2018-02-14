@@ -109,6 +109,13 @@ namespace Lottery
     }
 
 
+    ///creates range from container, index and size.
+    template <class T> Range<T> makeRange(const T &cont, const size_t index, const size_t size)
+    {
+        return Range<T>(cont.begin() + index, cont.begin() + index + size);
+    }
+
+
 } //namespace Lottery
 
 
