@@ -141,6 +141,9 @@ namespace Lottery
                 //store the first number
                 subGame.m_draws.back()[0] = (Number)num;
 
+                //store the first number in the draws by column
+                subGame.m_drawsByColumn[0].push_back((Number)num);
+
                 //read the rest of the numbers
                 for (size_t j = 1; j < subGame.m_numberCount; ++j)
                 {
@@ -155,6 +158,9 @@ namespace Lottery
 
                     //store the number
                     subGame.m_draws.back()[j] = (Number)num;
+
+                    //store the number in the draws by column
+                    subGame.m_drawsByColumn[j].push_back((Number)num);
                 }
             }
         }

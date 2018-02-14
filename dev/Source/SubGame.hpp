@@ -64,6 +64,12 @@ namespace Lottery
             return m_draws;
         }
 
+        ///returns the draws by column.
+        const std::vector<std::vector<Number>> &getDrawsByColumn() const
+        {
+            return m_drawsByColumn;
+        }
+
         ///returns the number of all possible draws for this subgame.
         size_t getAllDrawsCount() const
         {
@@ -78,6 +84,7 @@ namespace Lottery
         size_t m_numberCount;
         size_t m_numberSpan;
         DrawVector m_draws;
+        std::vector<std::vector<Number>> m_drawsByColumn;
         size_t m_allDrawsCount;
 
         //constructor
@@ -91,6 +98,7 @@ namespace Lottery
             , m_maxNumber(maxNumber)
             , m_numberCount(numberCount)
             , m_numberSpan(maxNumber - minNumber + 1)
+            , m_drawsByColumn(numberCount)
             , m_allDrawsCount(calcAllColumnsCount(m_numberCount, m_maxNumber))
         {
         }
