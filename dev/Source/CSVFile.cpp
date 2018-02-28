@@ -144,7 +144,23 @@ namespace Lottery
 
 
     ///writes a number.
+    void CSVFile::write(int num)
+    {
+        m_file << num;
+        _addColumn();
+    }
+
+
+    ///writes a number.
     void CSVFile::write(size_t num)
+    {
+        m_file << num;
+        _addColumn();
+    }
+
+
+    ///writes a number.
+    void CSVFile::write(double num)
     {
         m_file << num;
         _addColumn();
