@@ -148,6 +148,7 @@
     <ClInclude Include="Source\Game.hpp" />
     <ClInclude Include="Source\Hash.hpp" />
     <ClInclude Include="Source\Log.hpp" />
+    <ClInclude Include="Source\Matrix.hpp" />
     <ClInclude Include="Source\Number.hpp" />
     <ClInclude Include="Source\Output.hpp" />
     <ClInclude Include="Source\ParameterPack.hpp" />
