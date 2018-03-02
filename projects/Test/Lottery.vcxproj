@@ -19,17 +19,38 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\source\CSVFile.cpp" />
-    <ClCompile Include="..\..\source\Game.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClInclude Include="..\..\source\addToContainer.hpp" />
+    <ClInclude Include="..\..\source\calcAllColumnsCount.hpp" />
+    <ClInclude Include="..\..\source\createPermutations.hpp" />
+    <ClInclude Include="..\..\source\createRows.hpp" />
+    <ClInclude Include="..\..\source\CSVFile.hpp" />
+    <ClInclude Include="..\..\source\Double.hpp" />
+    <ClInclude Include="..\..\source\Draw.hpp" />
+    <ClInclude Include="..\..\source\DrawVector.hpp" />
+    <ClInclude Include="..\..\source\DynamicStackArray.hpp" />
+    <ClInclude Include="..\..\source\Game.hpp" />
+    <ClInclude Include="..\..\source\Hash.hpp" />
+    <ClInclude Include="..\..\source\Log.hpp" />
+    <ClInclude Include="..\..\source\Matrix.hpp" />
+    <ClInclude Include="..\..\source\Number.hpp" />
+    <ClInclude Include="..\..\source\output.hpp" />
+    <ClInclude Include="..\..\source\ParameterPack.hpp" />
+    <ClInclude Include="..\..\source\PredictionAlgorithm.hpp" />
+    <ClInclude Include="..\..\source\PredictionAlgorithmA.hpp" />
+    <ClInclude Include="..\..\source\Profile.hpp" />
+    <ClInclude Include="..\..\source\RandomPredictionAlgorithm.hpp" />
+    <ClInclude Include="..\..\source\Range.hpp" />
+    <ClInclude Include="..\..\source\SubGame.hpp" />
+    <ClInclude Include="..\..\source\toString.hpp" />
+    <ClInclude Include="..\..\source\Tuple.hpp" />
+    <ClInclude Include="..\..\source\VectorComparator.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\source\toString.hpp" />
-    <ClInclude Include="..\source\CSVFile.hpp" />
-    <ClInclude Include="..\source\Draw.hpp" />
-    <ClInclude Include="..\source\DrawVector.hpp" />
-    <ClInclude Include="..\source\Game.hpp" />
-    <ClInclude Include="..\source\Matrix.hpp" />
+    <ClCompile Include="..\..\source\CSVFile.cpp" />
+    <ClCompile Include="..\..\source\Game.cpp" />
+    <ClCompile Include="..\..\source\log.cpp" />
+    <ClCompile Include="..\..\source\RandomPredictionAlgorithm.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
@@ -90,19 +111,13 @@
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);;$(LIBBOOST);$(MLLPATH);$(ARMLPATH)\include;$(ARMLPATH)\include\armadillo_bits</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;$(LIBBOOST)\lib32-msvc-14.1</LibraryPath>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(LOTTERYPRIVATE)\Source</IncludePath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);;$(LOTTERYPRIVATE)\Source</IncludePath>
-  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../Source</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../source</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);BOOST_CONFIG_SUPPRESS_OUTDATED_MESSAGE;LOTTERY_ENABLE_PROFILING</PreprocessorDefinitions>
@@ -116,7 +131,6 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>../../source</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -127,7 +141,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../Source</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../source</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);BOOST_CONFIG_SUPPRESS_OUTDATED_MESSAGE;LOTTERY_ENABLE_PROFILING</PreprocessorDefinitions>
