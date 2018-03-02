@@ -46,6 +46,7 @@
     <ClInclude Include="..\..\source\VectorComparator.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\Google Drive\Lottery\Source\PredictionAlgorithmA.cpp" />
     <ClCompile Include="..\..\source\CSVFile.cpp" />
     <ClCompile Include="..\..\source\Game.cpp" />
     <ClCompile Include="..\..\source\log.cpp" />
@@ -104,11 +105,11 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(LIBBOOST);$(MLLPATH);$(ARMLPATH)\include;$(ARMLPATH)\include\armadillo_bits</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(LIBBOOST)</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;$(LIBBOOST)\lib32-msvc-14.1</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);;$(LIBBOOST);$(MLLPATH);$(ARMLPATH)\include;$(ARMLPATH)\include\armadillo_bits</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);;$(LIBBOOST)</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;$(LIBBOOST)\lib32-msvc-14.1</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
