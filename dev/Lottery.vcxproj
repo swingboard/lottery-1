@@ -18,6 +18,41 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\Google Drive\Lottery\Source\PredictionAlgorithmA.cpp" />
+    <ClCompile Include="..\source\CSVFile.cpp" />
+    <ClCompile Include="..\source\Game.cpp" />
+    <ClCompile Include="..\source\log.cpp" />
+    <ClCompile Include="..\source\RandomPredictionAlgorithm.cpp" />
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\source\addToContainer.hpp" />
+    <ClInclude Include="..\source\calcAllColumnsCount.hpp" />
+    <ClInclude Include="..\source\createPermutations.hpp" />
+    <ClInclude Include="..\source\createRows.hpp" />
+    <ClInclude Include="..\source\CSVFile.hpp" />
+    <ClInclude Include="..\source\Double.hpp" />
+    <ClInclude Include="..\source\Draw.hpp" />
+    <ClInclude Include="..\source\DrawVector.hpp" />
+    <ClInclude Include="..\source\DynamicStackArray.hpp" />
+    <ClInclude Include="..\source\Game.hpp" />
+    <ClInclude Include="..\source\Hash.hpp" />
+    <ClInclude Include="..\source\Log.hpp" />
+    <ClInclude Include="..\source\Matrix.hpp" />
+    <ClInclude Include="..\source\Number.hpp" />
+    <ClInclude Include="..\source\output.hpp" />
+    <ClInclude Include="..\source\ParameterPack.hpp" />
+    <ClInclude Include="..\source\PredictionAlgorithm.hpp" />
+    <ClInclude Include="..\source\PredictionAlgorithmA.hpp" />
+    <ClInclude Include="..\source\Profile.hpp" />
+    <ClInclude Include="..\source\RandomPredictionAlgorithm.hpp" />
+    <ClInclude Include="..\source\Range.hpp" />
+    <ClInclude Include="..\source\SubGame.hpp" />
+    <ClInclude Include="..\source\toString.hpp" />
+    <ClInclude Include="..\source\Tuple.hpp" />
+    <ClInclude Include="..\source\VectorComparator.hpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{F2468410-1DFA-4DC5-941B-D2758D673865}</ProjectGuid>
@@ -81,7 +116,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>Source</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../Source</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);BOOST_CONFIG_SUPPRESS_OUTDATED_MESSAGE;LOTTERY_ENABLE_PROFILING</PreprocessorDefinitions>
@@ -103,7 +138,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>Source</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../Source</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);BOOST_CONFIG_SUPPRESS_OUTDATED_MESSAGE;LOTTERY_ENABLE_PROFILING</PreprocessorDefinitions>
@@ -127,41 +162,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\..\..\Google Drive\Lottery\Source\PredictionAlgorithmA.cpp" />
-    <ClCompile Include="Source\CSVFile.cpp" />
-    <ClCompile Include="Source\Game.cpp" />
-    <ClCompile Include="Source\Log.cpp" />
-    <ClCompile Include="Source\main.cpp" />
-    <ClCompile Include="Source\RandomPredictionAlgorithm.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Source\addToContainer.hpp" />
-    <ClInclude Include="Source\calcAllColumnsCount.hpp" />
-    <ClInclude Include="Source\createRows.hpp" />
-    <ClInclude Include="Source\createPermutations.hpp" />
-    <ClInclude Include="Source\CSVFile.hpp" />
-    <ClInclude Include="Source\Double.hpp" />
-    <ClInclude Include="Source\Draw.hpp" />
-    <ClInclude Include="Source\DrawVector.hpp" />
-    <ClInclude Include="Source\DynamicStackArray.hpp" />
-    <ClInclude Include="Source\Game.hpp" />
-    <ClInclude Include="Source\Hash.hpp" />
-    <ClInclude Include="Source\Log.hpp" />
-    <ClInclude Include="Source\Matrix.hpp" />
-    <ClInclude Include="Source\Number.hpp" />
-    <ClInclude Include="Source\Output.hpp" />
-    <ClInclude Include="Source\ParameterPack.hpp" />
-    <ClInclude Include="Source\PredictionAlgorithm.hpp" />
-    <ClInclude Include="Source\PredictionAlgorithmA.hpp" />
-    <ClInclude Include="Source\Profile.hpp" />
-    <ClInclude Include="Source\RandomPredictionAlgorithm.hpp" />
-    <ClInclude Include="Source\Range.hpp" />
-    <ClInclude Include="Source\SubGame.hpp" />
-    <ClInclude Include="Source\toString.hpp" />
-    <ClInclude Include="Source\Tuple.hpp" />
-    <ClInclude Include="Source\VectorComparator.hpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
