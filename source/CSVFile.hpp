@@ -3,6 +3,7 @@
 
 
 #include <fstream>
+#include "toString.hpp"
 
 
 namespace Lottery
