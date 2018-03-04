@@ -162,7 +162,7 @@ namespace Lottery
     ///writes a number.
     void CSVFile::write(double num)
     {
-        m_file << num;
+        m_file << std::setprecision(std::numeric_limits<double>::max_digits10) << num;
         _addColumn();
     }
 
