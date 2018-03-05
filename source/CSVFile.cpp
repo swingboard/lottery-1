@@ -198,6 +198,7 @@ namespace Lottery
         {
             m_file << '\n';
             m_currentColumn = 0;
+            m_file.flush();
         }
     }
 
