@@ -47,7 +47,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\Google Drive\Lottery\Source\PredictionAlgorithmA.cpp" />
-    <ClCompile Include="..\..\..\..\libs\dlib-19.9\dlib\all\source.cpp" />
     <ClCompile Include="..\..\source\CSVFile.cpp" />
     <ClCompile Include="..\..\source\Game.cpp" />
     <ClCompile Include="..\..\source\log.cpp" />
