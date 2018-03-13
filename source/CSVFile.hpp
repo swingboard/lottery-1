@@ -48,6 +48,13 @@ namespace Lottery
         void read(size_t &num);
 
         /**
+            Reads a double integer.
+            @param num number to read.
+            @exception std::runtime_error if there is an error.
+         */
+        void read(double &num);
+
+        /**
             Tells if the end of file is reached.
             @return true if the end of file is reached,
                 false otherise.

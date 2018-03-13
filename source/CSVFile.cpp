@@ -124,6 +124,13 @@ namespace Lottery
     }
 
 
+    //Reads a double.
+    void CSVFile::read(double &num)
+    {
+        _read(m_file, num);
+    }
+
+
     ///Writes a string.
     void CSVFile::write(const std::string &str, size_t maxLength)
     {
