@@ -34,5 +34,6 @@
     <ClCompile Include="..\..\source\RandomPredictionAlgorithm.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="..\..\..\..\..\Google Drive\Lottery\Source\PredictionAlgorithmA.cpp" />
+    <ClCompile Include="..\..\..\..\dlib-19.9\dlib\all\source.cpp" />
   </ItemGroup>
 </Project>
