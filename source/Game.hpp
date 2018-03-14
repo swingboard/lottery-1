@@ -40,6 +40,19 @@ namespace Lottery
             return m_subGames.empty() ? 0 : m_subGames[0].m_draws.size();
         }
 
+        /**
+            Returns total count of numbers.
+         */
+        size_t getNumberCount() const
+        {
+            size_t result = 0;
+            for (const SubGame &subGame : m_subGames)
+            {
+                result += subGame.getNumberCount();
+            }
+            return result;
+        }
+
     private:
         std::vector<SubGame> m_subGames;
         size_t m_numberCount = 0;
