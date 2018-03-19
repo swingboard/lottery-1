@@ -90,6 +90,21 @@ namespace Lottery
         ///writes a percentage.
         void writePercent(double percent, int w = 0, int p = 0);
 
+        ///writes one or more empty cells.
+        void writeEmpty(size_t count = 1);
+
+        ///writes an empty line.
+        void writeEmptyLine();
+
+        ///begins a new line.
+        void beginNewLine();
+
+        ///returns the column count.
+        const size_t getColumnCount() const
+        {
+            return m_columnCount;
+        }
+
     private:
         //file
         std::fstream m_file;

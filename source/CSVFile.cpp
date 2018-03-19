@@ -193,6 +193,34 @@ namespace Lottery
     }
 
 
+    //writes one or more empty cells.
+    void CSVFile::writeEmpty(size_t count)
+    {
+        for (; count > 0; --count)
+        {
+            write("");
+        }
+    }
+
+
+    //writes an empty line.
+    void CSVFile::writeEmptyLine()
+    {
+        if (m_currentColumn > 0)
+        {
+            beginNewLine();
+        }
+        writeEmpty(m_columnCount);
+    }
+
+
+    //begins a new line.
+    void CSVFile::beginNewLine()
+    {
+        writeEmpty(m_columnCount - m_currentColumn);
+    }
+
+
     //add column
     void CSVFile::_addColumn()
     {
