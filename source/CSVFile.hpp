@@ -29,6 +29,17 @@ namespace Lottery
         void openForWriting(const char *filename, size_t columnCount);
 
         /**
+            Opens the file for writing.
+            @param filename name of the file.
+            @param columnCount number of columns to write.
+            @exception std::runtime_error if there is an error.
+         */
+        void openForWriting(const std::string &filename, size_t columnCount)
+        {
+            openForWriting(filename.c_str(), columnCount);
+        }
+
+        /**
             Closes the file.
          */
         void close();
