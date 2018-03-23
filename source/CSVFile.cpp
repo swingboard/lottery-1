@@ -217,7 +217,9 @@ namespace Lottery
     //begins a new line.
     void CSVFile::beginNewLine()
     {
-        writeEmpty(m_columnCount - m_currentColumn);
+        if (m_currentColumn == 0) return;
+        const size_t remainingColumns = m_columnCount - m_currentColumn;
+        writeEmpty(remainingColumns);
     }
 
 
