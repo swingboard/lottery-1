@@ -94,7 +94,7 @@ int main()
                     const auto &algo = predictionAlgorithms[algoIndex];
 
                     Prediction prediction;
-                    prediction.count = subGame.getNumberCount() * 3;
+                    prediction.count = subGame.getNumberCount() * 2;
 
                     //get the prediction
                     algo->predict(subGame, previousDraws, prediction);
