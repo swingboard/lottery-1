@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include "Tuple.hpp"
 
 
 namespace Lottery
@@ -29,6 +30,19 @@ namespace Lottery
         {
             toString(stream, v);
         }
+    }
+
+
+    /**
+        Convert tuple to string.
+     */
+    template <class ...T> void toString(std::stringstream &stream, const std::tuple<T...> &tpl)
+    {
+        forEach(tpl, [&](const auto &v)
+        {
+            toString(stream, v);
+            return true;
+        });
     }
 
 
