@@ -26,10 +26,18 @@ namespace Lottery
      */
     template <class T, class Alloc> void toString(std::stringstream &stream, const std::vector<T, Alloc> &vec)
     {
-        for (const T &v : vec)
+        stream << '[';
+        if (!vec.empty())
         {
-            toString(stream, v);
+            auto it = vec.begin();
+            toString(stream, *it);
+            for (++it; it != vec.end(); ++it)
+            {
+                stream << ',';
+                toString(stream, *it);
+            }
         }
+        stream << ']';
     }
 
 
