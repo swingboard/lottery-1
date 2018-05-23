@@ -21,6 +21,9 @@ namespace Lottery
         ///const iterator type.
         typedef typename T::const_iterator const_iterator;
 
+        ///container type.
+        typedef T container_type;
+
         ///the default constructor.
         Range()
         {
@@ -113,6 +116,13 @@ namespace Lottery
     template <class T> Range<T> makeRange(const T &cont, const size_t index, const size_t size)
     {
         return Range<T>(cont.begin() + index, cont.begin() + index + size);
+    }
+
+
+    ///creates range from iterators of containers.
+    template <class T> Range<T> makeRange(const typename T::const_iterator &begin, const typename T::const_iterator &end)
+    {
+        return Range<T>(begin, end);
     }
 
 
