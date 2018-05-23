@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <set>
+#include <map>
 #include <sstream>
 #include "Tuple.hpp"
 
@@ -19,6 +20,32 @@ namespace Lottery
     template <class T> void toString(std::stringstream &stream, const T &v)
     {
         stream << v;
+    }
+
+
+    /**
+        Convert pair to string.
+     */
+    template <class T1, class T2> void toString(std::stringstream &stream, const std::pair<T1, T2> &pair)
+    {
+        stream << '[';
+        toString(stream, pair.first);
+        stream << ',';
+        toString(stream, pair.second);
+        stream << ']';
+    }
+
+
+    /**
+        Convert tuple to string.
+     */
+    template <class ...T> void toString(std::stringstream &stream, const std::tuple<T...> &tpl)
+    {
+        forEach(tpl, [&](const auto &v)
+        {
+            toString(stream, v);
+            return true;
+        });
     }
 
 
@@ -61,15 +88,11 @@ namespace Lottery
 
 
     /**
-        Convert tuple to string.
+        Convert map to string.
      */
-    template <class ...T> void toString(std::stringstream &stream, const std::tuple<T...> &tpl)
+    template <class K, class V, class Pred, class Alloc> void toString(std::stringstream &stream, const std::map<K, V, Pred, Alloc> &map)
     {
-        forEach(tpl, [&](const auto &v)
-        {
-            toString(stream, v);
-            return true;
-        });
+        containerToString(stream, map);
     }
 
 
