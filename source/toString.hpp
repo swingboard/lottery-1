@@ -4,6 +4,7 @@
 
 #include <string>
 #include <vector>
+#include <set>
 #include <sstream>
 #include "Tuple.hpp"
 
@@ -22,22 +23,40 @@ namespace Lottery
 
 
     /**
-        Convert vector to string.
+        Convert container to string.
      */
-    template <class T, class Alloc> void toString(std::stringstream &stream, const std::vector<T, Alloc> &vec)
+    template <class T> void containerToString(std::stringstream &stream, const T &container)
     {
         stream << '[';
-        if (!vec.empty())
+        if (!container.empty())
         {
-            auto it = vec.begin();
+            auto it = container.begin();
             toString(stream, *it);
-            for (++it; it != vec.end(); ++it)
+            for (++it; it != container.end(); ++it)
             {
                 stream << ',';
                 toString(stream, *it);
             }
         }
         stream << ']';
+    }
+
+
+    /**
+        Convert vector to string.
+     */
+    template <class T, class Alloc> void toString(std::stringstream &stream, const std::vector<T, Alloc> &vec)
+    {
+        containerToString(stream, vec);
+    }
+
+
+    /**
+        Convert set to string.
+     */
+    template <class T, class Pred, class Alloc> void toString(std::stringstream &stream, const std::set<T, Pred, Alloc> &set)
+    {
+        containerToString(stream, set);
     }
 
 
