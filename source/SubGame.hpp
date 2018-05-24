@@ -5,6 +5,7 @@
 #include <string>
 #include "DrawVector.hpp"
 #include "calcAllColumnsCount.hpp"
+#include "NumberRange.hpp"
 
 
 namespace Lottery
