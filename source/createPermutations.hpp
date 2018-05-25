@@ -47,6 +47,19 @@ namespace Lottery
     }
 
 
+    /**
+        Creates all possible permutations of the given symbols.
+     */
+    template <class Symbols, class F> 
+    bool createPermutations(const Symbols &symbols, const F &func)
+    {
+        std::vector<typename Symbols::value_type> result;
+        result.clear();
+        result.insert(result.end(), symbols.begin(), symbols.end());
+        return createPermutationsHelper(result, 0, func);
+    }
+
+
 } //namespace Lottery
 
 
