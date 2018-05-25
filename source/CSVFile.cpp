@@ -159,6 +159,14 @@ namespace Lottery
 
 
     ///writes a number.
+    void CSVFile::write(int num, const size_t width)
+    {
+        m_file << std::setw(width) << num;
+        _addColumn();
+    }
+
+
+    ///writes a number.
     void CSVFile::write(size_t num)
     {
         m_file << num;
@@ -170,6 +178,13 @@ namespace Lottery
     void CSVFile::write(double num)
     {
         m_file << std::setprecision(std::numeric_limits<double>::max_digits10) << num;
+        _addColumn();
+    }
+
+    ///writes a number.
+    void CSVFile::write(double num, const size_t nonDecimalCount, const size_t decimalCount)
+    {
+        m_file << std::fixed << std::setw(nonDecimalCount + 1 + decimalCount) << std::setprecision(decimalCount) << num;
         _addColumn();
     }
 
