@@ -58,15 +58,14 @@ namespace Lottery
         if (!container.empty())
         {
             auto it = container.begin();
-            stream << "\n    ";
             toString(stream, *it);
             for (++it; it != container.end(); ++it)
             {
-                stream << "\n    ";
+                stream << ',';
                 toString(stream, *it);
             }
         }
-        stream << "\n]";
+        stream << ']';
     }
 
 
