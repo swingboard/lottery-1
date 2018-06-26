@@ -41,11 +41,19 @@ namespace Lottery
      */
     template <class ...T> void toString(std::stringstream &stream, const std::tuple<T...> &tpl)
     {
+        stream << '[';
+        int counter = 0;
         forEach(tpl, [&](const auto &v)
         {
+            if (counter)
+            {
+                stream << ',';
+            }
+            counter = 1;
             toString(stream, v);
             return true;
         });
+        stream << ']';
     }
 
 
